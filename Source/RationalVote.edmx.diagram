@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="849dfc6ab85b4923a32be0211f498bd5" Name="RationalVote" >
+        <EntityTypeShape EntityType="RationalVote.User" Width="2.125" PointX="0.5" PointY="0.5" />
+        <EntityTypeShape EntityType="RationalVote.Session" Width="2.125" PointX="3.5" PointY="0.5" />
+        <AssociationConnector Association="RationalVote.UserSession" />
+        <EntityTypeShape EntityType="RationalVote.EmailVerificationToken" Width="2.125" PointX="3.5" PointY="3.25" />
+        <AssociationConnector Association="RationalVote.UserEmailVerificationToken" ManuallyRouted="false" >
+        </AssociationConnector>
+        <EntityTypeShape EntityType="RationalVote.Profile" Width="2.125" PointX="3.5" PointY="10.625" />
+        <AssociationConnector Association="RationalVote.UserProfile" />
+        <EntityTypeShape EntityType="RationalVote.Debate" Width="2.125" PointX="3.5" PointY="5.375" />
+        <AssociationConnector Association="RationalVote.UserDebate" ></AssociationConnector>
+        <EntityTypeShape EntityType="RationalVote.Tag" Width="2.125" PointX="6.375" PointY="0.5" />
+        <EntityTypeShape EntityType="RationalVote.DebateTag" Width="2.125" PointX="6.25" PointY="5.375" />
+        <AssociationConnector Association="RationalVote.TagDebateTag" />
+        <AssociationConnector Association="RationalVote.DebateDebateTag" />
+        <EntityTypeShape EntityType="RationalVote.DebateLink" Width="2.125" PointX="6.25" PointY="7.5" />
+        <AssociationConnector Association="RationalVote.DebateDebateLink" />
+        <AssociationConnector Association="RationalVote.DebateDebateLink1" />
+        <EntityTypeShape EntityType="RationalVote.DebateLinkVote" Width="2.125" PointX="3.5" PointY="8.5" />
+        <AssociationConnector Association="RationalVote.DebateLinkDebateLinkVote" />
+        <AssociationConnector Association="RationalVote.UserDebateLinkVote" />
+        <EntityTypeShape EntityType="RationalVote.Permission" Width="2.125" PointX="3.5" PointY="13.625" />
+        <AssociationConnector Association="RationalVote.UserPermission" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>
