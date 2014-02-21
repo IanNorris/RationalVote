@@ -2,6 +2,7 @@ namespace RationalVote.Models
 {
     using System;
     using System.Collections.Generic;
+	using System.ComponentModel.DataAnnotations.Schema;
     
     public partial class User
     {
@@ -21,6 +22,9 @@ namespace RationalVote.Models
         public string PasswordHash { get; set; }
         public byte AuthenticationMethod { get; set; }
         public bool Verified { get; set; }
+
+		[NotMapped]
+		public string Password { get; set; }
     
         public virtual ICollection<Session> Sessions { get; set; }
         public virtual Profile Profiles { get; set; }

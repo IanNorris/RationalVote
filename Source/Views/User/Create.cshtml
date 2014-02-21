@@ -24,37 +24,13 @@
             </div>
         </div>
 
-        <div class="form-group">
-            @Html.LabelFor(model => model.PasswordSalt, new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.PasswordSalt)
-                @Html.ValidationMessageFor(model => model.PasswordSalt)
-            </div>
-        </div>
-
-        <div class="form-group">
-            @Html.LabelFor(model => model.PasswordHash, new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.PasswordHash)
-                @Html.ValidationMessageFor(model => model.PasswordHash)
-            </div>
-        </div>
-
-        <div class="form-group">
-            @Html.LabelFor(model => model.AuthenticationMethod, new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.AuthenticationMethod)
-                @Html.ValidationMessageFor(model => model.AuthenticationMethod)
-            </div>
-        </div>
-
-        <div class="form-group">
-            @Html.LabelFor(model => model.Verified, new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.Verified)
-                @Html.ValidationMessageFor(model => model.Verified)
-            </div>
-        </div>
+		<div class="form-group">
+			@Html.LabelFor( model => model.Password, new { @class = "control-label col-md-2" } )
+			<div class="col-md-10">
+				@Html.EditorFor( model => model.Password )
+				@Html.ValidationMessageFor( model => model.Password )
+			</div>
+		</div>
 
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">

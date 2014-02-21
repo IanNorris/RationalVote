@@ -49,10 +49,12 @@ namespace RationalVote
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include="Id,Email,PasswordSalt,PasswordHash,AuthenticationMethod,Verified")] User user)
+        public ActionResult Create([Bind(Include="Email,Password")] User user)
         {
             if (ModelState.IsValid)
             {
+                user.PasswordSalt = Utility.Crypto.GenerateSalt();
+
                 db.Users.Add(user);
                 db.SaveChanges();
                 return RedirectToAction("Index");
