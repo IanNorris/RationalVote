@@ -1,0 +1,74 @@
+﻿@model RationalVote.Models.User
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>User</h4>
+	<hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.EmailVerificationTokens.Id)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.EmailVerificationTokens.Id)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Profiles.DisplayName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Profiles.DisplayName)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Email)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Email)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.PasswordSalt)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.PasswordSalt)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.PasswordHash)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.PasswordHash)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.AuthenticationMethod)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.AuthenticationMethod)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Verified)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Verified)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.Id }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

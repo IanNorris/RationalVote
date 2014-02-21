@@ -1,4 +1,4 @@
-namespace RationalVote
+namespace RationalVote.Models
 {
     using System;
     using System.Collections.Generic;

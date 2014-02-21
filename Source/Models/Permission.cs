@@ -1,9 +1,9 @@
-namespace RationalVote
+namespace RationalVote.Models
 {
     using System;
     using System.Collections.Generic;
     
-    public partial class Permission
+    public class Permission
     {
         public long Id { get; set; }
         public short Type { get; set; }
