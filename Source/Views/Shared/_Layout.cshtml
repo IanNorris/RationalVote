@@ -2,43 +2,160 @@
 <html>
 <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>@ViewBag.Title - My ASP.NET Application</title>
+	<meta content="width=device-width, initial-scale=1.0, user-scalable=no" name="viewport" />
+    <title>@ViewBag.Title - @System.Configuration.ConfigurationManager.AppSettings[ "siteTitle" ]</title>
     @Styles.Render("~/Content/css")
     @Scripts.Render("~/bundles/modernizr")
 
 </head>
 <body>
-    <div class="navbar navbar-inverse navbar-fixed-top">
-        <div class="container">
-            <div class="navbar-header">
-                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
-                @Html.ActionLink("Application name", "Index", "Home", null, new { @class = "navbar-brand" })
-            </div>
-            <div class="navbar-collapse collapse">
-                <ul class="nav navbar-nav">
-                    <li>@Html.ActionLink("Home", "Index", "Home")</li>
-                    <li>@Html.ActionLink("About", "About", "Home")</li>
-                    <li>@Html.ActionLink("Contact", "Contact", "Home")</li>
-                </ul>
-                @Html.Partial("_LoginPartial")
-            </div>
-        </div>
-    </div>
-    <div class="container body-content">
-        @RenderBody()
-        <hr />
-        <footer>
-            <p>&copy; @DateTime.Now.Year - My ASP.NET Application</p>
-        </footer>
-    </div>
+	<div class="header">
+		<div class="navbar navbar-default" role="navigation">
+			<!--<div class="container">--> <!--Alt style navigation-->
+			<div class="navbar-header navbar-left">
+				<button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-responsive-collapse">
+					<span class="sr-only">Toggle navigation</span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+				</button>
+				@Html.ActionLink( System.Configuration.ConfigurationManager.AppSettings[ "siteTitle" ], "Index", "Home", null, new { @class = "navbar-brand" } )
+			</div>
+			<!-- Collect the nav links, forms, and other content for toggling -->
+			<div class="collapse navbar-collapse navbar-responsive-collapse">
+				<ul class="nav navbar-nav navbar-left">
+					<li>@Html.ActionLink( "Home", "Index", "Home" )</li>
+					<li>@Html.ActionLink( "About", "About", "Home" )</li>
+					<li>@Html.ActionLink( "Contact", "Contact", "Home" )</li>
+				</ul>
+				<ul class="nav navbar-nav navbar-right" style="left:-2em">
+					@Html.Partial( "_LoginPartial" )
+				</ul>
+			</div>
+		</div>
+	</div>
 
-    @Scripts.Render("~/bundles/jquery")
-    @Scripts.Render("~/bundles/bootstrap")
-    @RenderSection("scripts", required: false)
+	@if( ViewBag.Breadcrumbs != null )
+	{
+		<!--=== Breadcrumbs ===-->
+		<div class="breadcrumbs margin-bottom-40">
+			<div class="container">
+				<h1 class="pull-left">@ViewBag.Title</h1>
+				<ul class="pull-right breadcrumb">
+					@foreach( KeyValuePair<string, string> crumb in ViewBag.Breadcrumbs )
+					{
+						<li><a href="@crumb.Value">@crumb.Key</a></li>
+					}
+					<li class="active">@ViewBag.Title</li>
+				</ul>
+</div><!--/container-->
+		</div><!--/breadcrumbs-->
+		<!--=== End Breadcrumbs ===-->
+	}
+
+	@if( ViewBag.WidePage ?? false )
+	{
+		@* insert alerts here*@
+		@RenderBody()
+	}
+	else
+	{
+		<div class="container">
+			@* insert alerts here*@
+			@RenderBody()
+		</div>
+	}
+
+	<div class="footer">
+		<div class="container">
+			<span id="fb-root"></span>
+			<script>
+				(function (d, s, id) {
+					var js, fjs = d.getElementsByTagName(s)[0];
+					if (d.getElementById(id)) return;
+					js = d.createElement(s); js.id = id;
+					js.src = "//connect.facebook.net/en_GB/all.js#xfbml=1";
+					fjs.parentNode.insertBefore(js, fjs);
+				}(document, 'script', 'facebook-jssdk'));</script>
+
+			<span class="fb-like" data-href="https://www.facebook.com/rationalvoteuk" data-layout="button" data-action="like" data-show-faces="true" data-share="true" style="vertical-align:top;zoom:1;*display:inline"></span>
+
+			<a href="https://twitter.com/RationalVoteUK" class="twitter-follow-button" data-show-count="false">Follow @@RationalVoteUK</a>
+			<script>!function (d, s, id) { var js, fjs = d.getElementsByTagName(s)[0], p = /^http:/.test(d.location) ? 'http' : 'https'; if (!d.getElementById(id)) { js = d.createElement(s); js.id = id; js.src = p + '://platform.twitter.com/widgets.js'; fjs.parentNode.insertBefore(js, fjs); } }(document, 'script', 'twitter-wjs');</script>
+
+			<!-- Place this tag where you want the widget to render. -->
+			<span class="g-follow" data-annotation="bubble" data-height="20" data-href="//plus.google.com/113849297615490056031" data-rel="publisher"></span>
+
+			<!-- Place this tag after the last widget tag. -->
+			<script type="text/javascript">
+				window.___gcfg = { lang: 'en-GB' };
+
+				(function () {
+					var po = document.createElement('script'); po.type = 'text/javascript'; po.async = true;
+					po.src = 'https://apis.google.com/js/platform.js';
+					var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(po, s);
+				})();
+			</script>
+		</div>
+	</div>
+
+	<div class="copyright">
+		<div class="container">
+			<p>User generated content on this site is licensed under  <a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/deed.en_US">Creative Commons Attribution-ShareAlike 3.0 Unported License</a> with attribution to the poster. Site templates, embedded components, featured images and additional content may have additional copyright restrictions.</p>
+		</div>
+	</div>
+
+	@Scripts.Render( "~/bundles/jquery" )
+	@Scripts.Render( "~/bundles/bootstrap" )
+	@RenderSection( "scripts", required: false )
+
+	<script>
+		// Include the UserVoice JavaScript SDK (only needed once on a page)
+		UserVoice = window.UserVoice || []; (function () { var uv = document.createElement('script'); uv.type = 'text/javascript'; uv.async = true; uv.src = '//widget.uservoice.com/1Fm3X2FXf5XVacZT422Q.js'; var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(uv, s) })();
+
+		//
+		// UserVoice Javascript SDK developer documentation:
+		// https://www.uservoice.com/o/javascript-sdk
+		//
+
+		// Set colors
+		UserVoice.push(['set', {
+			accent_color: '#448dd6',
+			trigger_color: 'white',
+			trigger_background_color: '#448dd6'
+		}]);
+
+		@*@<?php if( DDD_Session::getInstance()->isValid() )
+		{?>
+			// Identify the user if logged in
+			UserVoice.push(['identify', {
+				id: <?php echo DDD_Session::getInstance()->getUserID(); ?>
+				}]);
+		<?php } ?> *@
+
+		// Add default trigger to the bottom-right corner of the window:
+		UserVoice.push(['addTrigger', { mode: 'satisfaction', trigger_position: 'bottom-right' }]);
+
+		// Autoprompt for Satisfaction and SmartVote (only displayed under certain conditions)
+		UserVoice.push(['autoprompt', {}]);
+	</script>
+
+	@*<?php if( Config_Site::GoogleAnalyticsEnable )
+		{?>
+		<!-- Google Analytics -->
+		<script>
+			(function (i, s, o, g, r, a, m) {
+				i['GoogleAnalyticsObject'] = r; i[r] = i[r] || function () {
+					(i[r].q = i[r].q || []).push(arguments)
+				}, i[r].l = 1 * new Date(); a = s.createElement(o),
+				m = s.getElementsByTagName(o)[0]; a.async = 1; a.src = g; m.parentNode.insertBefore(a, m)
+			})(window, document, 'script', '//www.google-analytics.com/analytics.js', 'ga');
+
+			ga('create', '<?php echo Config_Site::GoogleAnalyticsTrackingID; ?>', '<?php echo Config_Site::GoogleAnalyticsSiteName; ?>');
+			ga('send', 'pageview');
+
+		</script>
+	*@
+
 </body>
 </html>

@@ -1,5 +1,10 @@
 ﻿@{
-    ViewBag.Title = "About";
+	ViewBag.Title = "About";
+	ViewBag.Breadcrumbs = new List<KeyValuePair<string, string>>()
+	{
+		new KeyValuePair<string, string>( "Hello", "/" ),
+		new KeyValuePair<string, string>( "World", "/world" )
+	};
 }
 <h2>@ViewBag.Title.</h2>
 <h3>@ViewBag.Message</h3>
