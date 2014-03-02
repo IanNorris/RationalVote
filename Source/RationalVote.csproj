@@ -168,6 +168,7 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\Debate.cs" />
     <Compile Include="Models\DebateLink.cs" />
@@ -179,14 +180,17 @@
     <Compile Include="Models\Session.cs" />
     <Compile Include="Models\Tag.cs" />
     <Compile Include="Models\User.cs" />
-    <Compile Include="ProfileController.cs" />
+    <Compile Include="Controllers\ProfileController.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
-    <Compile Include="UserController.cs" />
+    <Compile Include="Controllers\UserController.cs" />
+    <Compile Include="Utility\Attributes\AddOnIconAttribute.cs" />
+    <Compile Include="Utility\Attributes\PlaceholderAttribute.cs" />
+    <Compile Include="Utility\Attributes\RequireTrueAttribute.cs" />
     <Compile Include="Utility\Crypto.cs" />
   </ItemGroup>
   <ItemGroup>
-	<Content Include="Content\**\*.*" />
+    <Content Include="Content\**\*.*" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
@@ -203,7 +207,6 @@
     <Content Include="Scripts\modernizr-2.6.2.js" />
     <Content Include="Scripts\respond.js" />
     <Content Include="Scripts\respond.min.js" />
-    <Content Include="Scripts\_references.js" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
@@ -234,11 +237,18 @@
     <Content Include="Views\Profile\Details.cshtml" />
     <Content Include="Views\Profile\Edit.cshtml" />
     <Content Include="Views\Profile\Index.cshtml" />
-    <Content Include="Views\User\Create.cshtml" />
+    <Content Include="Views\User\Register.cshtml" />
     <Content Include="Views\User\Delete.cshtml" />
     <Content Include="Views\User\Details.cshtml" />
     <Content Include="Views\User\Edit.cshtml" />
     <Content Include="Views\User\Index.cshtml" />
+    <Content Include="Views\User\SignIn.cshtml" />
+    <Content Include="Views\User\Login.cshtml" />
+    <Content Include="Views\Shared\EditorTemplates\Text.cshtml" />
+    <Content Include="Views\Shared\EditorTemplates\EmailAddress.cshtml" />
+    <Content Include="Views\Shared\EditorTemplates\HtmlInput.cshtml" />
+    <Content Include="Views\Shared\EditorTemplates\String.cshtml" />
+    <Content Include="Views\Shared\EditorTemplates\Password.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

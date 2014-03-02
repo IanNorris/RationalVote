@@ -21,7 +21,6 @@
 				</button>
 				@Html.ActionLink( System.Configuration.ConfigurationManager.AppSettings[ "siteTitle" ], "Index", "Home", null, new { @class = "navbar-brand" } )
 			</div>
-			<!-- Collect the nav links, forms, and other content for toggling -->
 			<div class="collapse navbar-collapse navbar-responsive-collapse">
 				<ul class="nav navbar-nav navbar-left">
 					<li>@Html.ActionLink( "Home", "Index", "Home" )</li>
@@ -35,22 +34,23 @@
 		</div>
 	</div>
 
-	@if( ViewBag.Breadcrumbs != null )
+	@if( ViewBag.ShowTitle ?? true )
 	{
-		<!--=== Breadcrumbs ===-->
 		<div class="breadcrumbs margin-bottom-40">
 			<div class="container">
 				<h1 class="pull-left">@ViewBag.Title</h1>
-				<ul class="pull-right breadcrumb">
-					@foreach( KeyValuePair<string, string> crumb in ViewBag.Breadcrumbs )
-					{
-						<li><a href="@crumb.Value">@crumb.Key</a></li>
-					}
-					<li class="active">@ViewBag.Title</li>
-				</ul>
-</div><!--/container-->
-		</div><!--/breadcrumbs-->
-		<!--=== End Breadcrumbs ===-->
+				@if( ViewBag.Breadcrumbs != null )
+				{
+					<ul class="pull-right breadcrumb">
+						@foreach( KeyValuePair<string, string> crumb in ViewBag.Breadcrumbs )
+						{
+							<li><a href="@crumb.Value">@crumb.Key</a></li>
+						}
+						<li class="active">@ViewBag.Title</li>
+					</ul>
+				}
+			</div>
+		</div>
 	}
 
 	@if( ViewBag.WidePage ?? false )

@@ -1,0 +1,41 @@
+﻿@model RationalVote.Models.User
+
+@using (Html.BeginForm( "Register", "User", FormMethod.Post, new { @class = "reg-page" } ))
+{
+	@Html.AntiForgeryToken()
+	<div class="reg-header">
+		<h2>Create a new account</h2>
+	</div>
+
+	@Html.ValidationSummary(true)
+
+	@Html.EditorFor( model => model.Email )
+
+	<br />
+
+	@Html.EditorFor( model => model.Password )
+	<div class="progress" style="height:6px">
+		<div class="progress-bar" id="password_strength_bar"></div>
+	</div>
+	
+	@Html.EditorFor( model => model.PasswordRetype )
+	
+	<br />
+	<label class="checkbox">
+		@Html.EditorFor( model => model.AcceptedTermsOfService ) I agree to the <a data-toggle="modal" href="/static/tos.html" data-target="#popupDialog">terms of service</a>
+	</label>
+	@Html.ValidationMessageFor( model => model.AcceptedTermsOfService )
+	
+	<label class="checkbox">
+		@Html.EditorFor( model => model.AcceptedPrivacyPolicy ) I understand the <a data-toggle="modal" href="/static/privacy.html" data-target="#popupDialog">privacy policy</a>
+	</label>
+	@Html.ValidationMessageFor( model => model.AcceptedPrivacyPolicy )
+	
+	<br />
+	<br />
+
+	<button id="signup" class="btn btn-lg btn-primary btn-block" type="submit">Sign up</button>
+}
+
+<div class="modal fade" id="popupDialog" tabindex="-1" role="dialog" aria-labelledby="popupLabel" aria-hidden="true">
+</div>

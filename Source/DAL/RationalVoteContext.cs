@@ -15,6 +15,7 @@
 
 		protected override void OnModelCreating( DbModelBuilder modelBuilder )
 		{
+			Database.SetInitializer(new MigrateDatabaseToLatestVersion<RationalVoteContext, RationalVote.Migrations.Configuration>()); 
 			base.OnModelCreating( modelBuilder );
 		}
 

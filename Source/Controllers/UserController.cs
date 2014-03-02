@@ -21,6 +21,11 @@ namespace RationalVote
 			return View(users.ToList());
 		}
 
+		public ActionResult SignIn()
+		{
+			return View();
+		}
+
 		// GET: /User/Details/5
 		public ActionResult Details(long? id)
 		{
@@ -36,25 +41,17 @@ namespace RationalVote
 			return View(user);
 		}
 
-		// GET: /User/Create
-		public ActionResult Create()
-		{
-			ViewBag.Id = new SelectList(db.EmailVerificationTokens, "Id", "Id");
-			ViewBag.Id = new SelectList(db.Profiles, "Id", "DisplayName");
-			return View();
-		}
-
-		// POST: /User/Create
+		// POST: /User/Register
 		// To protect from overposting attacks, please enable the specific properties you want to bind to, for 
 		// more details see http://go.microsoft.com/fwlink/?LinkId=317598.
 		[HttpPost]
 		[ValidateAntiForgeryToken]
-		public ActionResult Create([Bind(Include="Email,Password")] User user)
+		public ActionResult Register([Bind(Include="Email,Password,PasswordRetype,AcceptedTermsOfService,AcceptedPrivacyPolicy")] User user)
 		{
 			if (ModelState.IsValid)
 			{
-				string salt;
-				string hash;
+				byte[] salt;
+				byte[] hash;
 				Utility.Crypto.CreatePasswordHash( user.Email, user.Password, out salt, out hash );
 				user.PasswordSalt = salt;
 				user.PasswordHash = hash;
@@ -64,9 +61,7 @@ namespace RationalVote
 				return RedirectToAction("Index");
 			}
 
-			ViewBag.Id = new SelectList(db.EmailVerificationTokens, "Id", "Id", user.Id);
-			ViewBag.DisplayName = new SelectList(db.Profiles, "Id", "DisplayName", user.Id);
-			return View(user);
+			return View( "SignIn", user );
 		}
 
 		// GET: /User/Edit/5
