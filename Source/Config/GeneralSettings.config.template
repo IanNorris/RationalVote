@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <appSettings>
-	<add key="siteTitle" value="RationalVote" />
+	<add key="siteTitle" value="YourSite" />
+
+	<add key="emailFrom" value="noreply@yoursite.com" />
 
 	<add key="passwordSalt" value="Generate a SHA-256 Hash and stick it here" />
 </appSettings>

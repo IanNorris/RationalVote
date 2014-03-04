@@ -50,13 +50,24 @@ namespace RationalVote
 		{
 			if (ModelState.IsValid)
 			{
+				//Create user
 				byte[] salt;
 				byte[] hash;
 				Utility.Crypto.CreatePasswordHash( user.Email, user.Password, out salt, out hash );
 				user.PasswordSalt = salt;
 				user.PasswordHash = hash;
-
 				db.Users.Add(user);
+
+				//Create verification token
+				EmailVerificationToken verificationToken = EmailVerificationToken.CreateNew( user );
+				db.EmailVerificationTokens.Add( verificationToken );
+
+				//Create profile
+				Profile profile = RationalVote.Models.Profile.CreateNew( user );
+				db.Profiles.Add( profile );
+
+				new Controllers.MailController().VerificationEmail( user, verificationToken ).Deliver();
+
 				db.SaveChanges();
 				return RedirectToAction("Index");
 			}

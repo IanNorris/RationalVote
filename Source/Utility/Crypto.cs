@@ -20,6 +20,15 @@ namespace Utility
 			return bytes;
 		}
 
+		public static string GenerateSaltString( uint length )
+		{
+			byte[] bytes = new byte[ length ];
+			randomGenerator.GetBytes( bytes );
+
+			string hex = System.BitConverter.ToString( bytes );
+			return hex.Replace( "-", "" );
+		}
+
 		public static void CreatePasswordHash( string email, string password, out byte[] userSpecificSalt, out byte[] passwordHash )
 		{
 			userSpecificSalt = new byte[ PasswordSaltSize];
