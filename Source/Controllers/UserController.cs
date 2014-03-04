@@ -7,18 +7,27 @@ using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using RationalVote.Models;
+using Dapper;
+using System.Data.SqlClient;
 
 namespace RationalVote
 {
 	public class UserController : Controller
 	{
-		private RationalVoteContext db = new RationalVoteContext();
-
 		// GET: /User/
 		public ActionResult Index()
 		{
-			var users = db.Users.Include(u => u.EmailVerificationTokens).Include(u => u.Profiles);
-			return View(users.ToList());
+			using( var sqlConnection = new SqlConnection( "Data Source=(LocalDb)\\v11.0;Initial Catalog=RationalVote;Integrated Security=True" ) )
+			{
+				sqlConnection.Open();
+				
+				IEnumerable<User> users = sqlConnection.Query<User>("select * from Users");
+
+				return View( users.ToList() );
+			}
+
+			//var users = db.Users.Include(u => u.EmailVerificationTokens).Include(u => u.Profiles);
+			//return View(users.ToList());
 		}
 
 		public ActionResult SignIn()
@@ -29,7 +38,7 @@ namespace RationalVote
 		// GET: /User/Details/5
 		public ActionResult Details(long? id)
 		{
-			if (id == null)
+			/*if (id == null)
 			{
 				return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
 			}
@@ -38,7 +47,8 @@ namespace RationalVote
 			{
 				return HttpNotFound();
 			}
-			return View(user);
+			return View(user);*/
+			return View();
 		}
 
 		// POST: /User/Register
@@ -50,7 +60,7 @@ namespace RationalVote
 		{
 			if (ModelState.IsValid)
 			{
-				//Create user
+				/*//Create user
 				byte[] salt;
 				byte[] hash;
 				Utility.Crypto.CreatePasswordHash( user.Email, user.Password, out salt, out hash );
@@ -69,7 +79,7 @@ namespace RationalVote
 				new Controllers.MailController().VerificationEmail( user, verificationToken ).Deliver();
 
 				db.SaveChanges();
-				return RedirectToAction("Index");
+				return RedirectToAction("Index");*/
 			}
 
 			return View( "SignIn", user );
@@ -78,7 +88,7 @@ namespace RationalVote
 		// GET: /User/Edit/5
 		public ActionResult Edit(long? id)
 		{
-			if (id == null)
+			/*if (id == null)
 			{
 				return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
 			}
@@ -89,7 +99,8 @@ namespace RationalVote
 			}
 			ViewBag.Id = new SelectList(db.EmailVerificationTokens, "Id", "Id", user.Id);
 			ViewBag.Id = new SelectList(db.Profiles, "Id", "DisplayName", user.Id);
-			return View(user);
+			return View(user);*/
+			return View();
 		}
 
 		// POST: /User/Edit/5
@@ -99,7 +110,7 @@ namespace RationalVote
 		[ValidateAntiForgeryToken]
 		public ActionResult Edit([Bind(Include="Id,Email,PasswordSalt,PasswordHash,AuthenticationMethod,Verified")] User user)
 		{
-			if (ModelState.IsValid)
+			/*if (ModelState.IsValid)
 			{
 				db.Entry(user).State = EntityState.Modified;
 				db.SaveChanges();
@@ -107,13 +118,14 @@ namespace RationalVote
 			}
 			ViewBag.Id = new SelectList(db.EmailVerificationTokens, "Id", "Id", user.Id);
 			ViewBag.Id = new SelectList(db.Profiles, "Id", "DisplayName", user.Id);
-			return View(user);
+			return View(user);*/
+			return View();
 		}
 
 		// GET: /User/Delete/5
 		public ActionResult Delete(long? id)
 		{
-			if (id == null)
+			/*if (id == null)
 			{
 				return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
 			}
@@ -122,7 +134,8 @@ namespace RationalVote
 			{
 				return HttpNotFound();
 			}
-			return View(user);
+			return View(user);*/
+			return View();
 		}
 
 		// POST: /User/Delete/5
@@ -130,18 +143,18 @@ namespace RationalVote
 		[ValidateAntiForgeryToken]
 		public ActionResult DeleteConfirmed(long id)
 		{
-			User user = db.Users.Find(id);
+			/*User user = db.Users.Find(id);
 			db.Users.Remove(user);
-			db.SaveChanges();
+			db.SaveChanges();*/
 			return RedirectToAction("Index");
 		}
 
 		protected override void Dispose(bool disposing)
 		{
-			if (disposing)
+			/*if (disposing)
 			{
 				db.Dispose();
-			}
+			}*/
 			base.Dispose(disposing);
 		}
 	}
