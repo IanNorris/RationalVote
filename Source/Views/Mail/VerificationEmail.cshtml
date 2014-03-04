@@ -1,0 +1,22 @@
+﻿@using ActionMailer.Net;
+ 
+@{
+	string relativeURL = Html.Action( "Verify", "User", new { Token = ViewBag.Token } ).ToString();
+	string link = Request.Url.GetLeftPart(UriPartial.Authority) + relativeURL;
+}
+ 
+Hi,
+ 
+Thank you for registering for RationalVote.
+ 
+To verify your email address and activate your account, please click the link below.
+ 
+@link"
+ 
+If you did not create this account, simply ignore this email and the account will automatically be deleted in 12 hours.
+ 
+Many thanks,
+ 
+The RationalVote team
+ 
+
