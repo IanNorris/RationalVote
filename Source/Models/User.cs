@@ -30,7 +30,7 @@ namespace RationalVote.Models
 		[Placeholder("E-mail address")]
 		[DataType(DataType.EmailAddress)]
 		[Required( ErrorMessage = "An e-mail address is required." )]
-		[EmailAddress( ErrorMessage = "Invalid Email Address" )]
+		[EmailAddress( ErrorMessage = "Invalid e-mail address." )]
 		[AddOnIcon( "envelope")]
 		[StringLength(254)] 
 		public string Email { get; set; }
