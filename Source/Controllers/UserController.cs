@@ -7,8 +7,9 @@ using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using RationalVote.Models;
-using Dapper;
 using System.Data.SqlClient;
+using Dapper;
+using RationalVote.DAL;
 
 namespace RationalVote
 {
@@ -17,7 +18,7 @@ namespace RationalVote
 		// GET: /User/
 		public ActionResult Index()
 		{
-			using( var sqlConnection = new SqlConnection( "Data Source=(LocalDb)\\v11.0;Initial Catalog=RationalVote;Integrated Security=True" ) )
+			using( SqlConnection sqlConnection = RationalVote.DAL.RationalVoteContext.Connect() )
 			{
 				sqlConnection.Open();
 				
@@ -25,9 +26,6 @@ namespace RationalVote
 
 				return View( users.ToList() );
 			}
-
-			//var users = db.Users.Include(u => u.EmailVerificationTokens).Include(u => u.Profiles);
-			//return View(users.ToList());
 		}
 
 		public ActionResult SignIn()
