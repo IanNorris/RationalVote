@@ -26,12 +26,12 @@ namespace RationalVote.Models
 	
 		[Required]
 		[ForeignKey("Id")]
-		public virtual User User { get; set; }
+		public virtual long User { get; set; }
 
 		public static Profile CreateNew( User user )
 		{
 			Profile profile = new Profile();
-			profile.User = user;
+			profile.User = user.Id;
 			profile.Joined = DateTime.Now;
 			profile.Experience = 0;
 

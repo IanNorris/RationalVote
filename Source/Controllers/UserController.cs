@@ -9,6 +9,7 @@ using System.Web.Mvc;
 using RationalVote.Models;
 using System.Data.SqlClient;
 using Dapper;
+using DapperExtensions;
 using RationalVote.DAL;
 
 namespace RationalVote
@@ -18,11 +19,9 @@ namespace RationalVote
 		// GET: /User/
 		public ActionResult Index()
 		{
-			using( SqlConnection sqlConnection = RationalVote.DAL.RationalVoteContext.Connect() )
-			{
-				sqlConnection.Open();
-				
-				IEnumerable<User> users = sqlConnection.Query<User>("select * from Users");
+			using( SqlConnection connection = RationalVoteContext.Connect() )
+			{			
+				IEnumerable<User> users = connection.Query<User>("select * from Users");
 
 				return View( users.ToList() );
 			}
@@ -54,33 +53,65 @@ namespace RationalVote
 		// more details see http://go.microsoft.com/fwlink/?LinkId=317598.
 		[HttpPost]
 		[ValidateAntiForgeryToken]
-		public ActionResult Register([Bind(Include="Email,Password,PasswordRetype,AcceptedTermsOfService,AcceptedPrivacyPolicy")] User user)
+		public ActionResult Register( UserPublic userPublic )
 		{
 			if (ModelState.IsValid)
 			{
-				/*//Create user
-				byte[] salt;
-				byte[] hash;
-				Utility.Crypto.CreatePasswordHash( user.Email, user.Password, out salt, out hash );
-				user.PasswordSalt = salt;
-				user.PasswordHash = hash;
-				db.Users.Add(user);
+				try
+				{
+					using( SqlConnection connection = RationalVoteContext.Connect() )
+					{
+						using( SqlTransaction transaction = connection.BeginTransaction() )
+						{
+							//Create user
+							User user = new User( userPublic );
+							byte[] salt;
+							byte[] hash;
+							Utility.Crypto.CreatePasswordHash( user.Email, userPublic.Password, out salt, out hash );
+							user.PasswordSalt = salt;
+							user.PasswordHash = hash;
 
-				//Create verification token
-				EmailVerificationToken verificationToken = EmailVerificationToken.CreateNew( user );
-				db.EmailVerificationTokens.Add( verificationToken );
+							//Add the user
+							user.Id = connection.Insert( user, transaction );
 
-				//Create profile
-				Profile profile = RationalVote.Models.Profile.CreateNew( user );
-				db.Profiles.Add( profile );
+							//Create verification token
+							EmailVerificationToken verificationToken = EmailVerificationToken.CreateNew( user );
+							connection.Insert( verificationToken, transaction );
 
-				new Controllers.MailController().VerificationEmail( user, verificationToken ).Deliver();
+							//Create profile
+							Profile profile = RationalVote.Models.Profile.CreateNew( user );
+							connection.Insert( profile, transaction );
 
-				db.SaveChanges();
-				return RedirectToAction("Index");*/
+							new Controllers.MailController().VerificationEmail( user, verificationToken ).Deliver();
+
+							transaction.Commit();
+
+							return RedirectToAction("Index");
+						}
+					}
+				}
+				catch( SqlException exception )
+				{
+					switch( RationalVoteContext.DecodeException( exception ) )
+					{
+						case RationalVoteContext.Error.DuplicateIndex:
+							ModelState.AddModelError( "Email", "This e-mail address is already registered." );
+							break;
+
+						default:
+							ModelState.AddModelError( string.Empty, "Unable to create account for unknown reasons." );
+							break;
+					}
+				}
 			}
 
-			return View( "SignIn", user );
+			return View( "SignIn", userPublic );
+		}
+
+		// GET: /User/Edit/5
+		public ActionResult Verify(long? id)
+		{
+			return View();
 		}
 
 		// GET: /User/Edit/5

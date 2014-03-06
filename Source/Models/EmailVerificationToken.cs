@@ -14,18 +14,14 @@ namespace RationalVote.Models
 		[DataType(DataType.DateTime)]
 		public System.DateTime Created { get; set; }
 
-		[DataType( "VARCHAR" )]
-		[MaxLength(64)]
 		public string Token {  get; set; }
-	
-		[Required]
-		[ForeignKey("Id")]
-		public virtual User User { get; set; }
+
+		public long User { get; set; }
 
 		public static EmailVerificationToken CreateNew( User user )
 		{
 			EmailVerificationToken token = new EmailVerificationToken();
-			token.User = user;
+			token.User = user.Id;
 			token.Token = Utility.Crypto.GenerateSaltString( 32 );
 			token.Created = DateTime.Now;
 
