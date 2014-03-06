@@ -1,21 +1,23 @@
 ﻿@using ActionMailer.Net;
 
 @{
-	string relativeURL = "/User/Verify?token=" + ViewBag.Token;
+	Layout = "~/Views/Mail/_HtmlLayout.cshtml";
+	
+	string relativeURL = "/User/Verify/" + ViewBag.Token;
 	string link = Request.Url.GetLeftPart(UriPartial.Authority) + relativeURL;
 }
 
-Hi,
+<p>Hi,</p>
 
-Thank you for registering for RationalVote.
+<p>Thank you for registering for RationalVote.</p>
 
-To verify your email address and activate your account, please click the link below.
+<p>To verify your email address and activate your account, please click the link below.</p>
 
-<a href="@link">Verify your account</a>
+<p><a href="@link">Verify your account</a></p>
 
-If you did not create this account, simply ignore this email and the account will automatically be deleted in 12 hours.
+<p>If you did not create this account, simply ignore this email and the account will automatically be deleted in 12 hours.</p>
 
-Many thanks,
+<p>Many thanks,</p>
 
-The RationalVote team
+<p>The RationalVote team</p>
 

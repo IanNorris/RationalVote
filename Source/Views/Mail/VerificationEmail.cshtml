@@ -1,8 +1,10 @@
 ﻿@using ActionMailer.Net;
  
 @{
-	string relativeURL = Html.Action( "Verify", "User", new { Token = ViewBag.Token } ).ToString();
-	string link = Request.Url.GetLeftPart(UriPartial.Authority) + relativeURL;
+	Layout = "~/Views/Mail/_TextLayout.cshtml";
+	
+	string relativeURL = "/User/Verify/" + ViewBag.Token;
+	string link = Request.Url.GetLeftPart(UriPartial.Authority) + relativeURL;
 }
  
 Hi,

@@ -53,6 +53,31 @@
 		</div>
 	}
 
+	@if( TempData[ "ErrorMessage" ] != null )
+	{
+		<div class="alert alert-block alert-danger fade in">
+			<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+			<h4>@TempData[ "MessageTitle " ]</h4>
+			<p>@TempData[ "ErrorMessage" ]</p>
+		</div>
+	}
+	else if( TempData[ "WarningMessage" ] != null )
+	{
+		<div class="alert alert-block alert-warning fade in">
+			<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+			<h4>@TempData[ "MessageTitle" ]</h4>
+			<p>@TempData[ "WarningMessage" ]</p>
+		</div>
+	}
+	else if( TempData[ "SuccessMessage" ] != null )
+	{
+		<div class="alert alert-block alert-success fade in">
+			<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+			<h4>@TempData[ "MessageTitle" ]</h4>
+			<p>@TempData[ "SuccessMessage" ]</p>
+		</div>
+	}
+
 	@if( ViewBag.WidePage ?? false )
 	{
 		@* insert alerts here*@
@@ -158,4 +183,11 @@
 	*@
 
 </body>
+
+
+
+
+
+
+
 </html>

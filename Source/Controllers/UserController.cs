@@ -14,6 +14,7 @@ using RationalVote.DAL;
 
 namespace RationalVote
 {
+	[RoutePrefix("User")]
 	public class UserController : Controller
 	{
 		// GET: /User/
@@ -21,7 +22,7 @@ namespace RationalVote
 		{
 			using( SqlConnection connection = RationalVoteContext.Connect() )
 			{			
-				IEnumerable<User> users = connection.Query<User>("select * from Users");
+				IEnumerable<User> users = connection.Query<User>("SELECT * FROM Users");
 
 				return View( users.ToList() );
 			}
@@ -108,10 +109,36 @@ namespace RationalVote
 			return View( "SignIn", userPublic );
 		}
 
-		// GET: /User/Edit/5
-		public ActionResult Verify(long? id)
+		// GET: /User/Verify/token
+		[Route("Verify/{token?}")]
+		public ActionResult Verify( string token )
 		{
-			return View();
+			using( SqlConnection connection = RationalVoteContext.Connect() )
+			{
+				EmailVerificationToken resultToken = connection.Query<EmailVerificationToken>( "SELECT * FROM EmailVerificationTokens WHERE Token = @Token", new { Token = token } ).FirstOrDefault();
+
+				if( resultToken == null )
+				{
+					TempData[ "WarningMessage" ] = "This validation token no longer exists. It may have expired, already have been used or is invalid.";
+					TempData[ "MessageTitle" ] = "E-mail verification failed";
+				}
+				else
+				{
+					using( SqlTransaction transaction = connection.BeginTransaction() )
+					{
+						connection.Execute( "UPDATE Users SET Verified = 1 WHERE Id = @Id", new { Id = resultToken.User }, transaction );
+
+						connection.Delete<EmailVerificationToken>( resultToken, transaction );
+
+						transaction.Commit();
+						
+						TempData[ "SuccessMessage" ] = "Thank you for verifying your email address, you may now login to your account!";
+						TempData[ "MessageTitle" ] = "E-mail address verified";
+					}
+				}
+			}
+
+			return RedirectToAction("Index");
 		}
 
 		// GET: /User/Edit/5

@@ -259,6 +259,8 @@
     <Content Include="Views\Mail\VerificationEmail.cshtml">
       <SubType>Designer</SubType>
     </Content>
+    <Content Include="Views\Mail\_HtmlLayout.cshtml" />
+    <Content Include="Views\Mail\_TextLayout.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
