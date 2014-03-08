@@ -29,10 +29,17 @@ namespace RationalVote
 					  "~/Scripts/bootstrap.js",
 					  "~/Scripts/respond.js"));
 
+			bundles.Add( new ScriptBundle( "~/bundles/errorscripts" ).Include(
+					  "~/Scripts/jquery.backstretch.js",
+					  "~/Scripts/errorscripts.js" ) );
+
 			bundles.Add(new StyleBundle("~/Content/css").Include(
 					  "~/Content/bootstrap.css",
 					  "~/Content/Theme/default.css",
 					  "~/Content/font-awesome/css/font-awesome.css"));
+
+			bundles.Add( new StyleBundle( "~/Content/csserror" ).Include(
+					  "~/Content/Theme/error.css" ) );
 		}
 	}
 }

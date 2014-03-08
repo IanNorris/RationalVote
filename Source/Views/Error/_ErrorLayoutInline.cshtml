@@ -1,0 +1,18 @@
+﻿@{
+	ViewBag.WidePage = true;
+	ViewBag.ShowTitle = false;
+	Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container">
+	<div class="row">
+		<div class="col-md-8 col-md-offset-2">
+			<div class="error-v3">
+				<img src="/Content/beasts/@(ViewBag.BeastName ?? " tbservers")-sm.png" />
+				@RenderBody()
+			</div>
+
+			<p style="text-align:center"><span xmlns:dct="http://purl.org/dc/terms/" href="http://purl.org/dc/dcmitype/StillImage" property="dct:title" rel="dct:type">Tumbeasts</span> by <a xmlns:cc="http://creativecommons.org/ns#" href="http://theoatmeal.com" property="cc:attributionName" rel="cc:attributionURL">Matthew Inman</a> are licensed under a <a rel="license" href="http://creativecommons.org/licenses/by/3.0/">Creative Commons Attribution 3.0 Unported License</a>.<br />Based on a work at <a xmlns:dct="http://purl.org/dc/terms/" href="http://theoatmeal.com" rel="dct:source">theoatmeal.com</a>.</p>
+		</div>
+	</div>
+</div>

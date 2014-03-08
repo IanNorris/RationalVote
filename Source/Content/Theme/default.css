@@ -2404,6 +2404,96 @@ ul.blog-tags a:hover {
 }
 
 
+/*Error page*/
+
+.error-v2 {
+	padding: 40px;
+	margin: 60px 0;
+	text-align: center;	
+	background: url(images/error/bg-black1.png);
+	-webkit-border-radius: 15px !important; 
+	-moz-border-radius: 15px !important; 
+	border-radius: 15px !important; 
+}
+
+.error-v2 p {
+	color: #fff;
+	font-size: 22px;
+}
+
+.error-v2 span {
+	color: #fff;
+	display: block;
+	font-size: 42px;
+}
+
+.error-v2 span.error-v2-title {
+	color: #fff;
+	font-size: 160px;	
+}
+
+/*For Mobile Devices*/
+@media (max-width: 500px) { 
+	.error-v2 p {
+		font-size: 16px;
+	}	
+
+	.error-v2 span {
+		font-size: 26px;
+	}
+
+	.error-v2 span.error-v2-title {
+		font-size: 100px;
+	}
+}
+
+
+
+
+
+
+.error-v3 {
+	padding: 40px;
+	margin: 60px 0;
+	text-align: center;	
+	background: url(images/error/bg-black.png);
+	-webkit-border-radius: 15px !important; 
+	-moz-border-radius: 15px !important; 
+	border-radius: 15px !important; 
+}
+
+.error-v3 p {
+	color: #000;
+	font-size: 22px;
+}
+
+.error-v3 span {
+	color: #000;
+	display: block;
+	font-size: 42px;
+}
+
+.error-v3 span.error-v3-title {
+	color: #000;
+	font-size: 160px;	
+}
+
+/*For Mobile Devices*/
+@media (max-width: 500px) { 
+	.error-v3 p {
+		font-size: 16px;
+	}	
+
+	.error-v3 span {
+		font-size: 26px;
+	}
+
+	.error-v3 span.error-v3-title {
+		font-size: 100px;
+	}
+}
+
+
 /*Additional customisation*/
 
 
