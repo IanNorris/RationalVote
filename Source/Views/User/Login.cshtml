@@ -1,5 +1,46 @@
-﻿
-<form class="reg-page" role="form" method="post" action="/login.php" accept-charset="UTF-8" id="login-nav">
+﻿@model RationalVote.Models.UserLogin
+
+@using( Html.BeginForm( "Login", "User", FormMethod.Post, new { @class = "reg-page" } ) )
+{
+	@Html.AntiForgeryToken()
+	<div class="reg-header">
+		<h2>Login to your account</h2>
+	</div>
+	
+	if( ViewContext.RouteData.Values[ "action" ].ToString() == "Login" )
+	{
+		@Html.ValidationSummary( true )
+	}
+
+	@Html.EditorFor( model => model.LoginEmail )
+
+	<br />
+
+	@Html.EditorFor( model => model.LoginPassword )
+	
+	<br />
+	<label class="checkbox">
+		@Html.EditorFor( model => model.LoginStaySignedIn ) Stay signed in
+	</label>
+	@Html.ValidationMessageFor( model => model.LoginStaySignedIn )
+	
+	<hr>
+
+	<h4>Forget your Password ?</h4>
+	<p>You can <a href="/forgot.php">reset your password here</a>.</p>
+	
+	<div style="height:1.56em">&nbsp;</div>
+	<br />
+	
+	<button id="signin" class="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>
+}
+
+<div class="modal fade" id="popupDialog" tabindex="-1" role="dialog" aria-labelledby="popupLabel" aria-hidden="true">
+</div>
+
+
+
+@*<form class="reg-page" role="form" method="post" action="/login.php" accept-charset="UTF-8" id="login-nav">
 	<div class="reg-header">
 		<h2>Login to your account</h2>
 	</div>
@@ -30,4 +71,4 @@
 
 	<h4>Forget your Password ?</h4>
 	<p>You can <a href="/forgot.php">reset your password here</a>.</p>
-</form>
+</form>*@

@@ -54,7 +54,7 @@ namespace RationalVote
 		// more details see http://go.microsoft.com/fwlink/?LinkId=317598.
 		[HttpPost]
 		[ValidateAntiForgeryToken]
-		public ActionResult Register( UserPublic userPublic )
+		public ActionResult Register( UserRegister userPublic )
 		{
 			if (ModelState.IsValid)
 			{
@@ -68,7 +68,7 @@ namespace RationalVote
 							User user = new User( userPublic );
 							byte[] salt;
 							byte[] hash;
-							Utility.Crypto.CreatePasswordHash( user.Email, userPublic.Password, out salt, out hash );
+							Utility.Crypto.CreatePasswordHash( user.Email, userPublic.RegisterPassword, out salt, out hash );
 							user.PasswordSalt = salt;
 							user.PasswordHash = hash;
 
@@ -96,12 +96,42 @@ namespace RationalVote
 					switch( RationalVoteContext.DecodeException( exception ) )
 					{
 						case RationalVoteContext.Error.DuplicateIndex:
-							ModelState.AddModelError( "Email", "This e-mail address is already registered." );
+							ModelState.AddModelError( "RegisterEmail", "This e-mail address is already registered." );
 							break;
 
 						default:
 							ModelState.AddModelError( string.Empty, "Unable to create account for unknown reasons." );
 							break;
+					}
+				}
+			}
+
+			return View( "SignIn", userPublic );
+		}
+
+		// POST: /User/Login
+		// To protect from overposting attacks, please enable the specific properties you want to bind to, for 
+		// more details see http://go.microsoft.com/fwlink/?LinkId=317598.
+		[HttpPost]
+		[ValidateAntiForgeryToken]
+		public ActionResult Login( UserLogin userPublic )
+		{
+			if( ModelState.IsValid )
+			{
+				using( SqlConnection connection = RationalVoteContext.Connect() )
+				{
+					User storedUser = connection.Query<User>( "SELECT * FROM Users WHERE Email = @Email", new { Email = userPublic.LoginEmail.ToLower() } ).FirstOrDefault();
+
+					if( storedUser != null && Utility.Crypto.ConfirmPasswordHash( storedUser.Email, userPublic.LoginPassword, storedUser.PasswordSalt, storedUser.PasswordHash ) )
+					{
+						return RedirectToAction( "Index", "Home" );
+					}
+					else
+					{
+						ModelState.AddModelError( "LoginPassword", "Email and password combination is not correct." );
+
+						userPublic.LoginPassword = "";
+						return View( "SignIn", userPublic );
 					}
 				}
 			}

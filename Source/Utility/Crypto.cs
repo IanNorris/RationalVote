@@ -1,5 +1,6 @@
 ﻿using System.Configuration;
 using System.Security.Cryptography;
+using System.Linq;
 
 namespace Utility
 {
@@ -38,6 +39,16 @@ namespace Utility
 			Rfc2898DeriveBytes PBKDF2 = new Rfc2898DeriveBytes( passwordCountents, userSpecificSalt, IterationCount);
 
 			passwordHash = PBKDF2.GetBytes(PasswordHashSize);
+		}
+
+		public static bool ConfirmPasswordHash( string email, string password, byte[] userSpecificSalt, byte[] passwordHash )
+		{
+			string passwordCountents = passwordSalt + email.ToLower() + password;
+			Rfc2898DeriveBytes PBKDF2 = new Rfc2898DeriveBytes( passwordCountents, userSpecificSalt, IterationCount );
+
+			byte[] serverPasswordHash = PBKDF2.GetBytes( PasswordHashSize );
+
+			return serverPasswordHash.SequenceEqual( passwordHash );
 		}
 	}
 }

@@ -1,4 +1,4 @@
-﻿@model RationalVote.Models.UserPublic
+﻿@model RationalVote.Models.UserRegister
 
 @using (Html.BeginForm( "Register", "User", FormMethod.Post, new { @class = "reg-page" } ))
 {
@@ -7,29 +7,32 @@
 		<h2>Create a new account</h2>
 	</div>
 
-	@Html.ValidationSummary(true)
+	if( ViewContext.RouteData.Values[ "action" ].ToString() == "Register" )
+	{
+		@Html.ValidationSummary( true )
+	}
 
-	@Html.EditorFor( model => model.Email )
+	@Html.EditorFor( model => model.RegisterEmail )
 
 	<br />
 
-	@Html.EditorFor( model => model.Password )
+	@Html.EditorFor( model => model.RegisterPassword )
 	<div class="progress" style="height:6px">
 		<div class="progress-bar" id="password_strength_bar"></div>
 	</div>
 	
-	@Html.EditorFor( model => model.PasswordRetype )
+	@Html.EditorFor( model => model.RegisterPasswordRetype )
 	
 	<br />
 	<label class="checkbox">
-		@Html.EditorFor( model => model.AcceptedTermsOfService ) I agree to the <a data-toggle="modal" href="/static/tos.html" data-target="#popupDialog">terms of service</a>
+		@Html.EditorFor( model => model.RegisterAcceptedTermsOfService ) I agree to the <a data-toggle="modal" href="/static/tos.html" data-target="#popupDialog">terms of service</a>
 	</label>
-	@Html.ValidationMessageFor( model => model.AcceptedTermsOfService )
+	@Html.ValidationMessageFor( model => model.RegisterAcceptedTermsOfService )
 	
 	<label class="checkbox">
-		@Html.EditorFor( model => model.AcceptedPrivacyPolicy ) I understand the <a data-toggle="modal" href="/static/privacy.html" data-target="#popupDialog">privacy policy</a>
+		@Html.EditorFor( model => model.RegisterAcceptedPrivacyPolicy ) I understand the <a data-toggle="modal" href="/static/privacy.html" data-target="#popupDialog">privacy policy</a>
 	</label>
-	@Html.ValidationMessageFor( model => model.AcceptedPrivacyPolicy )
+	@Html.ValidationMessageFor( model => model.RegisterAcceptedPrivacyPolicy )
 	
 	<br />
 	<br />

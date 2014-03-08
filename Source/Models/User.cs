@@ -20,12 +20,12 @@ namespace RationalVote.Models
 			this.Verified = false;
 		}
 
-		public User( UserPublic user )
+		public User( UserRegister user )
 		{
 			this.AuthenticationMethod = 0;
 			this.Verified = false;
 
-			this.Email = user.Email;
+			this.Email = user.RegisterEmail.ToLower();
 		}
 	
 		public long Id { get; set; }
