@@ -189,9 +189,12 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
     <Compile Include="Controllers\UserController.cs" />
+    <Compile Include="Utility\AppSettings.cs" />
     <Compile Include="Utility\Attributes\AddOnIconAttribute.cs" />
     <Compile Include="Utility\Attributes\PlaceholderAttribute.cs" />
     <Compile Include="Utility\Attributes\RequireTrueAttribute.cs" />
+    <Compile Include="Utility\Client.cs" />
+    <Compile Include="Utility\Cookie.cs" />
     <Compile Include="Utility\Crypto.cs" />
     <Compile Include="Utility\SendMail.cs" />
   </ItemGroup>

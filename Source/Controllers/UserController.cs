@@ -20,15 +20,26 @@ namespace RationalVote
 		// GET: /User/
 		public ActionResult Index()
 		{
-			using( SqlConnection connection = RationalVoteContext.Connect() )
-			{			
-				IEnumerable<User> users = connection.Query<User>("SELECT * FROM Users");
+			long? userID = RationalVote.Models.Session.ValidateAndUpdateSession();
 
-				return View( users.ToList() );
+			if( userID != null )
+			{
+				using( SqlConnection connection = RationalVoteContext.Connect() )
+				{			
+					IEnumerable<User> users = connection.Query<User>("SELECT * FROM Users");
+
+					return View( users.ToList() );
+				}
+			}
+			else
+			{
+				TempData[ "ErrorMessage" ] = "You must be logged in to view this page";
+				TempData[ "MessageTitle" ] = "Access denied";
+				return RedirectToAction( "Index", "Home" );
 			}
 		}
 
-		public ActionResult SignIn()
+		public ActionResult SignIn( string returnUrl )
 		{
 			return View();
 		}
@@ -124,6 +135,9 @@ namespace RationalVote
 
 					if( storedUser != null && Utility.Crypto.ConfirmPasswordHash( storedUser.Email, userPublic.LoginPassword, storedUser.PasswordSalt, storedUser.PasswordHash ) )
 					{
+						//Create new session for the user
+						RationalVote.Models.Session.CreateSession( storedUser, Request, userPublic.LoginStaySignedIn );
+
 						return RedirectToAction( "Index", "Home" );
 					}
 					else
@@ -164,11 +178,13 @@ namespace RationalVote
 						
 						TempData[ "SuccessMessage" ] = "Thank you for verifying your email address, you may now login to your account!";
 						TempData[ "MessageTitle" ] = "E-mail address verified";
+
+						return RedirectToAction("Login");
 					}
 				}
 			}
 
-			return RedirectToAction("Index");
+			return RedirectToAction( "Index", "Home" );
 		}
 
 		// GET: /User/Edit/5
