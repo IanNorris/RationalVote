@@ -5,6 +5,11 @@ using System.Web;
 using System.Web.Mvc;
 using System.Web.Optimization;
 using System.Web.Routing;
+using System.Data.SqlClient;
+using Dapper;
+using DapperExtensions;
+using RationalVote.Models;
+using RationalVote.DAL;
 
 namespace RationalVote
 {
@@ -43,6 +48,24 @@ namespace RationalVote
 				}
 
 				HttpContext.Current.RewritePath( "/Error/SiteDown" );
+			}
+		}
+
+		void Application_AuthenticateRequest( Object sender, EventArgs e )
+		{
+			long? user = RationalVote.Models.Session.ValidateAndUpdateSession();
+			
+			if( user != null )
+			{
+				using( SqlConnection connection = RationalVoteContext.Connect() )
+				{
+					User dbUser = connection.Get<User>( user );
+
+					if( dbUser != null )
+					{
+						Context.User = new UserPrincipal( dbUser );
+					}
+				}
 			}
 		}
 	}
