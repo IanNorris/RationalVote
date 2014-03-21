@@ -36,6 +36,7 @@ namespace RationalVote
 			bundles.Add(new StyleBundle("~/Content/css").Include(
 					  "~/Content/ThirdParty/bootstrap.css",
 					  "~/Content/Theme/default.css",
+					 "~/Content/Theme/custom.css",
 					  "~/Content/ThirdParty/font-awesome/css/font-awesome.css"));
 
 			bundles.Add( new StyleBundle( "~/Content/csserror" ).Include(

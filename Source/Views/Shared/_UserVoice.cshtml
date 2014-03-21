@@ -1,0 +1,31 @@
+﻿<script>
+	// Include the UserVoice JavaScript SDK (only needed once on a page)
+	UserVoice = window.UserVoice || []; (function () { var uv = document.createElement('script'); uv.type = 'text/javascript'; uv.async = true; uv.src = '//widget.uservoice.com/1Fm3X2FXf5XVacZT422Q.js'; var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(uv, s) })();
+
+	//
+	// UserVoice Javascript SDK developer documentation:
+	// https://www.uservoice.com/o/javascript-sdk
+	//
+
+	// Set colors
+	UserVoice.push(['set', {
+		accent_color: '#448dd6',
+		trigger_color: 'white',
+		trigger_background_color: '#448dd6'
+	}]);
+
+		@*@<?php if( DDD_Session::getInstance()->isValid() )
+	{?>
+		// Identify the user if logged in
+		UserVoice.push(['identify', {
+			id: <?php echo DDD_Session::getInstance()->getUserID(); ?>
+			}]);
+	<?php } ?> *@
+
+	// Add default trigger to the bottom-right corner of the window:
+	UserVoice.push(['addTrigger', { mode: 'satisfaction', trigger_position: 'bottom-right' }]);
+
+	// Autoprompt for Satisfaction and SmartVote (only displayed under certain conditions)
+	UserVoice.push(['autoprompt', {}]);
+</script>
+
