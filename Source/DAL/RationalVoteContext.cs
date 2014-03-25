@@ -19,12 +19,22 @@ namespace RationalVote.DAL
 
 		static RationalVoteContext()
 		{
+			string context = WebConfigurationManager.ConnectionStrings["RationalVoteContext"].ToString();
+
+			//Test the connection works
+			using( SqlConnection connection = new SqlConnection( context ) )
+			{
+				connection.Open();
+			}
+
 			DapperExtensions.DapperExtensions.DefaultMapper = typeof(PluralizedAutoClassMapper<>);
 		}
 
 		public static SqlConnection Connect()
 		{
-			SqlConnection connection = new SqlConnection( WebConfigurationManager.ConnectionStrings["RationalVoteContext"].ToString() );
+			string context = WebConfigurationManager.ConnectionStrings["RationalVoteContext"].ToString();
+
+			SqlConnection connection = new SqlConnection( context );
 			connection.Open();
 
 			return connection;
