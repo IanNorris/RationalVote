@@ -1,0 +1,141 @@
+
+/*Additional customisation*/
+
+
+/*Block Headline*/
+.debate-for  {
+	/*border-left: 4px solid #94c564;*/
+	border-left: 4px solid #468847;
+	margin: 20px 0;
+	/*background: #fcfcfc;*/
+	background: #dff0d8;
+	padding: 18px;
+	font-family: 'Open Sans', sans-serif;
+	font-size: 16px;
+}
+
+.debate-against  {
+	border-left: 4px solid #b94a48;
+	margin: 20px 0;
+	background: #f2dede;
+	padding: 18px;
+	font-family: 'Open Sans', sans-serif;
+	font-size: 16px;
+}
+
+.debate-contended  {
+	border-left: 4px solid #c09853;
+	margin: 20px 0;
+	background: #fcf8e3;
+	padding: 18px;
+	font-family: 'Open Sans', sans-serif;
+	font-size: 16px;
+}
+
+.debate-rejected  {
+	border-left: 4px solid #95A5A6;
+	margin: 20px 0;
+	background: #F5F5F5;
+	padding: 18px;
+	font-family: 'Open Sans', sans-serif;
+	font-size: 16px;
+}
+
+.debate-policy  {
+	border-left: 4px solid #0051d1;
+	margin: 20px 0;
+	background: #c6d9ff;
+	padding: 18px;
+	font-family: 'Open Sans', sans-serif;
+	font-size: 16px;
+}
+
+.rightButton {
+	opacity: 0.1;
+	transition: opacity .5s ease-out;
+	-moz-transition: opacity .5s ease-out;
+	-webkit-transition: opacity .5s ease-out;
+	-o-transition: opacity .5s ease-out;
+	
+	background-attachment: scroll;
+	background-clip: border-box;
+	background-color: rgba(0, 0, 0, 0);
+	background-origin: padding-box;
+	background-size: auto;
+	border-bottom-left-radius: 0px;
+	border-bottom-right-radius: 0px;
+	border-top-left-radius: 0px;
+	border-top-right-radius: 0px;
+	box-sizing: border-box;
+	
+	width: 40px;
+	height: 40px;
+
+	background-image: url(/assets/plugins/revolution_slider/rs-plugin/assets/large_right.png);
+	z-index: 100;
+}
+
+.rightButton :hover{
+	opacity: 1;
+}
+
+.progress-bar-disabled {
+    background-color: #aaa;
+}
+
+.progress-bar-noise {
+    background-color: #000;
+}
+
+a.navbar-brand
+{
+	background: url(images/logo.png) no-repeat top left;
+	display: block;
+	width: 260px;
+	height: 45px;
+	text-indent: -9999px; /* hides the link text */
+
+    margin: 3px 20px 3px 0px;
+}
+
+/* http://www.jlum.ws/post/2014/1/3/displaying-error-messages-in-callouts */
+
+.field-validation-error {
+    background: #d9534f;
+    position: relative;
+    padding: 8px 0px 8px 0px;
+    box-shadow: 0px 0px 10px #AAA;
+    min-height: 20px;
+    margin-top: 5px;
+    display: block;
+    color: #fff;
+}
+ 
+.field-validation-error::before {
+    content: "";
+    width: 0px;
+    height: 0px;
+    border: 0.75em solid transparent;
+    position: relative;
+    left: 13%;
+    bottom: 30px;
+    border-bottom: 13px solid #d9534f;
+    float: left;
+}
+
+.field-validation-valid {
+    display: none;
+}
+
+.input-validation-error {
+    border: 1px solid #ff0000;
+    background-color: #ffeeee;
+}
+
+.validation-summary-errors bs-callout bs-callout-danger {
+    font-weight: bold;
+}
+
+.validation-summary-valid {
+    display: none;
+}
