@@ -1,0 +1,105 @@
+Login to VPS via remote desktop
+Change password (Ctrl+Alt+End)
+Go to server manager, click local server, top right select windows update
+Update and reboot until no updates left.
+Change power plan to High performance
+
+Navigate to IIS management console and install Web Platform Installer when prompted
+Go to Products and select
+URL Rewrite 2.0
+Web Deploy
+Web Deployment Tool
+
+Go to MIME Types setup in IIS, change .woff to application/font-woff
+Go to Computer Management
+	Add a new user for deployment
+	Go to properties, go to Dial in
+	Click Allow access
+Go to Network Connections
+	Press Alt to get the File menu
+	Select New Incoming Connection...
+	Under network IPV4 settings, Specify IP address range
+		192.168.1.119 to 192.168.1.128
+From dev PC
+	Connect to VPN using public IP
+Go to Management Service
+	Tick Enable remote connections
+	Select 192.168.1.119 from dropdown list of IPs
+	Click Apply
+	Click Start
+	
+Open up a powershell:
+	Set-NetConnectionProfile -Name "RAS*" -NetworkCategory Private
+	netsh advfirewall set private state off
+	
+1.      Launch the SQL Server Configuration Manager from the "Microsoft SQL 
+Server 2005 CTP" Program menu
+
+2.      Click on the "Protocols for SQLEXPRESS" node
+
+3.      Click on the "TCP/IP" child node
+
+4.      You will notice an entry on the right panel for "IPAll", right click 
+on this and select, "Properties"
+
+5.      Clear out the value for "TCP Dynamic Ports"
+
+Enter 56865 as the IPAll port
+
+Go to SQL server management
+Connect to server locally
+Right click properties, go to Security
+Change SQL Server and Windows... mode
+Right click databases and create a new one
+Expand Security
+Right click Logins and click New
+select SQL Server authentication
+Enter same UN/PW as deployment user
+Select default DB as the one created above
+Click server roles and tick all the boxes
+Click user mapping and tick Map next to the db
+and tick all the boxes at the bottom
+
+Connection string is 192.168.1.119\SQLEXPRESS,56865
+
+	
+Go to IIS manager permissions
+	Add the user created above for deployment
+Go to IIS manager, go to Server Certificates
+	Import (first select Web Hosting as the store, select PFX, input private key password) - if you don't have a PFX, generate one from StartSSL control panel by inputting public and private keys.
+
+Go back to IIS manager, expand Sites tree, delete default
+Click SMTP E-mail and tick localhost, and enter a from email.
+
+Click Add Website
+Enter
+	Site name: Live
+	Create new directory C:\Live then set Physical path to it.
+Enter binding:
+	http, Public IP
+	Right click site, edit bindings
+	Add https, public IP
+	Select SSL certificate.
+Go to SSL settings
+	Select Require
+	
+From dev PC
+	Delete 'obj' folder from source tree if it exists
+	Publish from VS
+	
+Then follow this:
+http://www.jppinto.com/2010/03/automatically-redirect-http-requests-to-https-on-iis7-using-url-rewrite-2-0/
+
+<rewrite>
+		<rules>
+			<rule name="Redirect to HTTPS" stopProcessing="true">
+				<match url="(.*)" />
+				<conditions>
+					<add input="{HTTPS}" pattern="^OFF$" />
+				</conditions>
+				<action type="Redirect" url="https://{HTTP_HOST}/{R:1}" redirectType="SeeOther" />
+			</rule>
+		</rules>
+	</rewrite>
+	
+**************But you need to insert it at the server level, not the site level**********************
