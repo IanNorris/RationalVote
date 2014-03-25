@@ -4,9 +4,8 @@
 	<meta charset="utf-8" />
 	<meta content="width=device-width, initial-scale=1.0, user-scalable=no" name="viewport" />
 	<title>@ViewBag.Title - @System.Configuration.ConfigurationManager.AppSettings[ "siteTitle" ]</title>
-	@Styles.Render("~/Content/css")
-	@Scripts.Render("~/bundles/modernizr")
-
+	@Styles.Render( "~/Content/ThirdParty/css" )
+	@Styles.Render("~/Content/Theme/css")
 </head>
 <body>
 	<div class="header">
@@ -91,6 +90,9 @@
 		</div>
 	}
 
+	@Scripts.Render( "~/Scripts/ThirdParty/jqbs" )
+	@RenderSection( "scripts", required: false )
+
 	<div class="footer">
 		<div class="container">
 			@Html.Partial( "_SocialFooter" )
@@ -102,10 +104,6 @@
 			<p>User generated content on this site is licensed under  <a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/deed.en_US">Creative Commons Attribution-ShareAlike 3.0 Unported License</a> with attribution to the poster. Site templates, embedded components, featured images and additional content may have additional copyright restrictions.</p>
 		</div>
 	</div>
-
-	@Scripts.Render( "~/bundles/jquery" )
-	@Scripts.Render( "~/bundles/bootstrap" )
-	@RenderSection( "scripts", required: false )
 
 	@Html.Partial( "_UserVoice" )
 	@Html.Partial( "_GoogleAnalytics" )
