@@ -39,6 +39,17 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <PublishDatabaseSettings>
+      <Objects>
+        <ObjectGroup Name="RationalVoteContext-Deployment" Order="1">
+          <Destination Path="Server=192.168.1.119,56865\SQLEXPRESS%3bDatabase=RationalVoteDB%3bIntegrated Security=true" />
+          <Object Type="DbFullSql" Enabled="False">
+            <PreSource Path="Data Source=%28LocalDb%29\v11.0%3bInitial Catalog=RationalVote%3bIntegrated Security=SSPI%3b" ScriptSchema="True" ScriptData="False" CopyAllFullTextCatalogs="False" DriDefaults="True" />
+            <Source Path="obj\Release\AutoScripts\RationalVoteContext-Deployment_SchemaOnly.sql" Transacted="True" />
+          </Object>
+        </ObjectGroup>
+      </Objects>
+    </PublishDatabaseSettings>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="ActionMailer.Net">
@@ -201,6 +212,9 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\**\*.*" />
+    <Content Include="Config\**\*.*">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
