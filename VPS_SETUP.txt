@@ -2,6 +2,7 @@ Login to VPS via remote desktop
 Change password (Ctrl+Alt+End)
 Go to server manager, click local server, top right select windows update
 Update and reboot until no updates left.
+Change power plan to High performance
 
 Navigate to IIS management console and install Web Platform Installer when prompted
 Go to Products and select
