@@ -1,4 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<smtp deliveryMethod="Network">
-	<network enableSsl="true" host="smtp.mysite.com" userName="myuser" password="mypassword" />
-</smtp>

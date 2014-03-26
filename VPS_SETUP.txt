@@ -106,3 +106,8 @@ http://www.jppinto.com/2010/03/automatically-redirect-http-requests-to-https-on-
 
 Set up connection string at the server level, not at the site level too:
 Server=.\SQLEXPRESS;Database=RationalVoteDB;User ID=user;Password=pass
+
+
+
+NO - DON'T DO THIS, TempData stops working.
+Go to Session State and turn it off.
