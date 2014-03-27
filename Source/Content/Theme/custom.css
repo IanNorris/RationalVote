@@ -1,82 +1,93 @@
 
 /*Additional customisation*/
 
+.AuthorBlockText
+{
+    vertical-align: middle;
+}
+
+.AuthorBlock a
+{
+    text-decoration: none;
+}
+
+.AuthorBlock
+{
+    text-align: right;
+}
+
+.DebateValid
+{
+    border-color: #2ecc71;
+}
+
+.DebateValid > .DebateHeading
+{
+    color: #fff;
+    background: #2ecc71;
+}
+
+.DebateInvalid
+{
+    border-color: #e74c3c;
+}
+
+.DebateInvalid > .DebateHeading
+{
+    color: #fff;
+    background: #e74c3c;
+}
+
+.DebateAmbiguous
+{
+    border-color: #e67e22;
+}
+
+.DebateAmbiguous > .DebateHeading
+{
+    color: #fff;
+    background: #e67e22;
+}
+
+.DebateNoise
+{
+    border-color: #95a5a6;
+}
+
+.DebateNoise > .DebateHeading
+{
+    color: #fff;
+    background: #95a5a6;
+}
+
+.DebateChild
+{
+	margin: 20px 0;
+	padding: 18px;
+	font-family: 'Open Sans', sans-serif;
+	font-size: 16px;
+    margin-bottom: 0;
+}
 
 /*Block Headline*/
-.debate-for  {
-	/*border-left: 4px solid #94c564;*/
+.DebateChildValid  {
 	border-left: 4px solid #468847;
-	margin: 20px 0;
-	/*background: #fcfcfc;*/
 	background: #dff0d8;
-	padding: 18px;
-	font-family: 'Open Sans', sans-serif;
-	font-size: 16px;
 }
 
-.debate-against  {
+.DebateChildInvalid  {
 	border-left: 4px solid #b94a48;
-	margin: 20px 0;
 	background: #f2dede;
-	padding: 18px;
-	font-family: 'Open Sans', sans-serif;
-	font-size: 16px;
 }
 
-.debate-contended  {
+.DebateChildAmbiguous  {
 	border-left: 4px solid #c09853;
-	margin: 20px 0;
 	background: #fcf8e3;
-	padding: 18px;
-	font-family: 'Open Sans', sans-serif;
-	font-size: 16px;
 }
 
-.debate-rejected  {
+.DebateChildNoise  {
 	border-left: 4px solid #95A5A6;
-	margin: 20px 0;
 	background: #F5F5F5;
-	padding: 18px;
-	font-family: 'Open Sans', sans-serif;
-	font-size: 16px;
-}
-
-.debate-policy  {
-	border-left: 4px solid #0051d1;
-	margin: 20px 0;
-	background: #c6d9ff;
-	padding: 18px;
-	font-family: 'Open Sans', sans-serif;
-	font-size: 16px;
-}
-
-.rightButton {
-	opacity: 0.1;
-	transition: opacity .5s ease-out;
-	-moz-transition: opacity .5s ease-out;
-	-webkit-transition: opacity .5s ease-out;
-	-o-transition: opacity .5s ease-out;
-	
-	background-attachment: scroll;
-	background-clip: border-box;
-	background-color: rgba(0, 0, 0, 0);
-	background-origin: padding-box;
-	background-size: auto;
-	border-bottom-left-radius: 0px;
-	border-bottom-right-radius: 0px;
-	border-top-left-radius: 0px;
-	border-top-right-radius: 0px;
-	box-sizing: border-box;
-	
-	width: 40px;
-	height: 40px;
-
-	background-image: url(/assets/plugins/revolution_slider/rs-plugin/assets/large_right.png);
-	z-index: 100;
-}
-
-.rightButton :hover{
-	opacity: 1;
 }
 
 .progress-bar-disabled {

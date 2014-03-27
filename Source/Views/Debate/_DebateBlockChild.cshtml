@@ -1,0 +1,45 @@
+﻿@model DebateLink
+
+@{
+	int BoxWidth = 12;
+	int SideBarWidth = 1;
+	BoxWidth = BoxWidth - SideBarWidth;
+	
+	Profile profile = RationalVote.Models.Profile.GetFromUser( Model.Child.Owner_Id );
+	
+	VoteSplit voteSplit = new VoteSplit();
+	voteSplit.For = 65;
+	voteSplit.Assumption = 5;
+	voteSplit.Against = 25;
+	voteSplit.Noise = 5;
+	voteSplit.Total = 100;
+}
+
+<div class="row">
+	<div class="col-md-@SideBarWidth"></div>
+	<div class="col-md-@BoxWidth">
+		<div class="DebateChild DebateChild@(Model.Child.Validity().ToString())" title="$panel_tip">
+			<div class="row">
+				<div class="col-md-11">
+					<p>@Model.Child.Title</p>
+					<br />
+				</div>
+				<div class="col-md-1">
+					<a href="@Url.Action( "Index", new { Id = Model.Child.Id } )" title="Debate this"><i class="fa fa-chevron-circle-right fa-4x"></i></a>
+					<br /><br />
+				</div>
+			</div>
+
+			<div class="row">
+				<div class="col-md-9">
+					$tag_block
+				</div>
+				<div class="col-md-3 AuthorBlock">
+					<h5>@Html.Partial( "_Author", profile )</h5>
+				</div>
+			</div>
+		</div>
+		@Html.Partial( "_VoteSplit", voteSplit )
+		$opinion_box
+	</div>
+</div>

@@ -1,0 +1,27 @@
+﻿@model VoteSplit
+
+@if( Model.Total > 0 )
+{
+	<div class="progress" style="height:10px;margin-bottom:0px">
+		<div class="progress-bar progress-bar-success" style="width: @Model.For%" title="@Model.For% in favor">
+			<span class="sr-only">@Model.For% in favor</span>
+		</div>
+		<div class="progress-bar progress-bar-warning" style="width: @Model.Assumption%" title="@Model.Assumption% undebated or assumptions">
+			<span class="sr-only">@Model.Assumption% undebated or assumptions</span>
+		</div>
+		<div class="progress-bar progress-bar-danger" style="width: @Model.Against%" title="@Model.Against% against">
+			<span class="sr-only">@Model.Against% against</span>
+		</div>
+		<div class="progress-bar progress-bar-noise" style="width: @Model.Noise%" title="@Model.Noise% disproven, invalid or spam">
+			<span class="sr-only">@Model.Noise% disproven, invalid or spam</span>
+		</div>
+	</div>
+}
+else
+{
+	<div class="progress" style="height:10px;margin-bottom:0px">
+		<div class="progress-bar progress-bar-disabled" style="width: 100%" title="This post has not been debated">
+			<span class="sr-only">This post has not been debated</span>
+		</div>
+	</div>
+}
