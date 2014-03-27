@@ -1,4 +1,121 @@
-﻿
-@{
-    ViewBag.Title = "Start a debate";
+﻿@{
+	Layout = "~/Views/Debate/_DebateLayout.cshtml";
+	ViewBag.Title = "Start a debate";
+
+	int maxArgumentLength = Utility.AppSettings.Get<int>("maxArgumentLength");
+}
+
+<div class="container">
+	<div class="row">
+		<div class="col-sm-4">
+			<div class="panel panel-default">
+				<div class="panel-body">
+					<form accept-charset="UTF-8" action="/new_topic_post.php" method="POST">
+						<textarea class="form-control counted" name="message" placeholder="Type in your message" rows="5" style="margin-bottom:10px;" id="assertionBox"></textarea>
+						<p class="pull-right" id="counter">@maxArgumentLength characters remaining</p>
+						<br /><br />
+						<button class="btn btn-info RightButton" type="submit">Post New Assertion</button>
+					</form>
+				</div>
+			</div>
+		</div>
+
+		<div class="col-sm-8">
+
+			<div class="panel panel-primary">
+				<div class="panel-heading"><i class="fa fa-question-circle fa-fw"></i> What to post</div>
+				<div class="panel-body">
+					Arguments are not won with questions but with statements. When you state something to be true,
+					you <i>assert</i> it. An assertion is a confident statement of fact or belief - something you believe is correct.
+					<br /><br />
+					Some assertions:
+					<ul>
+						<li>Red is a colour.</li>
+						<li>3 is less than 4.</li>
+						<li>4 is less than 2.</li>
+						<li>Apples are blue.</li>
+					</ul>
+
+					It is important to note that an assertion may turn out to be false, that is what debate is all about -
+					establishing what is true, what is relevant and what is not. However an assertion is still an assertion
+					if it is proven false.
+				</div>
+			</div>
+
+			<div class="panel panel-success">
+				<div class="panel-heading"><i class="fa fa-thumbs-up fa-fw"></i> What makes a <b>good</b> assertion?</div>
+				<div class="panel-body">
+					<ul>
+						<li>
+							Short and contain exactly one idea without supporting evidence.
+							You can attach other assertions to back up your main assertion later.
+							<ul>
+								<li>Good example: <i>The sky is blue.</i></li>
+								<li>Bad example: <i>I think the sky is a light blue colour because X Y Z, and bananas are yellow.</i></li>
+							</ul>
+						</li>
+
+
+					</ul>
+				</div>
+			</div>
+
+			<div class="panel panel-danger">
+				<div class="panel-heading"><i class="fa fa-thumbs-down fa-fw"></i> What makes a <b>bad</b> assertion?</div>
+				<div class="panel-body">
+					<ul>
+						<li>
+							A question.
+							<ul>
+								<li>Example: <i>What colour is the sky?</i></li>
+								<li>Fixed example: <i>The sky is blue.</i></li>
+							</ul>
+						</li>
+
+						<li>
+							A lie.
+							<ul>
+								<li>Example: <i>I saw Elvis at the supermarket last week.</i></li>
+							</ul>
+						</li>
+
+						<li>
+							A link, HTML code or ASCII art. Sentences only please!
+							<ul>
+								<li>Example: <i>http://www.google.com/</i></li>
+							</ul>
+						</li>
+
+						<li>
+							A logical fallacy.
+							<ul>
+								<li>If you are not familiar with logical fallacies, you can read all about them on this <a href="https://yourlogicalfallacyis.com/" target="#new">helpful website</a>.</li>
+							</ul>
+						</li>
+
+						<li>
+							Anything on the prohibited list.
+							<ul>
+								<li>You can read what is banned on the site at our <a data-toggle="modal" href="/Content/Static/tos.html" data-target="#tosDialog">terms of service</a> page, don't worry it's short!</li>
+							</ul>
+						</li>
+					</ul>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+
+<div class="modal fade" id="tosDialog" tabindex="-1" role="dialog" aria-labelledby="tosLabel" aria-hidden="true">
+</div>
+
+@section DebateScripts
+{
+	<script>
+		$(function ()
+		{
+			$("#assertionBox").charCounter( @maxArgumentLength, { container: "#counter" });
+		});
+	</script>
 }

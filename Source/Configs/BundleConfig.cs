@@ -24,7 +24,8 @@ namespace RationalVote
 			bundles.Add(new ScriptBundle("~/Scripts/ThirdParty/jqueryval").Include(
 				"~/Scripts/ThirdParty/jquery.validate.js",
 				"~/Scripts/ThirdParty/jquery.validate.unobtrusive.js",
-				"~/Scripts/ThirdParty/jquery.validate.unobtrusive-custom.js")
+				"~/Scripts/ThirdParty/jquery.validate.unobtrusive-custom.js",
+				"~/Scripts/ThirdParty/jquery.charcounter.js")
 			);
 
 			bundles.Add( new ScriptBundle( "~/Scripts/ThirdParty/zxcvbn" ).Include(

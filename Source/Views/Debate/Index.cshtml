@@ -1,7 +1,8 @@
 ﻿@model RationalVote.Models.Debate
-
 @{
 	ViewBag.Title = Model.Title;
+	Layout = "~/Views/Debate/_DebateLayout.cshtml";
+	
 	ViewBag.Breadcrumbs = new List<KeyValuePair<string, string>>()
 	{
 		new KeyValuePair<string, string>( "Debates", "/Debate" )
@@ -11,13 +12,4 @@
 	};
 }
 
-<div class="row">
-
-	<div class="col-md-2">
-		@Html.Partial( "_SideBar" )
-	</div>
-
-	<div class="col-md-10">
-		@Html.Partial( "_DebateBlockParent", Model )
-	</div>
-</div>
+@Html.Partial( "_DebateBlockParent", Model )
