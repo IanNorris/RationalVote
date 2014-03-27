@@ -14,12 +14,19 @@ using RationalVote.DAL;
 
 namespace RationalVote.Controllers
 {
-	[RoutePrefix("Debate")]
 	public class DebateController : Controller
 	{
 		//
+		// GET: /New
+		[Route( "New" )]
+		public ActionResult Create()
+		{
+			return View();
+		}
+
+		//
 		// GET: /Debate/{Id?}
-		[Route( "{Id?}" )]
+		[Route( "Debate/{Id?}" )]
 		public ActionResult Index( long? Id )
 		{
 			if( Id == null )

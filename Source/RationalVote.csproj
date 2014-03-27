@@ -308,6 +308,7 @@
     <Content Include="Views\Debate\_DebateBlockChild.cshtml" />
     <Content Include="Views\Debate\_Author.cshtml" />
     <Content Include="Views\Debate\_VoteSplit.cshtml" />
+    <Content Include="Views\Debate\Create.cshtml" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
