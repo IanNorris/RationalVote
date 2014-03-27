@@ -114,7 +114,7 @@ namespace RVUtility
 			return html;
 		}
 
-		public static HtmlString CreateMenuItem( this HtmlHelper htmlHelper, Item menuItem )
+		public static MvcHtmlString CreateMenuItem( this HtmlHelper htmlHelper, Item menuItem )
 		{
 			bool isActive;
 
