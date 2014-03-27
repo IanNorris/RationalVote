@@ -1,27 +1,82 @@
 ﻿@model VoteSplit
 
-@if( Model.Total > 0 )
-{
-	<div class="progress" style="height:10px;margin-bottom:0px">
-		<div class="progress-bar progress-bar-success" style="width: @Model.For%" title="@Model.For% in favor">
-			<span class="sr-only">@Model.For% in favor</span>
+@{
+	long voteTotal = Model.For + Model.Against + Model.Assumption;
+
+	if( voteTotal > 0 )
+	{
+		//Well, this is a bit of a mess...
+		//The progress bar won't render properly unless the values
+		//add up to exactly 100%, well browsers truncate to 2dp
+		//and that leaves a sizable gap in some cases.
+		//So the solution is to use a simplified version of the
+		//largest remainder method.
+		
+		double ForPercent			= ( (double)Model.For			/ (double)voteTotal ) * 100.0;
+		double AssumptionPercent	= ( (double)Model.Assumption	/ (double)voteTotal ) * 100.0;
+		double AgainstPercent		= ( (double)Model.Against		/ (double)voteTotal ) * 100.0;
+		
+		double[] Percentages = { ForPercent, AssumptionPercent, AgainstPercent };
+		
+		//Round all the values down to start off with
+		int[] PercentagesInt = { (int)ForPercent, (int)AssumptionPercent, (int)AgainstPercent };
+		
+		for( int outer = 0; outer < 2; outer++ )
+		{
+			//If all the numbers add to 100 then do nothing
+			int sum = 0;
+			for( int sumIndex = 0; sumIndex < 3; sumIndex++ )
+			{
+				sum += PercentagesInt[ sumIndex ];
+			}
+			
+			System.Diagnostics.Debug.Assert( sum <= 100 );
+			
+			if( sum == 100 )
+			{ 
+				break;
+			}
+			
+			//Find the largest remainder
+			double largest = Percentages[ 0 ] - (double)PercentagesInt[ 0 ];
+			int largest_index = 0;
+			for( int index = 1; index < 3; index++ )
+			{
+				double rem = Percentages[ index ] - (double)PercentagesInt[ index ];
+				if( rem > largest )
+				{ 
+					largest = rem;
+					largest_index = index;
+				}
+			}
+			
+			//Add one to that value then set the original
+			//percentage to a negative value so it doesn't
+			//get touched the next time around
+			PercentagesInt[ largest_index ]++;
+			Percentages[ largest_index ] = -100.0;
+		}
+
+		System.Diagnostics.Debug.Assert( (PercentagesInt[0] + PercentagesInt[1] + PercentagesInt[2]) == 100 );
+		
+		<div class="progress" style="height:10px;margin-bottom:0">
+			<div class="progress-bar progress-bar-success" style="width: @PercentagesInt[0]%" title="@PercentagesInt[0] in favor">
+				<span class="sr-only">@PercentagesInt[0] in favor</span>
+			</div>
+			<div class="progress-bar progress-bar-warning" style="width: @PercentagesInt[1]%" title="@PercentagesInt[1] undebated or assumptions">
+				<span class="sr-only">@PercentagesInt[1] undebated or assumptions</span>
+			</div>
+			<div class="progress-bar progress-bar-danger" style="width: @PercentagesInt[2]%" title="@PercentagesInt[2] against">
+				<span class="sr-only">@PercentagesInt[2] against</span>
+			</div>
 		</div>
-		<div class="progress-bar progress-bar-warning" style="width: @Model.Assumption%" title="@Model.Assumption% undebated or assumptions">
-			<span class="sr-only">@Model.Assumption% undebated or assumptions</span>
+	}
+	else
+	{
+		<div class="progress" style="height:10px;margin-bottom:0">
+			<div class="progress-bar progress-bar-disabled" style="width: 100%" title="This argument has not been debated">
+				<span class="sr-only">This argument has not been debated</span>
+			</div>
 		</div>
-		<div class="progress-bar progress-bar-danger" style="width: @Model.Against%" title="@Model.Against% against">
-			<span class="sr-only">@Model.Against% against</span>
-		</div>
-		<div class="progress-bar progress-bar-noise" style="width: @Model.Noise%" title="@Model.Noise% disproven, invalid or spam">
-			<span class="sr-only">@Model.Noise% disproven, invalid or spam</span>
-		</div>
-	</div>
-}
-else
-{
-	<div class="progress" style="height:10px;margin-bottom:0px">
-		<div class="progress-bar progress-bar-disabled" style="width: 100%" title="This post has not been debated">
-			<span class="sr-only">This post has not been debated</span>
-		</div>
-	</div>
+	}
 }

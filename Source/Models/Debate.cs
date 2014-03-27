@@ -16,18 +16,12 @@ namespace RationalVote.Models
 {
 	public partial class Debate
 	{
-		public enum DebateType : short
-		{
-			Against,
-			For
-		}
-
 		public enum StatusType : short
 		{
 			Accepted,
 			Assumption,
 			Open,
-			Disproven,
+			Rejected,
 			Noise,
 		}
 
@@ -61,7 +55,7 @@ namespace RationalVote.Models
 				case StatusType.Assumption:
 				case StatusType.Open:
 					return ValidityType.Ambiguous;
-				case StatusType.Disproven:
+				case StatusType.Rejected:
 					return ValidityType.Invalid;
 				case StatusType.Noise:
 					return ValidityType.Noise;
@@ -79,7 +73,7 @@ namespace RationalVote.Models
 				case StatusType.Assumption:
 				case StatusType.Open:
 					return "question";
-				case StatusType.Disproven:
+				case StatusType.Rejected:
 					return "times";
 				case StatusType.Noise:
 					return "trash-o";

@@ -20,6 +20,7 @@
 
 <div class="panel Debate@(Model.Validity().ToString())">
 	<div class="DebateHeading panel-heading"><h3 class="panel-title"><i class="fa fa-@Model.StatusIcon()"></i> [@Model.StatusName().ToUpper()] @Model.Title</h3></div>
+	@Html.Partial( "_VoteSplit", VoteSplit.Get( Model.Id ) )
 	<div class="panel-body">
 		<div class="headline"><h4><span class="label label-success" title="There are @scoreFor votes for this proposition">@scoreFor</span> Arguments for</h4></div>
 

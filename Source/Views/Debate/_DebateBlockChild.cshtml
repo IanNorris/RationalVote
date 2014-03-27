@@ -6,13 +6,7 @@
 	BoxWidth = BoxWidth - SideBarWidth;
 	
 	Profile profile = RationalVote.Models.Profile.GetFromUser( Model.Child.Owner_Id );
-	
-	VoteSplit voteSplit = new VoteSplit();
-	voteSplit.For = 65;
-	voteSplit.Assumption = 5;
-	voteSplit.Against = 25;
-	voteSplit.Noise = 5;
-	voteSplit.Total = 100;
+	VoteSplit voteSplit = VoteSplit.Get( Model.Child.Id );
 }
 
 <div class="row">

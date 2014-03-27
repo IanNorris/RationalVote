@@ -9,7 +9,6 @@ namespace RationalVote.Models
 		{
 			For,
 			Against,
-			Attachment
 		}
 
 		public DebateLink()
