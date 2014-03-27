@@ -3,20 +3,13 @@
 @{
 	bool Expert = true;
 	string ExpertTags = "Cheese,Ponies";
-}
-
-<p class="color-green">
-	@if( Model.DisplayName != null )
+	
+	if( Model.DisplayName != null )
 	{
 		long level = @Model.Level();
 
 		<a href="@Url.Action( "Details", "Profile", new { Id = Model.Id } )" title="@Model.DisplayName" class="AuthorBlock">
-			<span class="label label-default" title="@Model.DisplayName has reached level @level">
-				@level
-			</span>
-
-			&nbsp;
-
+			
 			<span class="AuthorBlockText">
 				@Model.DisplayName
 
@@ -31,11 +24,18 @@
 					<i class="fa fa-star" title="@Model.DisplayName is an expert in the @topicString of: @ExpertTags"></i>
 				}
 			</span>
+
+			<span class="label label-default" title="@Model.DisplayName has reached level @level">
+				@level
+			</span>
 		</a>
 	}
 	else
 	{
-		<p title="This user has not created a public profile yet.">Anonymous</p>
+		<a>
+			<span class="AuthorBlockText">
+				<p title="This user has not created a public profile yet.">Anonymous</p>
+			</span>
+		</a>
 	}
-</p>
-
+}

@@ -16,11 +16,13 @@ namespace RationalVote.Models
 {
 	public partial class Debate
 	{
+		//The order of the elements in this enum
+		//control the sort order
 		public enum StatusType : short
 		{
 			Accepted,
-			Assumption,
 			Open,
+			Assumption,
 			Rejected,
 			Noise,
 		}
@@ -52,8 +54,8 @@ namespace RationalVote.Models
 			{
 				case StatusType.Accepted:
 					return ValidityType.Valid;
-				case StatusType.Assumption:
 				case StatusType.Open:
+				case StatusType.Assumption:
 					return ValidityType.Ambiguous;
 				case StatusType.Rejected:
 					return ValidityType.Invalid;
@@ -70,8 +72,8 @@ namespace RationalVote.Models
 			{
 				case StatusType.Accepted:
 					return "check";
-				case StatusType.Assumption:
 				case StatusType.Open:
+				case StatusType.Assumption:
 					return "question";
 				case StatusType.Rejected:
 					return "times";
@@ -91,8 +93,10 @@ namespace RationalVote.Models
 		{
 			using( SqlConnection connection = RationalVoteContext.Connect() )
 			{
+				//To limit selection, do SELECT TOP 10 etc
+
 				IEnumerable<DebateLink> arguments = connection.Query<DebateLink, Debate, DebateLink>( 
-					@"SELECT 
+					@"SELECT
 						DebateLinks.*, Debates.*, DebateLinkVotes.vote AS Vote
 					FROM
 						DebateLinks
@@ -101,7 +105,8 @@ namespace RationalVote.Models
 							LEFT OUTER JOIN
 						DebateLinkVotes ON (DebateLinkVotes.Link_Id = DebateLinks.Id)
 					WHERE
-						DebateLinks.Parent_Id = @Parent",
+						DebateLinks.Parent_Id = @Parent
+					ORDER BY Debates.Status ASC, DebateLinks.Weight DESC",
 					( parent, child) =>
 					{
 						parent.Child = child;
