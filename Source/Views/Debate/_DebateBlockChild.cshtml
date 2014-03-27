@@ -14,12 +14,12 @@
 	<div class="col-md-@BoxWidth">
 		<div class="DebateChild DebateChild@(Model.Child.Validity().ToString())" title="$panel_tip">
 			<div class="row">
-				<div class="col-md-11">
+				<div class="col-md-9">
 					<p>@Model.Child.Title</p>
 					<br />
 				</div>
-				<div class="col-md-1">
-					<a href="@Url.Action( "Index", new { Id = Model.Child.Id } )" title="Debate this"><i class="fa fa-chevron-circle-right fa-4x"></i></a>
+				<div class="col-md-3">
+					<a href="@Url.Action( "Index", new { Id = Model.Child.Id } )" title="Debate this"><i class="fa fa-chevron-circle-right fa-4x RightButton"></i></a>
 					<br /><br />
 				</div>
 			</div>

@@ -1,3 +1,23 @@
 ﻿@model RationalVote.Models.Debate
 
-@Html.Partial( "_DebateBlockParent", Model )
+@{
+	ViewBag.Title = Model.Title;
+	ViewBag.Breadcrumbs = new List<KeyValuePair<string, string>>()
+	{
+		new KeyValuePair<string, string>( "Debates", "/Debate" )
+		
+		//TODO: set this to the parent, could also be a tag or search term
+		//new KeyValuePair<string, string>( Model.Title, Url.Action( "Index", "Debate", new { Id = Model.Id } ) )
+	};
+}
+
+<div class="row">
+
+	<div class="col-md-2">
+		@Html.Partial( "_SideBar" )
+	</div>
+
+	<div class="col-md-10">
+		@Html.Partial( "_DebateBlockParent", Model )
+	</div>
+</div>

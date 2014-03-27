@@ -5,16 +5,16 @@
 		@Html.AntiForgeryToken()
 	}
 	
-	<li class="dropdown">
-		<a href="#" class="dropdown-toggle" data-toggle="dropdown">@(((RationalVote.Models.UserPrincipal)Context.User).User.Email) <b class="caret"></b></a>
-		<ul class="dropdown-menu">
-			<li><a href="@Url.Action( "Edit", "Profile" )"><i class="fa fa-user"></i> Profile</a></li>
-			<li><a href="@Url.Action( "Settings", "User" )"><i class="fa fa-cogs"></i> Settings</a></li>
-			<li><a href="javascript:document.getElementById('logoutForm').submit()"><i class="fa fa-sign-out"></i> Sign out</a></li>
-		</ul>
-	</li>
+	@Html.CreateMenu( ((RationalVote.Models.UserPrincipal)Context.User).User.Email,
+		new Menu.Item[]
+		{
+			new Menu.Action(  "Profile", "user", "Edit", "Profile", null ),
+			new Menu.Action(  "Settings", "cogs", "Settings", "User", null ),
+			new Menu.Uri(  "Sign out", "sign-out", "javascript:document.getElementById('logoutForm').submit()" ),
+		} 
+	)
 }
 else
 {
-	<li>@Html.ActionLink( "Sign in", "SignIn", "User" )</li>
+	@Html.CreateMenuItem( new Menu.Action( "Sign in", null, "SignIn", "User", null ) )
 }

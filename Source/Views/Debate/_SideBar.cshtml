@@ -1,0 +1,49 @@
+﻿@using RVUtility
+
+<ul class="nav nav-pills nav-stacked">
+	@Html.CreateMenuItem( new Menu.Action( "New debate", "pencil", "Create", "Debate", null ) )
+	@Html.CreateMenuItem( new Menu.Action( "Newest", "refresh", "Index", "Debate", null ) )
+</ul>
+
+<br />
+<div class="tag-box tag-box-v4">
+	<h4>Top tags</h4>
+	<p>
+		@*<?php
+
+	$max_tag_limit = 5;
+
+	$dbcon = DDD_DatabaseConnection::get();
+
+	$top_tags_string = <<<query select
+							ddd_tags.tag_id, ddd_tags.tag, counttable.usage_count
+							from
+							ddd_tags
+							left join
+							(select
+							tag_id, count(ddd_assertion_tags.tag_id) as usage_count
+							from
+							ddd_assertion_tags
+							group by ddd_assertion_tags.tag_id) as counttable on (ddd_tags.tag_id=countTable.tag_id)
+							order by counttable.usage_count desc
+							limit $max_tag_limit
+							query;
+							$top_tags=$dbcon->
+		prepare( $top_tags_string );
+		$top_tags->execute();
+
+		$results = $top_tags->fetchAll();
+
+		$first = true;
+
+		foreach( $results as $row )
+		{
+		$tag = htmlspecialchars( $row[ 'tag' ], ENT_QUOTES );
+
+		echo <<<tag
+			<span><a href="/tag.php?tags=$tag"><i class="fa fa-tag"></i>&nbsp;$tag </a></span>
+			TAG;
+			}
+			?>*@
+	</p>
+</div>

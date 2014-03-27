@@ -18,8 +18,8 @@ namespace RationalVote.Controllers
 	public class DebateController : Controller
 	{
 		//
-		// GET: /Debate/Index/{Id?}
-		[Route( "Index/{Id?}" )]
+		// GET: /Debate/{Id?}
+		[Route( "{Id?}" )]
 		public ActionResult Index( long? Id )
 		{
 			if( Id == null )
