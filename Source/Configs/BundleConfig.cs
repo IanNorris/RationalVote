@@ -29,7 +29,7 @@ namespace RationalVote
 			);
 
 			bundles.Add( new ScriptBundle( "~/Scripts/ThirdParty/zxcvbn" ).Include(
-				"~/Scripts/ThirdParty/zxcvbn.js",
+				"~/Scripts/ThirdParty/zxcvbn-async.js",
 				"~/Scripts/zxcvbn-register.js") 
 			);
 
