@@ -11,7 +11,7 @@ namespace RationalVote.Models
 		[Placeholder( "Enter your argument" )]
 		[DataType( DataType.MultilineText )]
 		[Required( ErrorMessage = "Your argument cannot be empty." )]
-		[StringLength( 254 )]
+		[StringLength( 160 )]
 		public string Argument { get; set; }
 	}
 }

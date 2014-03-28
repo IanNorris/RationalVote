@@ -33,10 +33,25 @@ namespace RationalVote.Controllers
 		[ValidateAntiForgeryToken]
 		public ActionResult Create( DebateNew debateInput )
 		{
-			Debate debate = new Debate();
-			//debate.Owner_Id = User.Identity.
+			if( ModelState.IsValid )
+			{
+				Debate debate = new Debate();
+				debate.Owner_Id = ((RationalVote.Models.UserPrincipal)HttpContext.User).User.Id;
+				debate.Title = debateInput.Argument;
+				debate.Locked = false;
+				debate.Posted = DateTime.Now;
+				debate.Status = Debate.StatusType.Open;
+				debate.Updated = null;
 
-			return RedirectToAction( "Index", new { Id = 15 } );
+				using( SqlConnection connection = RationalVoteContext.Connect() )
+				{
+					long Id = connection.Insert( debate );
+
+					return RedirectToAction( "Index", new { Id = Id } );
+				}
+			}
+
+			return View( debateInput );
 		}
 
 		//

@@ -44,7 +44,7 @@ namespace RationalVote.Models
 		public StatusType Status { get; set; }
 		public string Title { get; set; }
 		public System.DateTime Posted { get; set; }
-		public System.DateTime Updated { get; set; }
+		public System.DateTime? Updated { get; set; }
 		public long Owner_Id { get; set; }
 		public bool Locked { get; set; }
 

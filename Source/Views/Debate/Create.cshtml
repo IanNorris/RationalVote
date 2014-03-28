@@ -5,6 +5,13 @@
 	ViewBag.Title = "Start a debate";
 
 	int maxArgumentLength = Utility.AppSettings.Get<int>("maxArgumentLength");
+	
+	string ModelValue = "";
+	
+	if( Model != null )
+	{
+		ModelValue = @Model.Argument;
+	}
 }
 
 <div class="container">
@@ -20,7 +27,7 @@
 								  data-val-length="Your argument cannot exceed @maxArgumentLength characters" 
 								  data-val-length-max="@maxArgumentLength" data-val-required="Your argument cannot be empty." rows="8"
 								  placeholder="Enter your argument"
-								  id="Argument" name="Argument"></textarea>
+								  id="Argument" name="Argument">@ModelValue</textarea>
 
 						@Html.ValidationMessageFor( m => m.Argument, null )
 
