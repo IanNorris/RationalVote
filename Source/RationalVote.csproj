@@ -189,6 +189,7 @@
     <Compile Include="Models\Debate.cs" />
     <Compile Include="Models\DebateLink.cs" />
     <Compile Include="Models\DebateLinkVote.cs" />
+    <Compile Include="Models\DebateNew.cs" />
     <Compile Include="Models\DebateTag.cs" />
     <Compile Include="Models\EmailVerificationToken.cs" />
     <Compile Include="Models\Permission.cs" />
@@ -206,6 +207,7 @@
     <Compile Include="Utility\AppSettings.cs" />
     <Compile Include="Utility\Attributes\AddOnIconAttribute.cs" />
     <Compile Include="Utility\Attributes\PlaceholderAttribute.cs" />
+    <Compile Include="Utility\Attributes\RequireLogin.cs" />
     <Compile Include="Utility\Attributes\RequireTrueAttribute.cs" />
     <Compile Include="Utility\Client.cs" />
     <Compile Include="Utility\Cookie.cs" />

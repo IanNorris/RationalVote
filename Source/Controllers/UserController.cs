@@ -41,6 +41,8 @@ namespace RationalVote
 
 		public ActionResult SignIn( string returnUrl )
 		{
+			ViewBag.ReturnUrl = returnUrl;
+
 			return View();
 		}
 
@@ -65,8 +67,10 @@ namespace RationalVote
 		// more details see http://go.microsoft.com/fwlink/?LinkId=317598.
 		[HttpPost]
 		[ValidateAntiForgeryToken]
-		public ActionResult Register( UserRegister userPublic )
+		public ActionResult Register( UserRegister userPublic, string returnUrl )
 		{
+			ViewBag.ReturnUrl = returnUrl;
+
 			if (ModelState.IsValid)
 			{
 				try
@@ -83,6 +87,10 @@ namespace RationalVote
 							user.PasswordSalt = salt;
 							user.PasswordHash = hash;
 
+#if DEBUG
+							user.Verified = true;
+#endif
+
 							//Add the user
 							user.Id = connection.Insert( user, transaction );
 
@@ -94,11 +102,16 @@ namespace RationalVote
 							Profile profile = RationalVote.Models.Profile.CreateNew( user );
 							connection.Insert( profile, transaction );
 
+#if !DEBUG
 							new Controllers.MailController().VerificationEmail( user, verificationToken ).Deliver();
+#endif
 
 							transaction.Commit();
 
-							return RedirectToAction("Index");
+							TempData[ "WarningMessage" ] = "Thank you for registering! An e-mail has been sent to the e-mail address you provided. To log in you will need to click this link and verify your account.";
+							TempData[ "MessageTitle" ] = "E-mail verification required";
+
+							return RedirectToAction( "Index", "Home" );
 						}
 					}
 				}
@@ -125,20 +138,29 @@ namespace RationalVote
 		// more details see http://go.microsoft.com/fwlink/?LinkId=317598.
 		[HttpPost]
 		[ValidateAntiForgeryToken]
-		public ActionResult Login( UserLogin userPublic )
+		public ActionResult Login( UserLogin userPublic, string returnUrl )
 		{
+			ViewBag.ReturnUrl = returnUrl;
+
 			if( ModelState.IsValid )
 			{
 				using( SqlConnection connection = RationalVoteContext.Connect() )
 				{
 					User storedUser = connection.Query<User>( "SELECT * FROM Users WHERE Email = @Email", new { Email = userPublic.LoginEmail.ToLower() } ).FirstOrDefault();
 
-					if( storedUser != null && Utility.Crypto.ConfirmPasswordHash( storedUser.Email, userPublic.LoginPassword, storedUser.PasswordSalt, storedUser.PasswordHash ) )
+					if( storedUser != null && storedUser.Verified && Utility.Crypto.ConfirmPasswordHash( storedUser.Email, userPublic.LoginPassword, storedUser.PasswordSalt, storedUser.PasswordHash ) )
 					{
 						//Create new session for the user
 						RationalVote.Models.Session.CreateSession( storedUser, Request, userPublic.LoginStaySignedIn );
 
-						return RedirectToAction( "Index", "Home" );
+						if( Url.IsLocalUrl( returnUrl ) )
+						{
+							return Redirect( returnUrl );
+						}
+						else
+						{
+							return RedirectToAction( "Index", "Home" );
+						}
 					}
 					else
 					{

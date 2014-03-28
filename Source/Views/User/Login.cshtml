@@ -1,6 +1,6 @@
 ﻿@model RationalVote.Models.UserLogin
 
-@using( Html.BeginForm( "Login", "User", FormMethod.Post, new { @class = "reg-page" } ) )
+@using( Html.BeginForm( "Login", "User", new { returnUrl = ViewBag.returnUrl }, FormMethod.Post, new { @class = "reg-page" } ) )
 {
 	@Html.AntiForgeryToken()
 	<div class="reg-header">

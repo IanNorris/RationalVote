@@ -1,4 +1,6 @@
-﻿@{
+﻿@model DebateNew
+
+@{
 	Layout = "~/Views/Debate/_DebateLayout.cshtml";
 	ViewBag.Title = "Start a debate";
 
@@ -7,20 +9,32 @@
 
 <div class="container">
 	<div class="row">
-		<div class="col-sm-4">
+		<div class="col-sm-5">
 			<div class="panel panel-default">
 				<div class="panel-body">
-					<form accept-charset="UTF-8" action="/new_topic_post.php" method="POST">
-						<textarea class="form-control counted" name="message" placeholder="Type in your message" rows="5" style="margin-bottom:10px;" id="assertionBox"></textarea>
-						<p class="pull-right" id="counter">@maxArgumentLength characters remaining</p>
+					@using (Html.BeginForm( "Create", "Debate", FormMethod.Post ))
+					{
+						@Html.AntiForgeryToken()
+					
+						@*@Html.EditorFor( model => model.Argument )*@
+
+						<textarea class="form-control counted multi-line" data-val="true" 
+								  data-val-length="Your argument cannot exceed @maxArgumentLength characters" 
+								  data-val-length-max="@maxArgumentLength" data-val-required="Your argument cannot be empty." rows="8"
+								  id="Argument" name="Argument"></textarea>
+
+						@Html.ValidationMessageFor( m => m.Argument, null )
+
+						<!--<textarea class="form-control counted" name="message" placeholder="Type in your message" rows="5" style="margin-bottom:10px;" id="assertionBox"></textarea>-->
+						<p class="pull-right" id="counter"></p>
 						<br /><br />
 						<button class="btn btn-info RightButton" type="submit">Post New Assertion</button>
-					</form>
+					}
 				</div>
 			</div>
 		</div>
 
-		<div class="col-sm-8">
+		<div class="col-sm-7">
 
 			<div class="panel panel-primary">
 				<div class="panel-heading"><i class="fa fa-question-circle fa-fw"></i> What to post</div>
@@ -115,7 +129,7 @@
 	<script>
 		$(function ()
 		{
-			$("#assertionBox").charCounter( @maxArgumentLength, { container: "#counter" });
+			$("#Argument").charCounter( @maxArgumentLength, { container: "#counter" });
 		});
 	</script>
 }

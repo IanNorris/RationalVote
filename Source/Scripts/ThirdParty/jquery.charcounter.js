@@ -19,16 +19,21 @@
 		settings = $.extend({
 			container: "<span></span>",
 			classname: "charcounter",
-			format: "(%1 characters remaining)",
-			pulse: true,
-			delay: 0
+			format: "%1 characters remaining",
+			pulse: false,
+			delay: 0,
+			clamp: false,
+			noCharactersLeftStyle: "over-count",
+			charactersLeftStyle: "within-count",
 		}, settings);
 		var p, timeout;
 
 		function count(el, container) {
 			el = $(el);
 			if (el.val().length > max) {
-				el.val(el.val().substring(0, max));
+				if (settings.clamp) {
+					el.val(el.val().substring(0, max));
+				}
 				if (settings.pulse && !p) {
 					pulse(container, true);
 				};
@@ -42,6 +47,17 @@
 				}, settings.delay);
 			} else {
 				container.html(settings.format.replace(/%1/, (max - el.val().length)));
+			}
+
+			if( el.val().length > max )
+			{
+			    container.addClass( settings.noCharactersLeftStyle );
+			    container.removeClass( settings.charactersLeftStyle );
+			}
+			else
+			{
+			    container.addClass(settings.charactersLeftStyle);
+			    container.removeClass(settings.noCharactersLeftStyle);
 			}
 		};
 

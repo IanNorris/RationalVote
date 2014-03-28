@@ -18,10 +18,25 @@ namespace RationalVote.Controllers
 	{
 		//
 		// GET: /New
+		[RequireLogin]
 		[Route( "New" )]
 		public ActionResult Create()
 		{
 			return View();
+		}
+
+		//
+		// POST: /New
+		[HttpPost]
+		[RequireLogin]
+		[Route( "New" )]
+		[ValidateAntiForgeryToken]
+		public ActionResult Create( DebateNew debateInput )
+		{
+			Debate debate = new Debate();
+			//debate.Owner_Id = User.Identity.
+
+			return RedirectToAction( "Index", new { Id = 15 } );
 		}
 
 		//
