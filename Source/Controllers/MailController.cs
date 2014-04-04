@@ -12,10 +12,10 @@ namespace RationalVote.Controllers
 	{
 		public EmailResult VerificationEmail( User model, EmailVerificationToken token )
 		{
-			To.Add( model.Email );
+			/*To.Add( model.Email );
 			From = ConfigurationManager.AppSettings.Get("emailFrom");
 			Subject = "Please verify your account";
-			ViewBag.Token = token.Token;
+			ViewBag.Token = token.Token;*/
 
 			return Email( "VerificationEmail" );
 		}

@@ -57,7 +57,7 @@
 				$tags_block
 			</div>
 			<div class="col-md-5" style="text-align: right">
-				<h5>@Html.Partial( "_Author", RationalVote.Models.Profile.GetFromUser( Model.Owner_Id ) )</h5>
+				@Html.Partial( "_Author", RationalVote.Models.Profile.GetFromUser( Model.Owner.Value ) )
 			</div>
 		</div>
 	</div>

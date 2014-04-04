@@ -17,13 +17,13 @@ namespace RationalVote.Models
 		public User()
 		{
 			this.AuthenticationMethod = 0;
-			this.Verified = false;
+			this.Verified = 0;
 		}
 
 		public User( UserRegister user )
 		{
 			this.AuthenticationMethod = 0;
-			this.Verified = false;
+			this.Verified = 0;
 
 			this.Email = user.RegisterEmail.ToLower();
 		}
@@ -37,13 +37,9 @@ namespace RationalVote.Models
 		[AddOnIcon( "envelope")]
 		public string Email { get; set; }
 
-		public byte[] PasswordSalt { get; set; }
-		public byte[] PasswordHash { get; set; }
+		public string PasswordSalt { get; set; }
+		public string PasswordHash { get; set; }
 		public byte AuthenticationMethod { get; set; }
-		public bool Verified { get; set; }
-
-		//NotMapped fields - data that don't get stored in the DB
-
-		
+		public byte Verified { get; set; }
 	}
 }

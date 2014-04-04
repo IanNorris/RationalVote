@@ -14,7 +14,7 @@ namespace RationalVote.Models
 		[DataType(DataType.DateTime)]
 		public System.DateTime Created { get; set; }
 
-		public string Token {  get; set; }
+		public string Token { get; set; }
 
 		public long User { get; set; }
 

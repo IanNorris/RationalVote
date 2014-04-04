@@ -7,9 +7,8 @@ using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using RationalVote.Models;
-using System.Data.SqlClient;
+using System.Data.Common;
 using Dapper;
-using DapperExtensions;
 using RationalVote.DAL;
 
 namespace RationalVote.Controllers
@@ -36,14 +35,14 @@ namespace RationalVote.Controllers
 			if( ModelState.IsValid )
 			{
 				Debate debate = new Debate();
-				debate.Owner_Id = ((RationalVote.Models.UserPrincipal)HttpContext.User).User.Id;
+				debate.Owner = ((RationalVote.Models.UserPrincipal)HttpContext.User).User.Id;
 				debate.Title = debateInput.Argument;
 				debate.Locked = false;
 				debate.Posted = DateTime.Now;
 				debate.Status = Debate.StatusType.Open;
 				debate.Updated = null;
 
-				using( SqlConnection connection = RationalVoteContext.Connect() )
+				using( DbConnection connection = RationalVoteContext.Connect() )
 				{
 					long Id = connection.Insert( debate );
 
@@ -64,7 +63,7 @@ namespace RationalVote.Controllers
 				Id = 8;
 			}
 
-			using( SqlConnection connection = RationalVoteContext.Connect() )
+			using( DbConnection connection = RationalVoteContext.Connect() )
 			{
 				Debate test = connection.Get<Debate>( Id );
 

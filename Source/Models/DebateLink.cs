@@ -19,7 +19,7 @@ namespace RationalVote.Models
 		public LinkType Type { get; set; }
 		public long Weight { get; set; }
 	
-		public long Parent_Id { get; set; }
+		public long Parent { get; set; }
 
 		public Debate Child { get; set; }
 

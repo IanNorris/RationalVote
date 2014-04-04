@@ -7,10 +7,9 @@ using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using RationalVote.Models;
-using System.Data.SqlClient;
 using Dapper;
-using DapperExtensions;
 using RationalVote.DAL;
+using System.Data.Common;
 
 namespace RationalVote.Models
 {
@@ -18,7 +17,7 @@ namespace RationalVote.Models
 	{
 		//The order of the elements in this enum
 		//control the sort order
-		public enum StatusType : short
+		public enum StatusType : sbyte
 		{
 			Accepted,
 			Open,
@@ -38,6 +37,7 @@ namespace RationalVote.Models
 		public Debate()
 		{
 			this.Status = StatusType.Open;
+			this.Weight = 0;
 		}
 	
 		public long Id { get; set; }
@@ -45,8 +45,9 @@ namespace RationalVote.Models
 		public string Title { get; set; }
 		public System.DateTime Posted { get; set; }
 		public System.DateTime? Updated { get; set; }
-		public long Owner_Id { get; set; }
+		public long? Owner { get; set; }
 		public bool Locked { get; set; }
+		public long Weight { get; set; }
 
 		public ValidityType Validity()
 		{
@@ -91,22 +92,22 @@ namespace RationalVote.Models
 
 		public IEnumerable<DebateLink> Children()
 		{
-			using( SqlConnection connection = RationalVoteContext.Connect() )
+			using( DbConnection connection = RationalVoteContext.Connect() )
 			{
 				//To limit selection, do SELECT TOP 10 etc
 
 				IEnumerable<DebateLink> arguments = connection.Query<DebateLink, Debate, DebateLink>( 
 					@"SELECT
-						DebateLinks.*, Debates.*, DebateLinkVotes.vote AS Vote
+						DebateLink.*, Debate.*, DebateLinkVote.vote AS Vote
 					FROM
-						DebateLinks
+						DebateLink
 							LEFT OUTER JOIN
-						Debates ON DebateLinks.Child_Id = Debates.Id
+						Debate ON DebateLink.Child = Debate.Id
 							LEFT OUTER JOIN
-						DebateLinkVotes ON (DebateLinkVotes.Link_Id = DebateLinks.Id)
+						DebateLinkVote ON (DebateLinkVote.Link = DebateLink.Id)
 					WHERE
-						DebateLinks.Parent_Id = @Parent
-					ORDER BY Debates.Status ASC, DebateLinks.Weight DESC",
+						DebateLink.Parent = @Parent
+					ORDER BY Debate.Status ASC, DebateLink.Weight DESC",
 					( parent, child) =>
 					{
 						parent.Child = child;

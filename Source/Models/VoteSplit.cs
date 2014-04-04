@@ -7,9 +7,8 @@ using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using RationalVote.Models;
-using System.Data.SqlClient;
+using System.Data.Common;
 using Dapper;
-using DapperExtensions;
 using RationalVote.DAL;
 
 namespace RationalVote.Models
@@ -27,19 +26,19 @@ namespace RationalVote.Models
 
 		public static VoteSplit Get( long Parent )
 		{
-			using( SqlConnection connection = RationalVoteContext.Connect() )
+			using( DbConnection connection = RationalVoteContext.Connect() )
 			{
 				VoteSplit split = connection.Query<VoteSplit>(
 					@"SELECT
-					SUM( CASE WHEN Debates.Status = 0 THEN DebateLinks.Weight ELSE 0 END ) AS [For],
-					SUM( CASE WHEN (Debates.Status = 1 OR Debates.Status = 2) THEN DebateLinks.Weight ELSE 0 END ) AS [Assumption],
-					SUM( CASE WHEN Debates.Status = 3 THEN DebateLinks.Weight ELSE 0 END ) AS [Against]
+					SUM( CASE WHEN Debate.Status = 0 THEN DebateLink.Weight ELSE 0 END ) AS `For`,
+					SUM( CASE WHEN (Debate.Status = 1 OR Debate.Status = 2) THEN DebateLink.Weight ELSE 0 END ) AS `Assumption`,
+					SUM( CASE WHEN Debate.Status = 3 THEN DebateLink.Weight ELSE 0 END ) AS `Against`
 					FROM
-						DebateLinks
-					INNER JOIN Debates
-					ON DebateLinks.Child_Id = Debates.Id
-					WHERE DebateLinks.Parent_Id = @Parent
-					GROUP BY DebateLinks.Parent_Id", 
+						DebateLink
+					INNER JOIN Debate
+					ON DebateLink.Child = Debate.Id
+					WHERE DebateLink.Parent = @Parent
+					GROUP BY DebateLink.Parent", 
 					new { Parent = Parent } ).FirstOrDefault();
 
 				if( split == null )

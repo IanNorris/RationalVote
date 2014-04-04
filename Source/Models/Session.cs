@@ -1,12 +1,11 @@
 using System;
 using System.Linq;
 using System.Collections.Generic;
-using System.Data.SqlClient;
+using System.Data.Common;
 using System.Web;
 using RationalVote.DAL;
 using RationalVote.Models;
 using Dapper;
-using DapperExtensions;
 
 namespace RationalVote.Models
 {    
@@ -30,9 +29,9 @@ namespace RationalVote.Models
 			session.Life = keepLoggedIn ? LIFE_LONG : LIFE_SHORT;
 			session.User = user.Id;
 
-			using( SqlConnection connection = RationalVoteContext.Connect() )
+			using( DbConnection connection = RationalVoteContext.Connect() )
 			{
-				long Id = connection.Insert<Session>( session );
+				long Id = connection.Insert( session );
 				session.Id = Id;
 			}
 
@@ -42,7 +41,7 @@ namespace RationalVote.Models
 			return session;
 		}
 
-		public static long? ValidateAndUpdateSession()
+		public static User ValidateAndUpdateSession()
 		{
 			string id_string = Utility.Cookie.GetCookie( "s_id" );
 			string token = Utility.Cookie.GetCookie( "s_tok" );
@@ -66,21 +65,40 @@ namespace RationalVote.Models
 				return null;
 			}
 
-			using( SqlConnection connection = RationalVoteContext.Connect() )
+			using( DbConnection connection = RationalVoteContext.Connect() )
 			{
 				//Find the valid sessions
-				Session session = connection.Query<Session>( "UPDATE Sessions SET LastSeen = @CurrentDate OUTPUT INSERTED.* WHERE Token = @Token AND Id = @Id AND DATEADD(SECOND, Life, LastSeen) >= GETDATE()", new { CurrentDate = DateTime.Now, Token = token, Id = id } ).FirstOrDefault();
 
-				if( session != null )
-				{
-					//Delete the old users
-					connection.Execute( "DELETE FROM Sessions WHERE GETDATE() > DATEADD(SECOND, Life, LastSeen) AND [User] = @User", new { User = session.User } );
+				//SQL Server
+				//"UPDATE Session SET LastSeen = @CurrentDate OUTPUT INSERTED.* WHERE Token = @Token AND Id = @Id AND DATEADD(SECOND, Life, LastSeen) >= GETDATE()"
+								
+				User user = connection.Query<User>(
+					@"SET @SelectedUser := NULL; 
+					
+					UPDATE
+						RationalVote.Session 
+					SET 
+						LastSeen=NOW(), 
+						User = (SELECT @SelectedUser := User) 
+					WHERE 
+						Id = @Id
+						AND 
+						Token = @Token
+						AND (DATE_ADD(LastSeen, INTERVAL Life SECOND) >= NOW())
+					LIMIT 1;
 
-					return session.User;
-				}
+					DELETE FROM 
+						RationalVote.Session 
+					WHERE 
+						User = @SelectedUser
+						AND
+						(DATE_ADD(LastSeen, INTERVAL Life SECOND) < NOW());
+
+					SELECT * FROM User WHERE Id = @SelectedUser"
+					, new { Token = token, Id = id } ).FirstOrDefault();
+
+				return user;
 			}
-
-			return null;
 		}
 	
 		public long Id { get; set; }

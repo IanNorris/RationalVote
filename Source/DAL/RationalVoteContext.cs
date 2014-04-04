@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data.SqlClient;
 using System.Linq;
 using System.Web;
+using System.Data.Common;
 using System.Web.Configuration;
-using DapperExtensions.Mapper;
+using MySql.Data.MySqlClient;
 
 namespace RationalVote.DAL
 {
@@ -19,32 +19,32 @@ namespace RationalVote.DAL
 
 		static RationalVoteContext()
 		{
+			//DapperExtensions.DapperExtensions.SqlDialect = new DapperExtensions.Sql.MySqlDialect();
+
 			string context = WebConfigurationManager.ConnectionStrings["RationalVoteContext"].ToString();
 
 			//Test the connection works
-			using( SqlConnection connection = new SqlConnection( context ) )
+			using( DbConnection connection = new MySqlConnection( context ) )
 			{
 				connection.Open();
 			}
-
-			DapperExtensions.DapperExtensions.DefaultMapper = typeof(PluralizedAutoClassMapper<>);
 		}
 
-		public static SqlConnection Connect()
+		public static DbConnection Connect()
 		{
 			string context = WebConfigurationManager.ConnectionStrings["RationalVoteContext"].ToString();
 
-			SqlConnection connection = new SqlConnection( context );
+			DbConnection connection = new MySqlConnection( context );
 			connection.Open();
 
 			return connection;
 		}
 
-		public static Error DecodeException( SqlException exception )
+		public static Error DecodeException( MySqlException exception )
 		{
 			switch( exception.Number )
 			{
-				case 2601:
+				case 1062:
 					return Error.DuplicateIndex;
 
 				default:

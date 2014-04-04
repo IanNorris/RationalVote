@@ -10,7 +10,7 @@ namespace RationalVote.Models
             this.Tags = new HashSet<DebateTag>();
         }
     
-        public long Id { get; set; }
+        public ulong Id { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
     

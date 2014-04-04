@@ -7,10 +7,11 @@ using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using RationalVote.Models;
-using System.Data.SqlClient;
+using System.Data.Common;
 using Dapper;
-using DapperExtensions;
 using RationalVote.DAL;
+using Utility;
+using MySql.Data.MySqlClient;
 
 namespace RationalVote
 {
@@ -18,25 +19,16 @@ namespace RationalVote
 	public class UserController : Controller
 	{
 		// GET: /User/
+		[RequireLogin]
 		public ActionResult Index()
 		{
-			long? userID = RationalVote.Models.Session.ValidateAndUpdateSession();
-
-			if( userID != null )
+			using( DbConnection connection = RationalVoteContext.Connect() )
 			{
-				using( SqlConnection connection = RationalVoteContext.Connect() )
-				{			
-					IEnumerable<User> users = connection.Query<User>("SELECT * FROM Users");
+				IEnumerable<User> users = connection.Query<User>( "SELECT * FROM User" );
 
-					return View( users.ToList() );
-				}
+				return View( users.ToList() );
 			}
-			else
-			{
-				TempData[ "ErrorMessage" ] = "You must be logged in to view this page";
-				TempData[ "MessageTitle" ] = "Access denied";
-				return RedirectToAction( "Index", "Home" );
-			}
+			
 		}
 
 		public ActionResult SignIn( string returnUrl )
@@ -75,20 +67,21 @@ namespace RationalVote
 			{
 				try
 				{
-					using( SqlConnection connection = RationalVoteContext.Connect() )
+					using( DbConnection connection = RationalVoteContext.Connect() )
 					{
-						using( SqlTransaction transaction = connection.BeginTransaction() )
+						using( DbTransaction transaction = connection.BeginTransaction() )
 						{
 							//Create user
 							User user = new User( userPublic );
-							byte[] salt;
-							byte[] hash;
+							string salt;
+							string hash;
 							Utility.Crypto.CreatePasswordHash( user.Email, userPublic.RegisterPassword, out salt, out hash );
+
 							user.PasswordSalt = salt;
 							user.PasswordHash = hash;
 
 #if DEBUG
-							user.Verified = true;
+							user.Verified = 1;
 #endif
 
 							//Add the user
@@ -115,7 +108,7 @@ namespace RationalVote
 						}
 					}
 				}
-				catch( SqlException exception )
+				catch( MySqlException exception )
 				{
 					switch( RationalVoteContext.DecodeException( exception ) )
 					{
@@ -144,11 +137,11 @@ namespace RationalVote
 
 			if( ModelState.IsValid )
 			{
-				using( SqlConnection connection = RationalVoteContext.Connect() )
+				using( DbConnection connection = RationalVoteContext.Connect() )
 				{
-					User storedUser = connection.Query<User>( "SELECT * FROM Users WHERE Email = @Email", new { Email = userPublic.LoginEmail.ToLower() } ).FirstOrDefault();
+					User storedUser = connection.Query<User>( "SELECT * FROM User WHERE Email = @Email", new { Email = userPublic.LoginEmail.ToLower() } ).FirstOrDefault();
 
-					if( storedUser != null && storedUser.Verified && Utility.Crypto.ConfirmPasswordHash( storedUser.Email, userPublic.LoginPassword, storedUser.PasswordSalt, storedUser.PasswordHash ) )
+					if( storedUser != null && storedUser.Verified != 0 && Utility.Crypto.ConfirmPasswordHash( storedUser.Email, userPublic.LoginPassword, storedUser.PasswordSalt, storedUser.PasswordHash ) )
 					{
 						//Create new session for the user
 						RationalVote.Models.Session.CreateSession( storedUser, Request, userPublic.LoginStaySignedIn );
@@ -179,9 +172,9 @@ namespace RationalVote
 		[Route("Verify/{token?}")]
 		public ActionResult Verify( string token )
 		{
-			using( SqlConnection connection = RationalVoteContext.Connect() )
+			using( DbConnection connection = RationalVoteContext.Connect() )
 			{
-				EmailVerificationToken resultToken = connection.Query<EmailVerificationToken>( "SELECT * FROM EmailVerificationTokens WHERE Token = @Token", new { Token = token } ).FirstOrDefault();
+				EmailVerificationToken resultToken = connection.Query<EmailVerificationToken>( "SELECT * FROM EmailVerificationToken WHERE Token = @Token", new { Token = token } ).FirstOrDefault();
 
 				if( resultToken == null )
 				{
@@ -190,9 +183,9 @@ namespace RationalVote
 				}
 				else
 				{
-					using( SqlTransaction transaction = connection.BeginTransaction() )
+					using( DbTransaction transaction = connection.BeginTransaction() )
 					{
-						connection.Execute( "UPDATE Users SET Verified = 1 WHERE Id = @Id", new { Id = resultToken.User }, transaction );
+						connection.Execute( "UPDATE User SET Verified = 1 WHERE Id = @Id", new { Id = resultToken.User }, transaction );
 
 						connection.Delete<EmailVerificationToken>( resultToken, transaction );
 

@@ -4,8 +4,8 @@
 	int BoxWidth = 12;
 	int SideBarWidth = 1;
 	BoxWidth = BoxWidth - SideBarWidth;
-	
-	Profile profile = RationalVote.Models.Profile.GetFromUser( Model.Child.Owner_Id );
+
+	Profile profile = Model.Child.Owner != null ? RationalVote.Models.Profile.GetFromUser( Model.Child.Owner.Value ) : null;
 	VoteSplit voteSplit = VoteSplit.Get( Model.Child.Id );
 }
 
@@ -29,7 +29,14 @@
 					$tag_block
 				</div>
 				<div class="col-md-3 AuthorBlock">
-					<h5>@Html.Partial( "_Author", profile )</h5>
+					if( profile != null )
+					{
+						<h5>@Html.Partial( "_Author", profile )</h5>
+					}
+					else
+					{
+						<h5>Deleted Account</h5>
+					}
 				</div>
 			</div>
 		</div>
