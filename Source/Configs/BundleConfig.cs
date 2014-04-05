@@ -33,7 +33,7 @@ namespace RationalVote
 				"~/Scripts/zxcvbn-register.js") 
 			);
 
-			bundles.Add( new ScriptBundle( "~/Scripts/ThirdParty/errorscripts" ).Include(
+			bundles.Add( new ScriptBundle( "~/Scripts/errorscripts" ).Include(
 				"~/Scripts/ThirdParty/jquery.backstretch.js",
 				"~/Scripts/errorscripts.js" )
 			);

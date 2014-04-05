@@ -5,9 +5,9 @@
 
 	<meta content="width=device-width, initial-scale=1.0, user-scalable=no" name="viewport" />
 	
-	@Styles.Render( "~/Content/css" )
+	@Styles.Render( "~/Content/ThirdParty/css" )
+	@Styles.Render( "~/Content/Theme/css" )
 	@Styles.Render( "~/Content/csserror" )
-	@Scripts.Render( "~/bundles/modernizr" )
 </head>
 
 <body>
@@ -16,20 +16,21 @@
 		<div class="row">
 			<div class="col-md-8 col-md-offset-2">
 				<div class="error-v2">
+					<img src="/Content/Theme/images/logo-lg.png" />
+					<br /><br /><br />
 					<img src="/Content/beasts/@(ViewBag.BeastName ?? "tbservers")-sm.png" />
 					@RenderBody()
 				</div>
 
-				<div style="background: rgba( 0, 0, 0, .3 ); -webkit-border-radius: 15px ; -moz-border-radius: 15px !important; border-radius: 15px !important; ">
+				<div style="background: rgba( 0, 0, 0, .6 ); -webkit-border-radius: 15px ; -moz-border-radius: 15px !important; border-radius: 15px !important; ">
 					<p style="color:white;text-align:center"><span xmlns:dct="http://purl.org/dc/terms/" href="http://purl.org/dc/dcmitype/StillImage" property="dct:title" rel="dct:type">Tumbeasts</span> by <a xmlns:cc="http://creativecommons.org/ns#" href="http://theoatmeal.com" property="cc:attributionName" rel="cc:attributionURL">Matthew Inman</a> are licensed under a <a rel="license" href="http://creativecommons.org/licenses/by/3.0/">Creative Commons Attribution 3.0 Unported License</a>.<br />Based on a work at <a xmlns:dct="http://purl.org/dc/terms/" href="http://theoatmeal.com" rel="dct:source">theoatmeal.com</a>.</p>
 				</div>
 			</div>
 		</div>
 	</div>
 
-	@Scripts.Render( "~/bundles/jquery" )
-	@Scripts.Render( "~/bundles/bootstrap" )
-	@Scripts.Render( "~/bundles/errorscripts" )
+	@Scripts.Render( "~/Scripts/ThirdParty/jqbs" )
+	@Scripts.Render( "~/Scripts/errorscripts" )
 	@RenderSection( "scripts", required: false )
 
 </body>
