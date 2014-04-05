@@ -2,6 +2,7 @@
 
 @{
 	Profile profile = Model.Owner != null ? RationalVote.Models.Profile.GetFromUser( Model.Owner.Value ) : null;
+	VoteSplit voteSplit = VoteSplit.Get( Model.Id );
 }
 
 <div class="DebateChild DebateChild@(Model.Validity().ToString())" title="@Model.ValidityExplanation()">
@@ -32,3 +33,4 @@
 		</div>
 	</div>
 </div>
+@Html.Partial( "_VoteSplit", voteSplit )

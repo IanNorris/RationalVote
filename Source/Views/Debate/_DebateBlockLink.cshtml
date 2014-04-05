@@ -5,14 +5,13 @@
 	int SideBarWidth = 1;
 	BoxWidth = BoxWidth - SideBarWidth;
 	
-	VoteSplit voteSplit = VoteSplit.Get( Model.Child.Id );
+	
 }
 
 <div class="row">
 	<div class="col-md-@SideBarWidth"></div>
 	<div class="col-md-@BoxWidth">
 		@Html.Partial( "_DebateBlockInline", Model.Child )
-		@Html.Partial( "_VoteSplit", voteSplit )
 		@*$opinion_box*@
 	</div>
 </div>
