@@ -12,12 +12,22 @@ namespace RationalVote.Controllers
 	{
 		public EmailResult VerificationEmail( User model, EmailVerificationToken token )
 		{
-			/*To.Add( model.Email );
+			To.Add( model.Email );
 			From = ConfigurationManager.AppSettings.Get("emailFrom");
 			Subject = "Please verify your account";
-			ViewBag.Token = token.Token;*/
+			ViewBag.Token = token.Token;
 
 			return Email( "VerificationEmail" );
+		}
+
+		public EmailResult ExceptionEmail( HttpException e )
+		{
+			To.Add( ConfigurationManager.AppSettings.Get( "ServerAdmin" ) );
+			From = ConfigurationManager.AppSettings.Get("emailFrom");
+			Subject = "Site exception";
+			ViewBag.Exception = e.ToString();
+
+			return Email( "ExceptionEmail" );
 		}
 	}
 }

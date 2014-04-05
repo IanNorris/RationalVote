@@ -1,0 +1,11 @@
+@using ActionMailer.Net;
+
+@{
+	Layout = "~/Views/Mail/_TextLayout.cshtml";
+}
+
+Exception triggered. Details:
+
+<pre>
+@Html.Raw(ViewBag.Exception)
+</pre>

@@ -67,6 +67,7 @@ Go to IIS manager permissions
 	Add the user created above for deployment
 Go to IIS manager, go to Server Certificates
 	Import (first select Web Hosting as the store, select PFX, input private key password) - if you don't have a PFX, generate one from StartSSL control panel by inputting public and private keys.
+Go to Application settings and add ServerAdmin with an email address that will receive exceptions.
 
 Go back to IIS manager, expand Sites tree, delete default
 Click SMTP E-mail and tick localhost, and enter a from email.

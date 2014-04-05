@@ -41,15 +41,9 @@
     <WarningLevel>4</WarningLevel>
     <PublishDatabaseSettings>
       <Objects>
-        <ObjectGroup Name="RationalVoteContext-Deployment" Order="1">
-          <Destination Path="Server=192.168.1.119,56865\SQLEXPRESS%3bDatabase=RationalVoteDB%3bIntegrated Security=true" />
-          <Object Type="DbFullSql" Enabled="False">
-            <PreSource Path="Data Source=%28LocalDb%29\v11.0%3bInitial Catalog=RationalVote%3bIntegrated Security=SSPI%3b" ScriptSchema="True" ScriptData="False" CopyAllFullTextCatalogs="False" DriDefaults="True" />
-            <Source Path="obj\Release\AutoScripts\RationalVoteContext-Deployment_SchemaOnly.sql" Transacted="True" />
-          </Object>
-        </ObjectGroup>
       </Objects>
     </PublishDatabaseSettings>
+    <PublishDatabases>false</PublishDatabases>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="ActionMailer.Net">
@@ -226,6 +220,7 @@
     <Compile Include="Utility\Cookie.cs" />
     <Compile Include="Utility\Crypto.cs" />
     <Compile Include="Utility\Dapper.SimpleCRUD.cs" />
+    <Compile Include="Utility\EmailExceptionFilter.cs" />
     <Compile Include="Utility\Menu.cs" />
     <Compile Include="Utility\SendMail.cs" />
   </ItemGroup>
@@ -266,13 +261,6 @@
   <ItemGroup>
     <None Include="Properties\PublishProfiles\Default Settings.pubxml" />
     <None Include="Properties\PublishProfiles\RV VPS.pubxml" />
-    <Content Include="Views\Debate\Index.cshtml" />
-    <Content Include="Views\Debate\_DebateBlockParent.cshtml" />
-    <Content Include="Views\Debate\_DebateBlockChild.cshtml" />
-    <Content Include="Views\Debate\_Author.cshtml" />
-    <Content Include="Views\Debate\_VoteSplit.cshtml" />
-    <Content Include="Views\Debate\Create.cshtml" />
-    <Content Include="Views\Debate\_DebateLayout.cshtml" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

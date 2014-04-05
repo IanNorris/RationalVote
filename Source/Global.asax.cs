@@ -59,5 +59,16 @@ namespace RationalVote
 				Context.User = new UserPrincipal( user );
 			}
 		}
+
+		void Application_Error( object sender, EventArgs e )
+		{
+			//// Code that runs when an unhandled error occurs		
+			//HttpException httpException = Server.GetLastError() as HttpException;
+
+			//if( httpException != null && httpException.GetHttpCode() == 500 )
+			//{
+			//	new Controllers.MailController().ExceptionEmail( httpException ).Deliver();
+			//}
+		}
 	}
 }
