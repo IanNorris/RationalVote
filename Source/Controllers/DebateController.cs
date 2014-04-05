@@ -58,16 +58,28 @@ namespace RationalVote.Controllers
 		[Route( "Debate/{Id?}" )]
 		public ActionResult Index( long? Id )
 		{
-			if( Id == null )
+			if( Id != null )
 			{
-				Id = 8;
+				using( DbConnection connection = RationalVoteContext.Connect() )
+				{
+					Debate debate = connection.Get<Debate>( Id );
+
+					return View( "Display", debate );
+				}
 			}
-
-			using( DbConnection connection = RationalVoteContext.Connect() )
+			else
 			{
-				Debate test = connection.Get<Debate>( Id );
+				using( DbConnection connection = RationalVoteContext.Connect() )
+				{
+					IEnumerable<Debate> list = connection.Query<Debate>(
+						@"SELECT * FROM Debate
+						LEFT OUTER JOIN DebateLink
+						ON Debate.Id = DebateLink.Child
+						WHERE DebateLink.Child IS null
+						ORDER BY Debate.Updated DESC, Debate.Posted DESC" );
 
-				return View( test );
+					return View( "Index", list );
+				}
 			}
 		}
 	}

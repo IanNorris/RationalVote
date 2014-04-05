@@ -261,6 +261,8 @@
   <ItemGroup>
     <None Include="Properties\PublishProfiles\Default Settings.pubxml" />
     <None Include="Properties\PublishProfiles\RV VPS.pubxml" />
+    <Content Include="Views\Debate\Index.cshtml" />
+    <Content Include="Views\Debate\_DebateBlockInline.cshtml" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

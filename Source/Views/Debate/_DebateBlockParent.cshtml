@@ -6,7 +6,7 @@
 	var voteSplit = RationalVote.Models.VoteSplit.Get( Model.Id );
 }
 
-<div class="panel Debate@(Model.Validity().ToString())">
+<div class="panel Debate@(Model.Validity().ToString())" title="@Model.ValidityExplanation()">
 	<div class="DebateHeading panel-heading"><h3 class="panel-title"><i class="fa fa-@Model.StatusIcon()"></i> [@Model.StatusName().ToUpper()] @Model.Title</h3></div>
 	@Html.Partial( "_VoteSplit", voteSplit )
 	<div class="panel-body">
@@ -16,7 +16,7 @@
 		{
 			if( forArg.Type == DebateLink.LinkType.For )
 			{
-				@Html.Partial( "_DebateBlockChild", forArg )
+				@Html.Partial( "_DebateBlockLink", forArg )
 			}
 		}
 
@@ -25,7 +25,7 @@
 		<div class="row">
 			<div class="col-md-11 col-md-offset-1">
 				<br />
-				$for_input
+				@*$for_input*@
 			</div>
 		</div>
 
@@ -37,7 +37,7 @@
 		{
 			if( againstArg.Type == DebateLink.LinkType.Against )
 			{
-				@Html.Partial( "_DebateBlockChild", againstArg )
+				@Html.Partial( "_DebateBlockLink", againstArg )
 			}
 		}
 
@@ -46,7 +46,7 @@
 		<div class="row">
 			<div class="col-md-11 col-md-offset-1">
 				<br />
-				$against_input
+				@*$against_input*@
 			</div>
 		</div>
 
@@ -54,7 +54,7 @@
 
 		<div class="row">
 			<div class="col-md-7">
-				$tags_block
+				@*$tags_block*@
 			</div>
 			<div class="col-md-5" style="text-align: right">
 				@Html.Partial( "_Author", RationalVote.Models.Profile.GetFromUser( Model.Owner.Value ) )

@@ -67,6 +67,25 @@ namespace RationalVote.Models
 			}
 		}
 
+		public string ValidityExplanation()
+		{
+			switch( Status )
+			{
+				case StatusType.Accepted:
+					return "This argument has been accepted.";
+				case StatusType.Open:
+					return "No consensus has been reached on this debate.";
+				case StatusType.Assumption:
+					return "This argument is an assumption or hinges on too many assumptions.";
+				case StatusType.Rejected:
+					return "This argument has been disproved or deemed not relevant.";
+				case StatusType.Noise:
+					return "This argument adds no value to the discussion or has been flagged as spam.";
+				default:
+					return "The status of this debate is unknown.";
+			}
+		}
+
 		public string StatusIcon()
 		{
 			switch( Status )

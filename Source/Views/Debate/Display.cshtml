@@ -1,6 +1,6 @@
-﻿@model IEnumerable<RationalVote.Models.Debate>
+﻿@model RationalVote.Models.Debate
 @{
-	ViewBag.Title = "Newest";
+	ViewBag.Title = Model.Title;
 	Layout = "~/Views/Debate/_DebateLayout.cshtml";
 	
 	ViewBag.Breadcrumbs = new List<KeyValuePair<string, string>>()
@@ -12,7 +12,4 @@
 	};
 }
 
-@foreach( var debate in Model )
-{
-	@Html.Partial( "_DebateBlockInline", debate )
-}
+@Html.Partial( "_DebateBlockParent", Model )
