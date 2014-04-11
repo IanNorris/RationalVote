@@ -100,6 +100,17 @@ namespace RationalVote.Models
 				return user;
 			}
 		}
+
+		public static void DeleteCurrentSession()
+		{
+			string id_string = Utility.Cookie.GetCookie( "s_id" );
+			string token = Utility.Cookie.GetCookie( "s_tok" );
+
+			using( DbConnection connection = RationalVoteContext.Connect() )
+			{
+				connection.Execute( "DELETE FROM Session WHERE Id = @Id AND Token = @Token", new { Id = id_string, Token = token } );
+			}
+		}
 	
 		public long Id { get; set; }
 		public string Token { get; set; }

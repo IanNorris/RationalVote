@@ -168,6 +168,24 @@ namespace RationalVote
 			return View( "SignIn", userPublic );
 		}
 
+		// POST: /User/LogOff
+		// To protect from overposting attacks, please enable the specific properties you want to bind to, for 
+		// more details see http://go.microsoft.com/fwlink/?LinkId=317598.
+		[HttpPost]
+		[ValidateAntiForgeryToken]
+		public ActionResult LogOff()
+		{
+			if( ModelState.IsValid )
+			{
+				using( DbConnection connection = RationalVoteContext.Connect() )
+				{
+					RationalVote.Models.Session.DeleteCurrentSession();
+				}
+			}
+
+			return RedirectToAction( "Index", "Home" );
+		}
+
 		// GET: /User/Verify/token
 		[Route("Verify/{token?}")]
 		public ActionResult Verify( string token )
@@ -194,7 +212,7 @@ namespace RationalVote
 						TempData[ "SuccessMessage" ] = "Thank you for verifying your email address, you may now login to your account!";
 						TempData[ "MessageTitle" ] = "E-mail address verified";
 
-						return RedirectToAction("Login");
+						return RedirectToAction("SignIn");
 					}
 				}
 			}
