@@ -70,7 +70,7 @@ Go to IIS manager, go to Server Certificates
 Go to Application settings and add ServerAdmin with an email address that will receive exceptions.
 
 Go back to IIS manager, expand Sites tree, delete default
-Click SMTP E-mail and tick localhost, and enter a from email.
+Click SMTP E-mail and tick localhost, leave the email field blank.
 
 Click Add Website
 Enter
