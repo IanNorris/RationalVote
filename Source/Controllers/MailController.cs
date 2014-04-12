@@ -32,7 +32,7 @@ namespace RationalVote.Controllers
 		{
 			To.Add( ConfigurationManager.AppSettings.Get( "ServerAdmin" ) );
 			From = GetFromEmail( "Exception" );
-			Subject = "Site exception - " + message;
+			Subject = ConfigurationManager.AppSettings.Get("siteTitle") + " exception - " + message;
 			ViewBag.Exception = e.ToString();
 
 			return Email( "ExceptionEmail" );
