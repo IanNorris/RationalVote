@@ -9,7 +9,7 @@ public class EmailExceptionFilter : HandleErrorAttribute
 {
 	public override void OnException(ExceptionContext filterContext)
 	{
-		if( filterContext.ExceptionHandled || !filterContext.HttpContext.IsCustomErrorEnabled )
+		if( !filterContext.HttpContext.IsCustomErrorEnabled )
 		{
 			return;
 		}
@@ -26,6 +26,6 @@ public class EmailExceptionFilter : HandleErrorAttribute
 			return;
 		}
 
-		new RationalVote.Controllers.MailController().ExceptionEmail( httpException ).Deliver();
+		new RationalVote.Controllers.MailController().ExceptionEmail( httpException, filterContext.Exception.Message ).Deliver();
 	}
 }

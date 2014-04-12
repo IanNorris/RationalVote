@@ -28,11 +28,11 @@ namespace RationalVote.Controllers
 			return Email( "VerificationEmail" );
 		}
 
-		public EmailResult ExceptionEmail( HttpException e )
+		public EmailResult ExceptionEmail( HttpException e, string message )
 		{
 			To.Add( ConfigurationManager.AppSettings.Get( "ServerAdmin" ) );
 			From = GetFromEmail( "Exception" );
-			Subject = "Site exception";
+			Subject = "Site exception - " + message;
 			ViewBag.Exception = e.ToString();
 
 			return Email( "ExceptionEmail" );
