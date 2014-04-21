@@ -1,13 +1,10 @@
 ﻿@{
 	bool isAuthenticated = Context.User.Identity.IsAuthenticated;
-	bool isAdmin = false;
 	string userIdentity = null;
 	long userID = 0;
 
 	if( isAuthenticated )
 	{
-		isAdmin = Context.User.IsInRole( "Administrator" );
-
 		userIdentity = ( (RationalVote.Models.UserPrincipal)Context.User ).User.Email;
 		userID = ( (RationalVote.Models.UserPrincipal)Context.User ).User.Id;
 	}
