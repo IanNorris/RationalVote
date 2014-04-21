@@ -1,4 +1,4 @@
-/*// Uncomment this class to provide custom runtime policy for Glimpse
+// Uncomment this class to provide custom runtime policy for Glimpse
 
 using Glimpse.AspNet.Extensions;
 using Glimpse.Core.Extensibility;
@@ -12,12 +12,21 @@ namespace RationalVote
 			// You can perform a check like the one below to control Glimpse's permissions within your application.
 			// More information about RuntimePolicies can be found at http://getglimpse.com/Help/Custom-Runtime-Policy
 			var httpContext = policyContext.GetHttpContext();
+
+			if( httpContext.User.Identity.IsAuthenticated )
+			{
+				if( ((RationalVote.Models.UserPrincipal)httpContext.User).User.Email.ToLower().CompareTo( "ian@icstatic.com" ) == 0 )
+				{
+					return RuntimePolicy.On;
+				}
+			}
+
 			//if (!httpContext.User.IsInRole("Administrator"))
 			//{
 			//	return RuntimePolicy.Off;
 			//}
 
-			return RuntimePolicy.On;
+			return RuntimePolicy.Off;
 		}
 
 		public RuntimeEvent ExecuteOn
@@ -28,4 +37,3 @@ namespace RationalVote
 		}
 	}
 }
-*/
