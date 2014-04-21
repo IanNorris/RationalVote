@@ -10,11 +10,19 @@ using RationalVote.Models;
 using System.Data.Common;
 using Dapper;
 using RationalVote.DAL;
+using System.Text.RegularExpressions;
 
 namespace RationalVote.Controllers
 {
 	public class DebateController : Controller
 	{
+		Regex replaceMultipleSpaces = null;
+
+		public DebateController()
+		{
+			replaceMultipleSpaces = new Regex( @"[ ]{2,}", RegexOptions.None );
+		}
+
 		//
 		// GET: /New
 		[RequireLogin]
@@ -34,6 +42,12 @@ namespace RationalVote.Controllers
 		{
 			if( ModelState.IsValid )
 			{
+				//Convert all superfluous consecutive whitespace with a single space
+				debateInput.Argument = debateInput.Argument.Replace( '\r', ' ' );
+				debateInput.Argument = debateInput.Argument.Replace( '\n', ' ' );
+				debateInput.Argument = debateInput.Argument.Replace( '\t', ' ' );
+				debateInput.Argument = replaceMultipleSpaces.Replace( debateInput.Argument, @" " );
+
 				Debate debate = new Debate();
 				debate.Owner = ((RationalVote.Models.UserPrincipal)HttpContext.User).User.Id;
 				debate.Title = debateInput.Argument;
@@ -51,6 +65,62 @@ namespace RationalVote.Controllers
 			}
 
 			return View( debateInput );
+		}
+
+
+		//
+		// POST: /New
+		[HttpPost]
+		[RequireLogin]
+		[Route( "CreateAjax" )]
+		[ValidateAntiForgeryToken]
+		public ActionResult CreateAjax( DebateResponse debateInput )
+		{
+			if( ModelState.IsValid )
+			{
+				//Convert all superfluous consecutive whitespace with a single space
+				debateInput.Argument = debateInput.Argument.Replace( '\r', ' ' );
+				debateInput.Argument = debateInput.Argument.Replace( '\n', ' ' );
+				debateInput.Argument = debateInput.Argument.Replace( '\t', ' ' );
+				debateInput.Argument = replaceMultipleSpaces.Replace( debateInput.Argument, @" " );
+
+				Debate debate = new Debate();
+				debate.Owner = ( (RationalVote.Models.UserPrincipal)HttpContext.User ).User.Id;
+				debate.Title = debateInput.Argument;
+				debate.Locked = false;
+				debate.Posted = DateTime.Now;
+				debate.Status = Debate.StatusType.Open;
+				debate.Updated = null;
+
+				using( DbConnection connection = RationalVoteContext.Connect() )
+				{
+					using( DbTransaction transaction = connection.BeginTransaction() )
+					{
+						long Id = connection.Insert( debate, transaction );
+						debate.Id = Id;
+
+						DebateLink link = new DebateLink();
+						link.Parent = debateInput.Parent;
+						link.Type = debateInput.Type;
+						link.Child = debate;
+
+						connection.Execute( "INSERT INTO DebateLink (Parent, Child, Type, Weight) VALUES (@Parent, @Child, @Type, @Weight)", 
+							new {
+								Parent = link.Parent,
+								Child = link.Child.Id,
+								Type = link.Type,
+								Weight = link.Weight,
+							},
+							transaction );
+
+						transaction.Commit();
+
+						return View( "_DebateBlockLink", link );
+					}
+				}
+			}
+
+			return View( "_DebateErrorInline", new ErrorMessage( ErrorMessage.TypeEnum.Danger, "Unable to add response", "Your argument was unable to be made." ) );
 		}
 
 		//

@@ -59,6 +59,18 @@
     <Reference Include="Dapper">
       <HintPath>packages\Dapper.1.13\lib\net45\Dapper.dll</HintPath>
     </Reference>
+    <Reference Include="Glimpse.Ado">
+      <HintPath>packages\Glimpse.Ado.1.7.0\lib\net45\Glimpse.Ado.dll</HintPath>
+    </Reference>
+    <Reference Include="Glimpse.AspNet">
+      <HintPath>packages\Glimpse.AspNet.1.8.1\lib\net45\Glimpse.AspNet.dll</HintPath>
+    </Reference>
+    <Reference Include="Glimpse.Core">
+      <HintPath>packages\Glimpse.1.8.4\lib\net45\Glimpse.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="Glimpse.Mvc5">
+      <HintPath>packages\Glimpse.Mvc5.1.5.3\lib\net45\Glimpse.Mvc5.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.AspNet.Identity.Core, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>packages\Microsoft.AspNet.Identity.Core.2.0.0\lib\net45\Microsoft.AspNet.Identity.Core.dll</HintPath>
@@ -189,6 +201,7 @@
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\MailController.cs" />
     <Compile Include="DAL\RationalVoteContext.cs" />
+    <Compile Include="GlimpseSecurityPolicy.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -197,8 +210,10 @@
     <Compile Include="Models\DebateLink.cs" />
     <Compile Include="Models\DebateLinkVote.cs" />
     <Compile Include="Models\DebateNew.cs" />
+    <Compile Include="Models\DebateResponse.cs" />
     <Compile Include="Models\DebateTag.cs" />
     <Compile Include="Models\EmailVerificationToken.cs" />
+    <Compile Include="Models\ErrorMessage.cs" />
     <Compile Include="Models\Permission.cs" />
     <Compile Include="Models\Profile.cs" />
     <Compile Include="Models\Session.cs" />
@@ -216,11 +231,13 @@
     <Compile Include="Utility\Attributes\PlaceholderAttribute.cs" />
     <Compile Include="Utility\Attributes\RequireLogin.cs" />
     <Compile Include="Utility\Attributes\RequireTrueAttribute.cs" />
+    <Compile Include="Utility\Attributes\StringLengthConfigAttribute.cs" />
     <Compile Include="Utility\Client.cs" />
     <Compile Include="Utility\Cookie.cs" />
     <Compile Include="Utility\Crypto.cs" />
     <Compile Include="Utility\Dapper.SimpleCRUD.cs" />
     <Compile Include="Utility\EmailExceptionFilter.cs" />
+    <Compile Include="Utility\HtmlExtensions.cs" />
     <Compile Include="Utility\Menu.cs" />
     <Compile Include="Utility\SendMail.cs" />
   </ItemGroup>
@@ -253,7 +270,9 @@
     <Folder Include="App_Start\" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="packages.config" />
+    <Content Include="packages.config">
+      <SubType>Designer</SubType>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
@@ -263,6 +282,9 @@
     <None Include="Properties\PublishProfiles\RV VPS.pubxml" />
     <Content Include="Views\Debate\Index.cshtml" />
     <Content Include="Views\Debate\_DebateBlockInline.cshtml" />
+    <Content Include="Views\Debate\_DebateBlockResponse.cshtml" />
+    <Content Include="Views\Debate\_DebateErrorInline.cshtml" />
+    <Content Include="Views\Shared\_Ajax.cshtml" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

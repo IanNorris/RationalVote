@@ -17,6 +17,7 @@ namespace RationalVote
 			bundles.Add(new ScriptBundle("~/Scripts/ThirdParty/jqbs").Include(
 				//"~/Scripts/ThirdParty/modernizr-*",
 				"~/Scripts/ThirdParty/jquery-{version}.js",
+				"~/Scripts/ThirdParty/jquery.unobtrusive-ajax.js",
 				"~/Scripts/ThirdParty/bootstrap.js",
 				"~/Scripts/ThirdParty/respond.js" )
 			);
@@ -25,7 +26,9 @@ namespace RationalVote
 				"~/Scripts/ThirdParty/jquery.validate.js",
 				"~/Scripts/ThirdParty/jquery.validate.unobtrusive.js",
 				"~/Scripts/ThirdParty/jquery.validate.unobtrusive-custom.js",
-				"~/Scripts/ThirdParty/jquery.charcounter.js")
+				"~/Scripts/ThirdParty/jquery.charcounter.js",
+				"~/Scripts/ThirdParty/jquery.nolinebreaks.js",
+				"~/Scripts/ajax.debate-response.js")
 			);
 
 			bundles.Add( new ScriptBundle( "~/Scripts/ThirdParty/zxcvbn" ).Include(

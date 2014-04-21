@@ -20,6 +20,9 @@ namespace RationalVote
 			FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
 			RouteConfig.RegisterRoutes(RouteTable.Routes);
 			BundleConfig.RegisterBundles(BundleTable.Bundles);
+
+			//Now test connection can be established to DB
+			using( DbConnection connection = RationalVoteContext.Connect() ){}
 		}
 
 		bool IsSiteDown()

@@ -78,7 +78,8 @@
 			var container;
 			if (!settings.container.match(/^<.+>$/)) {
 				// use existing element to hold counter message
-				container = $(settings.container);
+				container = $(this).parentsUntil( ".row" ).find( settings.container );
+
 			} else {
 				// append element to hold counter message (clean up old element first)
 				$(this).next("." + settings.classname).remove();

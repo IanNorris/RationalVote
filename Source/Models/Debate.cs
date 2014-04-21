@@ -117,22 +117,24 @@ namespace RationalVote.Models
 
 				IEnumerable<DebateLink> arguments = connection.Query<DebateLink, Debate, DebateLink>( 
 					@"SELECT
-						DebateLink.*, Debate.*, DebateLinkVote.vote AS Vote
+						DebateLink.Id, DebateLink.Type, DebateLink.Weight,
+						DebateLink.Parent, DebateLinkVote.Vote, Debate.*
 					FROM
 						DebateLink
-							LEFT OUTER JOIN
+							LEFT JOIN
 						Debate ON DebateLink.Child = Debate.Id
 							LEFT OUTER JOIN
 						DebateLinkVote ON (DebateLinkVote.Link = DebateLink.Id)
 					WHERE
 						DebateLink.Parent = @Parent
-					ORDER BY Debate.Status ASC, DebateLink.Weight DESC",
-					( parent, child) =>
+					ORDER BY Debate.Status ASC, DebateLink.Weight DESC"
+					,
+					(Parent, Child) =>
 					{
-						parent.Child = child;
-						return parent;
+						Parent.Child = Child;
+						return Parent;
 					},
-					new { Parent = Id }
+					new { Parent = this.Id }
 					);
 
 				return arguments;

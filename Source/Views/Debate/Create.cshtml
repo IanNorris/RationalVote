@@ -23,7 +23,7 @@
 					{
 						@Html.AntiForgeryToken()
 						
-						<textarea class="form-control counted multi-line" data-val="true" 
+						<textarea class="DebateInput NoLineBreaks form-control counted multi-line" data-val="true" 
 								  data-val-length="Your argument cannot exceed @maxArgumentLength characters" 
 								  data-val-length-max="@maxArgumentLength" data-val-required="Your argument cannot be empty." rows="8"
 								  placeholder="Enter your argument"
@@ -31,7 +31,7 @@
 
 						@Html.ValidationMessageFor( m => m.Argument, null )
 
-						<p class="pull-right" id="counter"></p>
+						<p class="DebateCounter pull-right" id="counter"></p>
 						<br /><br />
 						<button class="btn btn-info RightButton" type="submit">Post New Assertion</button>
 					}
@@ -128,13 +128,3 @@
 
 <div class="modal fade" id="tosDialog" tabindex="-1" role="dialog" aria-labelledby="tosLabel" aria-hidden="true">
 </div>
-
-@section DebateScripts
-{
-	<script>
-		$(function ()
-		{
-			$("#Argument").charCounter( @maxArgumentLength, { container: "#counter" });
-		});
-	</script>
-}

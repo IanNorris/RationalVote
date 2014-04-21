@@ -5,7 +5,7 @@ namespace RationalVote.Models
 	
 	public partial class DebateLink
 	{
-		public enum LinkType : byte
+		public enum LinkType : int
 		{
 			For,
 			Against,
@@ -13,6 +13,7 @@ namespace RationalVote.Models
 
 		public DebateLink()
 		{
+			Weight = 1;
 		}
 	
 		public long Id { get; set; }

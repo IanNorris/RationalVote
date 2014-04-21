@@ -19,22 +19,16 @@ namespace RationalVote.DAL
 
 		static RationalVoteContext()
 		{
-			//DapperExtensions.DapperExtensions.SqlDialect = new DapperExtensions.Sql.MySqlDialect();
-
-			string context = WebConfigurationManager.ConnectionStrings["RationalVoteContext"].ToString();
-
-			//Test the connection works
-			using( DbConnection connection = new MySqlConnection( context ) )
-			{
-				connection.Open();
-			}
 		}
 
 		public static DbConnection Connect()
 		{
-			string context = WebConfigurationManager.ConnectionStrings["RationalVoteContext"].ToString();
+			var context = WebConfigurationManager.ConnectionStrings[ "RationalVoteContext" ];
+			var factory = DbProviderFactories.GetFactory( "MySql.Data.MySqlClient" );
+			DbConnection connection = factory.CreateConnection();
 
-			DbConnection connection = new MySqlConnection( context );
+			connection.ConnectionString = context.ConnectionString;
+
 			connection.Open();
 
 			return connection;

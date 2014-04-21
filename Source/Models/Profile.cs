@@ -49,11 +49,16 @@ namespace RationalVote.Models
 			return (long)Math.Log( Experience, LevelScale );
 		}
 
-		public static Profile GetFromUser( long Id )
+		public static Profile GetFromUser( long? Id )
 		{
+			if( Id == null )
+			{
+				return null;
+			}
+
 			using( DbConnection connection = RationalVoteContext.Connect() )
 			{
-				Profile profile = connection.Query<Profile>( "SELECT * FROM Profile WHERE `UserId` = @UserId", new { UserId = Id } ).FirstOrDefault();
+				Profile profile = connection.Query<Profile>( "SELECT * FROM Profile WHERE `UserId` = @UserId", new { UserId = Id.Value } ).FirstOrDefault();
 
 				return profile;
 			}

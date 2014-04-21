@@ -25,7 +25,7 @@
 		<div class="row">
 			<div class="col-md-11 col-md-offset-1">
 				<br />
-				@*$for_input*@
+				@Html.Partial( "_DebateBlockResponse", new DebateResponse( DebateLink.LinkType.For, Model.Id ) )
 			</div>
 		</div>
 
@@ -46,7 +46,7 @@
 		<div class="row">
 			<div class="col-md-11 col-md-offset-1">
 				<br />
-				@*$against_input*@
+				@Html.Partial( "_DebateBlockResponse", new DebateResponse( DebateLink.LinkType.Against, Model.Id ) )
 			</div>
 		</div>
 
@@ -57,7 +57,7 @@
 				@*$tags_block*@
 			</div>
 			<div class="col-md-5" style="text-align: right">
-				@Html.Partial( "_Author", RationalVote.Models.Profile.GetFromUser( Model.Owner.Value ) )
+				@Html.Partial( "_Author", RationalVote.Models.Profile.GetFromUser( Model.Owner ), new ViewDataDictionary() )
 			</div>
 		</div>
 	</div>

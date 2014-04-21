@@ -1,0 +1,11 @@
+﻿@Model ErrorMessage
+
+@{
+	Layout = "~/Views/Shared/_Ajax.cshtml";
+}
+
+<div class="alert alert-block alert-@Model.Type.ToString().ToLower() fade in">
+	<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+	<h4>@Model.Title</h4>
+	<p>@Model.Message</p>
+</div>

@@ -1,0 +1,34 @@
+﻿@model DebateResponse
+
+@{
+	int maxArgumentLength = Utility.AppSettings.Get<int>( "maxArgumentLength" );
+	
+	string type = Model.Type.ToString().ToLower();
+	string targetID = "new-" + type + "-content";
+	string target = Url.Action( "CreateAjax", "Debate" );
+}
+
+@using( Ajax.BeginForm( null, null, FormMethod.Post, new AjaxOptions { OnSuccess = "OnAjaxResponseSuccess( data, '#" + targetID + "' )", Url = target }, new { @autocomplete = "off" } ) )
+{
+	@Html.AntiForgeryToken()
+	
+	@Html.HiddenFor( m => m.Parent )
+	@Html.HiddenFor( m => m.Type )
+
+	<div class="input-group">
+		<input class="DebateInput NoLineBreaks form-control counted multi-line" data-val="true" 
+					data-val-length="Your argument cannot exceed @maxArgumentLength characters" 
+					data-val-length-max="@maxArgumentLength" data-val-required="Your argument cannot be empty."
+					placeholder="Enter your argument"
+					id="Argument" name="Argument" />
+
+		<span class="input-group-btn">
+			<button class="btn btn-primary" type="submit">Add</button>
+		</span>
+	</div>
+
+	@Html.ValidationMessageFor( m => m.Argument, null )
+
+	<p class="DebateCounter pull-right" id="counter"></p>
+	<br /><br />
+}

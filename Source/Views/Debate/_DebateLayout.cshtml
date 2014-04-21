@@ -1,5 +1,7 @@
 ﻿@{
 	Layout = "~/Views/Shared/_Layout.cshtml";
+	
+	int maxArgumentLength = Utility.AppSettings.Get<int>( "maxArgumentLength" );
 }
 
 <div class="row">
@@ -12,9 +14,15 @@
 	</div>
 </div>
 
+@Html.RegisterScript( 
+	@<script>
+		$(function ()
+		{
+			$(".DebateInput").charCounter( @maxArgumentLength, { container: ".DebateCounter" });
+		});
+	</script> )
+
 @section Scripts
 {
 	@Scripts.Render( "~/Scripts/ThirdParty/jqueryval" )
-
-	@RenderSection( "DebateScripts", required: false )
 }

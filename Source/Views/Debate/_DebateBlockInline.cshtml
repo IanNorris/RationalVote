@@ -22,14 +22,7 @@
 			@*$tag_block*@
 		</div>
 		<div class="col-md-3 AuthorBlock">
-			@if( profile != null )
-			{
-				<h5>@Html.Partial( "_Author", profile )</h5>
-			}
-			else
-			{
-				<h5>Deleted Account</h5>
-			}
+			@Html.Partial( "_Author", profile, new ViewDataDictionary() )
 		</div>
 	</div>
 </div>
