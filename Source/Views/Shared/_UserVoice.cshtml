@@ -1,31 +1,21 @@
-﻿<script>
-	// Include the UserVoice JavaScript SDK (only needed once on a page)
-	UserVoice = window.UserVoice || []; (function () { var uv = document.createElement('script'); uv.type = 'text/javascript'; uv.async = true; uv.src = '//widget.uservoice.com/1Fm3X2FXf5XVacZT422Q.js'; var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(uv, s) })();
+﻿@{
+	bool isAuthenticated = Context.User.Identity.IsAuthenticated;
+	bool isAdmin = false;
+	string userIdentity = null;
+	long userID = 0;
 
-	//
-	// UserVoice Javascript SDK developer documentation:
-	// https://www.uservoice.com/o/javascript-sdk
-	//
+	if( isAuthenticated )
+	{
+		isAdmin = Context.User.IsInRole( "Administrator" );
 
-	// Set colors
-	UserVoice.push(['set', {
-		accent_color: '#448dd6',
-		trigger_color: 'white',
-		trigger_background_color: '#448dd6'
-	}]);
-
-		@*@<?php if( DDD_Session::getInstance()->isValid() )
-	{?>
-		// Identify the user if logged in
-		UserVoice.push(['identify', {
-			id: <?php echo DDD_Session::getInstance()->getUserID(); ?>
-			}]);
-	<?php } ?> *@
-
-	// Add default trigger to the bottom-right corner of the window:
-	UserVoice.push(['addTrigger', { mode: 'satisfaction', trigger_position: 'bottom-right' }]);
-
-	// Autoprompt for Satisfaction and SmartVote (only displayed under certain conditions)
-	UserVoice.push(['autoprompt', {}]);
+		userIdentity = ( (RationalVote.Models.UserPrincipal)Context.User ).User.Email;
+		userID = ( (RationalVote.Models.UserPrincipal)Context.User ).User.Id;
+	}
+}
+<script>
+	UserVoice=window.UserVoice||[];(function(){var uv=document.createElement('script');uv.type='text/javascript';uv.async=true;uv.src='//widget.uservoice.com/1Fm3X2FXf5XVacZT422Q.js';var s=document.getElementsByTagName('script')[0];s.parentNode.insertBefore(uv,s)})();
+	UserVoice.push(['set',{accent_color:'#448dd6',trigger_color:'white',trigger_background_color:'#448dd6'}]);
+	@if( isAuthenticated ){<text>UserVoice.push(['identify',{email:'@userIdentity',id:@userID}]);</text>}
+	UserVoice.push(['addTrigger',{mode:'smartvote',trigger_style:'tab'}]);
+	UserVoice.push(['autoprompt',{}]);
 </script>
-
