@@ -1,5 +1,6 @@
 // Uncomment this class to provide custom runtime policy for Glimpse
 
+using System.Configuration;
 using Glimpse.AspNet.Extensions;
 using Glimpse.Core.Extensibility;
 
@@ -13,17 +14,22 @@ namespace RationalVote
 			// More information about RuntimePolicies can be found at http://getglimpse.com/Help/Custom-Runtime-Policy
 			var httpContext = policyContext.GetHttpContext();
 
+			//TODO: Replace this with a role based policy system
+			string[] glimpseUsers = ConfigurationManager.AppSettings.Get( "GlimpseUsers" ).ToString().ToLower().Split(';');
 			if( httpContext.User.Identity.IsAuthenticated )
 			{
-				if( ((RationalVote.Models.UserPrincipal)httpContext.User).User.Email.ToLower().CompareTo( "ian@icstatic.com" ) == 0 )
+				foreach( string user in glimpseUsers )
 				{
-					return RuntimePolicy.On;
+					if( ((RationalVote.Models.UserPrincipal)httpContext.User).User.Email.ToLower().CompareTo( user ) == 0 )
+					{
+						return RuntimePolicy.On;
+					}
 				}
 			}
 
-			//if (!httpContext.User.IsInRole("Administrator"))
+			//if (httpContext.User.IsInRole("Administrator"))
 			//{
-			//	return RuntimePolicy.Off;
+			//	return RuntimePolicy.On;
 			//}
 
 			return RuntimePolicy.Off;
