@@ -22,5 +22,10 @@ namespace RationalVote.Controllers
 		{
 			return View();
 		}
+
+		public ActionResult ForLegislators()
+		{
+			return View();
+		}
 	}
 }
