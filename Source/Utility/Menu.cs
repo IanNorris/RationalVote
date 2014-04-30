@@ -141,7 +141,7 @@ namespace RVUtility
 				menuStyle = "active";
 			}
 
-			string initial = String.Format( "<li class=\"dropdown {0}\"><a href=\"#\" class=\"dropdown-toggle\" data-toggle=\"dropdown\" data-hover=\"dropdown\">{1} <b class=\"caret\"></b></a><ul class=\"dropdown-menu\">",
+			string initial = String.Format( "<li class=\"dropdown {0}\"><a href=\"#\" class=\"dropdown-toggle\" data-toggle=\"dropdown\" data-hover=\"dropdown\">{1}</a><ul class=\"dropdown-menu\">",
 				menuStyle, title );
 
 			return MvcHtmlString.Create( initial + result + "</ul></li>" );

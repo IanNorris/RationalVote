@@ -10,10 +10,10 @@
 	@Styles.Render( "~/Content/ThirdParty/css" )
 	@Styles.Render("~/Content/Theme/css")
 </head>
-<body>
+<body><div class="wrapper">
+
 	<div class="header">
 		<div class="navbar navbar-default" role="navigation">
-			<!--<div class="container">--> <!--Alt style navigation-->
 			<div class="navbar-header navbar-left">
 				<button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-responsive-collapse">
 					<span class="sr-only">Toggle navigation</span>
@@ -62,40 +62,15 @@
 		</div>
 	}
 
-	@if( TempData[ "ErrorMessage" ] != null )
-	{
-		<div class="alert alert-block alert-danger fade in">
-			<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-			<h4>@TempData[ "MessageTitle " ]</h4>
-			<p>@TempData[ "ErrorMessage" ]</p>
-		</div>
-	}
-	else if( TempData[ "WarningMessage" ] != null )
-	{
-		<div class="alert alert-block alert-warning fade in">
-			<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-			<h4>@TempData[ "MessageTitle" ]</h4>
-			<p>@TempData[ "WarningMessage" ]</p>
-		</div>
-	}
-	else if( TempData[ "SuccessMessage" ] != null )
-	{
-		<div class="alert alert-block alert-success fade in">
-			<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-			<h4>@TempData[ "MessageTitle" ]</h4>
-			<p>@TempData[ "SuccessMessage" ]</p>
-		</div>
-	}
-
 	@if( ViewBag.WidePage ?? false )
 	{
-		@* insert alerts here*@
+		@Html.Partial( "Alerts" )
 		@RenderBody()
 	}
 	else
 	{
-		<div class="container">
-			@* insert alerts here*@
+		<div class="container content">
+			@Html.Partial( "Alerts" )
 			@RenderBody()
 		</div>
 	}
@@ -119,5 +94,5 @@
 	@Html.Partial( "_UserVoice" )
 	@Html.Partial( "_GoogleAnalytics" )
 
-</body>
+</div></body>
 </html>

@@ -5,25 +5,29 @@
 	VoteSplit voteSplit = VoteSplit.Get( Model.Id );
 }
 
-<div class="DebateChild DebateChild@(Model.Validity().ToString())" title="@Model.ValidityExplanation()">
-	<div class="row">
-		<div class="col-md-9">
-			<p>@Model.Title</p>
-			<br />
-		</div>
-		<div class="col-md-3">
-			<a href="@Url.Action( "Index", new { Id = Model.Id } )" title="Debate this"><i class="fa fa-chevron-circle-right fa-4x RightButton"></i></a>
-			<br /><br />
-		</div>
-	</div>
+<div class="shadow-wrapper">
+	<div class="box-shadow shadow-effect-4">
+		<div class="DebateChild DebateChild@(Model.Validity().ToString())" title="@Model.ValidityExplanation()">
+			<div class="row">
+				<div class="col-md-9">
+					<p>@Model.Title</p>
+					<br />
+				</div>
+				<div class="col-md-3">
+					<a href="@Url.Action( "Index", new { Id = Model.Id } )" title="Debate this"><i class="fa fa-chevron-circle-right fa-4x RightButton"></i></a>
+					<br /><br />
+				</div>
+			</div>
 
-	<div class="row">
-		<div class="col-md-9">
-			@*$tag_block*@
+			<div class="row">
+				<div class="col-md-9">
+					@*$tag_block*@
+				</div>
+				<div class="col-md-3 AuthorBlock">
+					@Html.Partial( "_Author", profile, new ViewDataDictionary() )
+				</div>
+			</div>
 		</div>
-		<div class="col-md-3 AuthorBlock">
-			@Html.Partial( "_Author", profile, new ViewDataDictionary() )
-		</div>
+		@Html.Partial( "_VoteSplit", voteSplit )
 	</div>
 </div>
-@Html.Partial( "_VoteSplit", voteSplit )

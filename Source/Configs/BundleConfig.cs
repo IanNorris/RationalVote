@@ -49,7 +49,8 @@ namespace RationalVote
 			bundles.Add(new StyleBundle("~/Content/Theme/css")
 				.Include( "~/Content/Theme/app.css", urlRewrite )
 				.Include( "~/Content/Theme/fonts.css" ) //Paths get mangled if using UrlTransform here.
-				.Include( "~/Content/Theme/default.css", urlRewrite )
+				.Include( "~/Content/Theme/style.css", urlRewrite )
+				.Include( "~/Content/Theme/theme.css", urlRewrite )
 				.Include( "~/Content/Theme/custom.css", urlRewrite )
 			);
 
