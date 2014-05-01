@@ -4,10 +4,12 @@
 	Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<div class="container">
+@Styles.Render( "~/Content/csserrorinline" )
+
+<div class="container content">
 	<div class="row">
 		<div class="col-md-8 col-md-offset-2">
-			<div class="error-v3">
+			<div class="error-v1">
 				<img src="/Content/beasts/@(ViewBag.BeastName ?? " tbservers")-sm.png" />
 				@RenderBody()
 			</div>
