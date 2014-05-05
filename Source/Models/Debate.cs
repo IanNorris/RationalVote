@@ -107,7 +107,7 @@ namespace RationalVote.Models
 			return Status.ToString();
 		}
 
-		public IEnumerable<DebateLink> Children()
+		public IEnumerable<DebateLink> Children( long userID )
 		{
 			using( DbConnection connection = RationalVoteContext.Connect() )
 			{
@@ -122,7 +122,7 @@ namespace RationalVote.Models
 							LEFT JOIN
 						Debate ON DebateLink.Child = Debate.Id
 							LEFT OUTER JOIN
-						DebateLinkVote ON (DebateLinkVote.Link = DebateLink.Id)
+						DebateLinkVote ON (DebateLinkVote.Parent = DebateLink.Parent AND DebateLinkVote.Child = DebateLink.Child AND DebateLinkVote.Owner = @Owner)
 					WHERE
 						DebateLink.Parent = @Parent AND DebateLink.PathLength = 1
 					ORDER BY Debate.Status ASC, DebateLink.LinkTime DESC"
@@ -132,7 +132,7 @@ namespace RationalVote.Models
 						Parent.Child = Child;
 						return Parent;
 					},
-					new { Parent = this.Id }
+					new { Parent = this.Id, Owner = userID }
 					);
 
 				return arguments;

@@ -1,7 +1,7 @@
 ﻿@model Debate
 
 @{
-	var arguments = Model.Children();
+	var arguments = Model.Children( Context.User.Identity.IsAuthenticated ? ( (RationalVote.Models.UserPrincipal)Context.User ).User.Id : 0 );
 	
 	var voteSplit = RationalVote.Models.VoteSplit.Get( Model.Id );
 }

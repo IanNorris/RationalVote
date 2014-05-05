@@ -1,9 +1,9 @@
-function opinionAjax( target, opinion )
+function opinionAjax( pobj, cobj, opinion )
 {
-	//alert( target + ' -> ' + opinion );
 	$.post( "/VoteAjax",
 		{
-			Link: target,
+			Parent: pobj,
+			Child: cobj,
 			Vote: opinion,
 			__RequestVerificationToken: $('#__AjaxAntiForgeryForm input[name=__RequestVerificationToken]').val()
 		} );
@@ -19,18 +19,13 @@ $('#fallacyDialog').on(
 				var selection = $( e.target ).data( 'val' );
 				var senderObj = e.data.sender;
 
-				//$( sender ).parent( ".btn-group" ).find(".SelectedOption" ).text( selection );
-				//sender.parent( ".btn-group" ).text( selection );
-				
-				//$( '#' + senderObj.id ).closest( '.btn-group' ).children( '.SelectedOption' ).text( selection );
-
 				var selectionText = '#' + 'selected' + senderObj.id;
 
 				$( selectionText ).text(  $( e.target ).data( 'description' ) ).prop( 'title', $( e.target ).data( 'title' ) );
 				
-				opinionAjax( senderObj.id.split("_")[1], selection );
+				var splitResult = senderObj.id.split("_");
 
-//				sende.html( 'farce' );
+				opinionAjax( splitResult[1], splitResult[2], selection );
 			}
 		);
 	}
@@ -51,13 +46,14 @@ function onAddedContent()
 		function(e)
 		{
 			var picked = $(this).data( 'val' );
-			var target = $(this).data( 'target' );
+			var parentObj = $(this).data( 'pobj' );
+			var childObj = $(this).data( 'cobj' );
 			var title = $(this).data( 'title' );
 			var message = $(this).text();
 
-			$( '#' + 'selectedFallacyTrigger_' + target ).text( message ).prop( 'title', title );
+			$( '#' + 'selectedFallacyTrigger_' + parentObj + '_' + childObj ).text( message ).prop( 'title', title );
 
-			opinionAjax( target, picked );
+			opinionAjax( parentObj, childObj, picked );
 		}
 	);
 }

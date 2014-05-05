@@ -61,7 +61,43 @@ namespace RationalVote.Controllers
 				},
 				transaction ).First();
 
+			DebateLinkVote vote = new DebateLinkVote();
+			vote.Owner = child.Owner.Value;
+			vote.Parent = parent;
+			vote.Child = child.Id;
+			vote.Vote = DebateLinkVote.VoteType.Agree;
+
+			InsertVote( connection, transaction, vote );
+
 			return link;
+		}
+
+		public bool InsertVote( DbConnection connection, DbTransaction transaction, DebateLinkVote debateVote )
+		{
+			//Check that the user is voting on the right link. If they're just spamming random junk at
+			//the server this might catch it. We don't want junk lying around on the server that isn't visible.
+			long found = connection.Query<long>( "SELECT 1 FROM DebateLink WHERE DebateLink.Parent = @Parent AND DebateLink.Child = @Child AND DebateLink.PathLength = 1",
+									new
+									{
+										Parent = debateVote.Parent,
+										Child = debateVote.Child,
+									} ).FirstOrDefault();
+
+			if( found != 1 )
+			{
+				return false;
+			}
+
+			connection.Execute( "INSERT INTO DebateLinkVote (Parent,Child,Vote,Owner) VALUES (@Parent, @Child, @Vote, @Owner) ON DUPLICATE KEY UPDATE Vote=VALUES(Vote)",
+								new
+								{
+									Parent = debateVote.Parent,
+									Child = debateVote.Child,
+									Vote = debateVote.Vote,
+									Owner = debateVote.Owner
+								} );
+
+			return true;
 		}
 
 		//
@@ -153,6 +189,8 @@ namespace RationalVote.Controllers
 
 						transaction.Commit();
 
+						link.Vote = DebateLinkVote.VoteType.Agree;
+
 						return View( "_DebateBlockLink", link );
 					}
 				}
@@ -175,44 +213,14 @@ namespace RationalVote.Controllers
 
 				using( DbConnection connection = RationalVoteContext.Connect() )
 				{
-					//Check that the user is voting on the right link. If they're just spamming random junk at
-					//the server this might catch it. We don't want junk lying around on the server that isn't visible.
-					long found = connection.Query<long>( "SELECT DebateLink.Id FROM DebateLink WHERE DebateLink.Id = @Link AND DebateLink.PathLength = 1",
-											new
-											{
-												Link = debateVote.Link,
-											} ).FirstOrDefault();
-
-					if( found != debateVote.Link )
+					if( InsertVote( connection, null, debateVote ) )
 					{
-						return new HttpStatusCodeResult(HttpStatusCode.Forbidden);
+
 					}
-
-					connection.Execute( "INSERT INTO DebateLinkVote (Link,Vote,Owner) VALUES (@Link, @Vote, @Owner) ON DUPLICATE KEY UPDATE Vote=VALUES(Vote)",
-										new
-										{
-											Link = debateVote.Link,
-											Vote = debateVote.Vote,
-											Owner = debateVote.Owner
-										} );
-
-					/*try
+					else
 					{
-						
+				
 					}
-					catch( MySqlException exception )
-					{
-						if( RationalVoteContext.DecodeException( exception ) == RationalVoteContext.Error.DuplicateIndex )
-						{
-							//Row exists, do update
-							connection.Execute( )
-						}
-						else
-						{
-							//Let someone else deal with it...
-							throw exception;
-						}
-					}*/
 				}
 
 				return new HttpStatusCodeResult(HttpStatusCode.OK);

@@ -30,13 +30,13 @@ namespace RationalVote.Models
 			{
 				VoteSplit split = connection.Query<VoteSplit>(
 					@"SELECT
-					SUM( CASE WHEN Debate.Status = 0 THEN 1 ELSE 0 END ) AS `For`,
+					SUM( CASE WHEN (Debate.Status = 0 AND DebateLink.Type = 0) THEN 1 ELSE 0 END ) AS `For`,
 					SUM( CASE WHEN (Debate.Status = 1 OR Debate.Status = 2) THEN 1 ELSE 0 END ) AS `Assumption`,
-					SUM( CASE WHEN Debate.Status = 3 THEN 1 ELSE 0 END ) AS `Against`
+					SUM( CASE WHEN (Debate.Status = 0 AND DebateLink.Type = 1) THEN 1 ELSE 0 END ) AS `Against`
 					FROM
 						DebateLink
 					INNER JOIN Debate
-					ON DebateLink.Child = Debate.Id
+					ON DebateLink.Child = Debate.Id AND DebateLink.PathLength = 1
 					WHERE DebateLink.Parent = @Parent
 					GROUP BY DebateLink.Parent", 
 					new { Parent = Parent } ).FirstOrDefault();

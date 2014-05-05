@@ -14,10 +14,10 @@ namespace RationalVote.Models
 			[AddOnIcon("square-o")]
 			NoOpinion,
 
-			[Description("Important to me")]
-			[LongDescription("This argument is important to me.")]
-			[AddOnIcon("exclamation")]
-			Important,
+			[Description( "I agree" )]
+			[LongDescription( "I agree with this argument." )]
+			[AddOnIcon( "check" )]
+			Agree,
 
 			[Description( "Not relevant" )]
 			[LongDescription( "This argument is not relevant to this discussion." )]
@@ -173,7 +173,8 @@ namespace RationalVote.Models
 		
 		public long Id { get; set; }
 		public VoteType Vote { get; set; }
-		public long Link { get; set; }
+		public long Parent { get; set; }
+		public long Child { get; set; }
 		public long Owner { get; set; }
 	}
 }
