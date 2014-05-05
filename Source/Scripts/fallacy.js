@@ -44,16 +44,22 @@ $('#fallacyDialog').on(
 	}
 );
 
-$('.OpinionOption').click(
-	function(e)
-	{
-		var picked = $(this).data( 'val' );
-		var target = $(this).data( 'target' );
-		var title = $(this).data( 'title' );
-		var message = $(this).text();
+function onAddedContent()
+{
+	$('.OpinionOption').unbind();
+	$('.OpinionOption').click(
+		function(e)
+		{
+			var picked = $(this).data( 'val' );
+			var target = $(this).data( 'target' );
+			var title = $(this).data( 'title' );
+			var message = $(this).text();
 
-		$( '#' + 'selectedFallacyTrigger_' + target ).text( message ).prop( 'title', title );
+			$( '#' + 'selectedFallacyTrigger_' + target ).text( message ).prop( 'title', title );
 
-		opinionAjax( target, picked );
-	}
-);
+			opinionAjax( target, picked );
+		}
+	);
+}
+
+onAddedContent();

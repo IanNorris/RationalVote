@@ -1,7 +1,6 @@
 @model DebateLink
 
 @{
-	string choice = "Default";
 	var voteTypes = (DebateLinkVote.VoteType[])Enum.GetValues( typeof( DebateLinkVote.VoteType ) );
 
 	if( !Context.User.Identity.IsAuthenticated )

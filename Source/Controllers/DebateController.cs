@@ -47,10 +47,11 @@ namespace RationalVote.Controllers
 			//Insert self reference
 			CreateAndInsertLinkSelf( connection, transaction, child.Id );
 
-			connection.Execute( @"INSERT INTO DebateLink (Parent, Child, Type, LinkTime, PathLength) 
+			link.Id = connection.Query<long>( @"INSERT INTO DebateLink (Parent, Child, Type, LinkTime, PathLength) 
 				SELECT ParentT.Parent, ChildT.Child, @Type, @LinkTime, ParentT.PathLength + ChildT.PathLength + 1
 				FROM DebateLink ParentT, DebateLink ChildT
-				WHERE ParentT.Child = @Parent AND ChildT.Parent = @Child",
+				WHERE ParentT.Child = @Parent AND ChildT.Parent = @Child;
+				SELECT DebateLink.Id FROM DebateLink WHERE DebateLink.Parent = @Parent AND DebateLink.Child = @Child AND DebateLink.PathLength = 1",
 				new
 				{
 					Parent = link.Parent,
@@ -58,7 +59,7 @@ namespace RationalVote.Controllers
 					Type = link.Type,
 					LinkTime = DateTime.Now,
 				},
-				transaction );
+				transaction ).First();
 
 			return link;
 		}
@@ -174,6 +175,19 @@ namespace RationalVote.Controllers
 
 				using( DbConnection connection = RationalVoteContext.Connect() )
 				{
+					//Check that the user is voting on the right link. If they're just spamming random junk at
+					//the server this might catch it. We don't want junk lying around on the server that isn't visible.
+					long found = connection.Query<long>( "SELECT DebateLink.Id FROM DebateLink WHERE DebateLink.Id = @Link AND DebateLink.PathLength = 1",
+											new
+											{
+												Link = debateVote.Link,
+											} ).FirstOrDefault();
+
+					if( found != debateVote.Link )
+					{
+						return new HttpStatusCodeResult(HttpStatusCode.Forbidden);
+					}
+
 					connection.Execute( "INSERT INTO DebateLinkVote (Link,Vote,Owner) VALUES (@Link, @Vote, @Owner) ON DUPLICATE KEY UPDATE Vote=VALUES(Vote)",
 										new
 										{
