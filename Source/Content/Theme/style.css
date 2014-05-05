@@ -712,26 +712,26 @@
 
 .dropdown > a:after,
 .dropdown-submenu > a:after {
-    top: 8px;
-    right: 9px;
-    font-size: 11px;
-    content: "\f105";
-    position: absolute;
-    font-weight: normal;
-    display: inline-block;
-    font-family: FontAwesome;
+	top: 8px;
+	right: 9px;
+	font-size: 11px;
+	content: "\f105";
+	position: absolute;
+	font-weight: normal;
+	display: inline-block;
+	font-family: FontAwesome;
 }
 
 @media (max-width: 767px) {
   .dropdown-submenu > a:after {
-      content: " ";
+	  content: " ";
   }
 }
 
 .dropdown > a:after {
-    top: 9px;
-    right: 15px;
-    content: "\f107";
+	top: 9px;
+	right: 15px;
+	content: "\f107";
 }
 
 .dropdown-submenu > .dropdown-menu { 
@@ -747,8 +747,8 @@
 
 @media (max-width: 767px) {
   .dropdown-submenu > .dropdown-menu {  
-     display: block;
-     margin-left: 15px;
+	 display: block;
+	 margin-left: 15px;
   }
 }
 
@@ -846,10 +846,10 @@
 .service:hover {
 	background: #fcfcfc;
 	box-shadow: 0 0 5px #ddd;
-    -webkit-transition: box-shadow 0.2s ease-in-out;
-    -moz-transition: box-shadow 0.2s ease-in-out;
-    -o-transition: box-shadow 0.2s ease-in-out;
-    transition: box-shadow 0.2s ease-in-out;
+	-webkit-transition: box-shadow 0.2s ease-in-out;
+	-moz-transition: box-shadow 0.2s ease-in-out;
+	-o-transition: box-shadow 0.2s ease-in-out;
+	transition: box-shadow 0.2s ease-in-out;
 }
 .service:hover i {
 	color: #656565;
@@ -870,10 +870,10 @@
 	color: #72c02c;
 	font-size: 35px;  
 	text-align: center;
-    -webkit-transition: all 0.4s ease-in-out;
-    -moz-transition: all 0.4s ease-in-out;
-    -o-transition: all 0.4s ease-in-out;
-    transition: all 0.4s ease-in-out;
+	-webkit-transition: all 0.4s ease-in-out;
+	-moz-transition: all 0.4s ease-in-out;
+	-o-transition: all 0.4s ease-in-out;
+	transition: all 0.4s ease-in-out;
 }
 .service .service-icon.icon-cogs {
 	font-size: 37px;
@@ -935,10 +935,10 @@
 
 .recent-work a:hover span {
 	border-bottom: solid 2px #72c02c;
-    -webkit-transition: all 0.2s ease-in-out;
-    -moz-transition: all 0.3s ease-in-out;
-    -o-transition: all 0.2s ease-in-out;
-    transition: all 0.3s ease-in-out;
+	-webkit-transition: all 0.2s ease-in-out;
+	-moz-transition: all 0.3s ease-in-out;
+	-o-transition: all 0.2s ease-in-out;
+	transition: all 0.3s ease-in-out;
 }
 
 /* Work */
@@ -984,10 +984,10 @@
 }
 .footer a:hover {
 	color: #a8f85f;
-    -webkit-transition: all 0.4s ease-in-out;
-    -moz-transition: all 0.4s ease-in-out;
-    -o-transition: all 0.4s ease-in-out;
-    transition: all 0.4s ease-in-out;
+	-webkit-transition: all 0.4s ease-in-out;
+	-moz-transition: all 0.4s ease-in-out;
+	-o-transition: all 0.4s ease-in-out;
+	transition: all 0.4s ease-in-out;
 }
 
 .footer h2, 
@@ -1119,10 +1119,10 @@ a.thumbnail {
 }
 .thumbnail-style:hover { 
 	box-shadow: 0 0 8px #ddd; 
-    -webkit-transition: box-shadow 0.2s ease-in-out;
-    -moz-transition: box-shadow 0.2s ease-in-out;
-    -o-transition: box-shadow 0.2s ease-in-out;
-    transition: box-shadow 0.2s ease-in-out;
+	-webkit-transition: box-shadow 0.2s ease-in-out;
+	-moz-transition: box-shadow 0.2s ease-in-out;
+	-o-transition: box-shadow 0.2s ease-in-out;
+	transition: box-shadow 0.2s ease-in-out;
 }
 
 .thumbnail h3,
@@ -1187,10 +1187,10 @@ a.thumbnail {
 /*Service Alternative Block*/
 .service-alternative .service:hover { 
 	background: #76ca2c;
-    -webkit-transition: all 0.4s ease-in-out;
-    -moz-transition: all 0.4s ease-in-out;
-    -o-transition: all 0.4s ease-in-out;
-    transition: all 0.4s ease-in-out;
+	-webkit-transition: all 0.4s ease-in-out;
+	-moz-transition: all 0.4s ease-in-out;
+	-o-transition: all 0.4s ease-in-out;
+	transition: all 0.4s ease-in-out;
 }
 .service-alternative .service:hover i,
 .service-alternative .service:hover p,
@@ -1666,10 +1666,10 @@ ul.blog-tags a:hover i {
 
 .info-blocks:hover i.icon-info-blocks {
 	color: #72c02c;
-    -webkit-transition:all 0.2s ease-in-out;
-    -moz-transition:all 0.2s ease-in-out;
-    -o-transition:all 0.2s ease-in-out;
-    transition:all 0.2s ease-in-out;	
+	-webkit-transition:all 0.2s ease-in-out;
+	-moz-transition:all 0.2s ease-in-out;
+	-o-transition:all 0.2s ease-in-out;
+	transition:all 0.2s ease-in-out;	
 }
 
 .info-blocks i.icon-info-blocks {
@@ -1843,17 +1843,17 @@ ul.labels-demo li {
 }
 
 .service-bg {
-    background-color: rgba(255,255,255,0.1);
-    width: 250px;
-    padding: 60px;
-    position: absolute;
-    top: -10px;
-    right: -100px;
-    transform: rotate(55deg);   
-    -o-transform: rotate(55deg);
-    -ms-transform: rotate(55deg);
-    -moz-transform: rotate(55deg);
-    -webkit-transform: rotate(55deg);
+	background-color: rgba(255,255,255,0.1);
+	width: 250px;
+	padding: 60px;
+	position: absolute;
+	top: -10px;
+	right: -100px;
+	transform: rotate(55deg);   
+	-o-transform: rotate(55deg);
+	-ms-transform: rotate(55deg);
+	-moz-transform: rotate(55deg);
+	-webkit-transform: rotate(55deg);
 }
 
 /*Service Block v2
@@ -2284,8 +2284,8 @@ ul.labels-demo li {
 }
 
 .title-box-v2 h2 {
-    font-size: 25px;
-    text-transform: uppercase;
+	font-size: 25px;
+	text-transform: uppercase;
 }
 
 .title-box-v2 p {
@@ -2448,4 +2448,50 @@ body {
   -ms-transform: rotate(3deg);
   -moz-transform: rotate(3deg);
   -webkit-transform: rotate(3deg);
+}
+
+/*Counter
+------------------------------------*/
+.counters {
+  color: #555;
+  text-align: center;
+}
+
+@media (max-width: 767px) {
+  .counters {
+	margin-bottom: 30px;
+  }
+}
+
+.counters span {
+  font-size: 35px;
+}
+
+.counters span.counter-icon {
+   display: block;
+   margin-bottom: 10px;
+}
+
+.counters span.counter-icon i {
+   color: #fff;
+   padding: 16px;
+   min-width: 65px;
+   font-size: 30px;
+   position: relative;
+   background: #72c02c;
+}
+
+.counters span.counter-icon i:after {
+   width: 0; 
+   height: 0;
+   left: 38%;
+   content: " "; 
+   bottom: -7px;
+   display: block; 
+   position: absolute;
+   border-top: 7px solid #72c02c;
+   border-left: 7px solid transparent;
+   border-right: 7px solid transparent;
+   border-left-style: inset; /*FF fixes*/
+   border-right-style: inset; /*FF fixes*/
 }

@@ -37,7 +37,6 @@ namespace RationalVote.Models
 		public Debate()
 		{
 			this.Status = StatusType.Open;
-			this.Weight = 0;
 		}
 	
 		public long Id { get; set; }
@@ -47,7 +46,6 @@ namespace RationalVote.Models
 		public System.DateTime? Updated { get; set; }
 		public long? Owner { get; set; }
 		public bool Locked { get; set; }
-		public long Weight { get; set; }
 
 		public ValidityType Validity()
 		{
@@ -117,7 +115,7 @@ namespace RationalVote.Models
 
 				IEnumerable<DebateLink> arguments = connection.Query<DebateLink, Debate, DebateLink>( 
 					@"SELECT
-						DebateLink.Id, DebateLink.Type, DebateLink.Weight,
+						DebateLink.Id, DebateLink.Type,
 						DebateLink.Parent, DebateLinkVote.Vote, Debate.*
 					FROM
 						DebateLink
@@ -126,8 +124,8 @@ namespace RationalVote.Models
 							LEFT OUTER JOIN
 						DebateLinkVote ON (DebateLinkVote.Link = DebateLink.Id)
 					WHERE
-						DebateLink.Parent = @Parent
-					ORDER BY Debate.Status ASC, DebateLink.Weight DESC"
+						DebateLink.Parent = @Parent AND DebateLink.PathLength = 1
+					ORDER BY Debate.Status ASC, DebateLink.LinkTime DESC"
 					,
 					(Parent, Child) =>
 					{

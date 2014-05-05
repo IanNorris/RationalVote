@@ -1,0 +1,55 @@
+﻿@{
+	Layout = "~/Views/Shared/_Ajax.cshtml";
+	var voteTypes = (DebateLinkVote.VoteType[])Enum.GetValues( typeof( DebateLinkVote.VoteType ) );
+}
+
+<div class="modal-header">
+	<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+	<h4 class="modal-title" id="fallacyLabel">What logical fallacy does this post contain?</h4>
+</div>
+<div class="modal-body" style="overflow: auto;height:600px">
+	@Styles.Render( "~/Content/Fallacies/fallacies" )
+
+	<p>Click a fallacy to find out more about it.</p>
+
+	<div class="panel-group acc-v1" id="accordion-fallacy">
+		@foreach( var type in voteTypes )
+		{
+			if( type > DebateLinkVote.VoteType.StartOfFallacies )
+			{
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h4 class="panel-title">
+							<a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion-fallacy" href="#collapse-@type.ToString()">
+								<span class="fallacy @EnumDescription.GetAddOnIcon(type)"></span> @EnumDescription.GetDescription(type)
+							</a>
+						</h4>
+					</div>
+					<div id="collapse-@type.ToString()" class="panel-collapse collapse">
+						<div class="panel-body">
+							<div class="row">
+								<div class="col-sm-1">
+									<div class="fallacy @type.ToString()"></div>
+								</div>
+								<div class="col-sm-11">
+									<h4 class="fallacy-heading">@EnumDescription.GetLongDescription(type)</h4>
+								</div>
+							</div>
+
+							<p>@EnumDescription.GetExplanation(type)</p>
+
+							<blockquote class="hero"><b>Example:</b> @EnumDescription.GetExample(type)</blockquote>
+
+							<div style="text-align:right"><button class="btn btn-primary FallacyButton" type="button" data-dismiss="modal" data-val="@type.ToString()" data-description="@EnumDescription.GetDescription(type)" data-title="@EnumDescription.GetLongDescription(type)">Use this</button></div>
+						</div>
+					</div>
+				</div>
+			}
+		}
+	</div>
+
+	<br /><p>Fallacies created and described by Jesse Richardson, Andy Smith and Som Meaden of <a href="https://yourlogicalfallacyis.com/" target="#new">Your Logical Fallacy Is</a>. Content used under <a href="http://creativecommons.org/licenses/by-nc/3.0/" target="#new">creative commons attribution and noncommercial license</a>. Like this? You can buy a poster at the link above!</p>
+</div>
+<div class="modal-footer">
+	<button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+</div>

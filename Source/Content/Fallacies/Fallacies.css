@@ -1,0 +1,74 @@
+h4.fallacy-heading
+{
+	padding-left: 1em;
+}
+
+div.fallacy
+{
+	background-image: url('Fallacies.png');
+	width: 44px;
+	height: 44px;
+	overflow: hidden;
+}
+
+span.fallacy
+{
+	background-image: url('data:image/png;base64,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');
+	*background-image: url('FallaciesSmall.png'); /* For IE 6 and 7 */
+	width: 33px;
+	height: 18px;
+	overflow: hidden;
+	display: inline-block;
+	vertical-align: middle;
+}
+
+div.Strawman{ background-position: 0 0; }
+div.FalseCause{ background-position: -44px 0; }
+div.AppealToEmotion{ background-position: -88px 0; }
+div.TheFallacyFallacy{ background-position: -132px 0; }
+div.SlipperySlope{ background-position: -176px 0; }
+div.AdHominem{ background-position: -220px 0; }
+div.TuQuoque{ background-position: -264px 0; }
+div.PersonalIncredulity{ background-position: -308px 0; }
+div.SpecialPleading{ background-position: -352px 0; }
+div.LoadedQuestion{ background-position: -396px 0; }
+div.BurdenOfProof{ background-position: -440px 0; }
+div.Ambiguity{ background-position: -484px 0; }
+div.TheGamblersFallacy{ background-position: -528px 0; }
+div.Bandwagon{ background-position: -572px 0; }
+div.AppealToAuthority{ background-position: -616px 0; }
+div.CompositionDivision{ background-position: -660px 0; }
+div.NoTrueScotsman{ background-position: -704px 0; }
+div.Genetic{ background-position: -748px 0; }
+div.BlackOrWhite{ background-position: -792px 0; }
+div.BeggingTheQuestion{ background-position: -836px 0; }
+div.AppealToNature{ background-position: -880px 0; }
+div.Anecdotal{ background-position: -924px 0; }
+div.TheTexasSharpshooter{ background-position: -968px 0; }
+div.MiddleGround{ background-position: -1012px 0; }
+
+span.Strawman{ background-position: 0 0; }
+span.FalseCause{ background-position: -33px 0; }
+span.AppealToEmotion{ background-position: -66px 0; }
+span.TheFallacyFallacy{ background-position: -99px 0; }
+span.SlipperySlope{ background-position: -132px 0; }
+span.AdHominem{ background-position: -165px 0; }
+span.TuQuoque{ background-position: -198px 0; }
+span.PersonalIncredulity{ background-position: -231px 0; }
+span.SpecialPleading{ background-position: -264px 0; }
+span.LoadedQuestion{ background-position: -297px 0; }
+span.BurdenOfProof{ background-position: -330px 0; }
+span.Ambiguity{ background-position: -363px 0; }
+span.TheGamblersFallacy{ background-position: -396px 0; }
+span.Bandwagon{ background-position: -429px 0; }
+span.AppealToAuthority{ background-position: -462px 0; }
+span.CompositionDivision{ background-position: -495px 0; }
+span.NoTrueScotsman{ background-position: -528px 0; }
+span.Genetic{ background-position: -561px 0; }
+span.BlackOrWhite{ background-position: -594px 0; }
+span.BeggingTheQuestion{ background-position: -627px 0; }
+span.AppealToNature{ background-position: -660px 0; }
+span.Anecdotal{ background-position: -693px 0; }
+span.TheTexasSharpshooter{ background-position: -726px 0; }
+span.MiddleGround{ background-position: -759px 0; }
+	

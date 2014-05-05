@@ -80,13 +80,21 @@ h1
 	background: #95a5a6;
 }
 
+.DebateChildOuter
+{
+	margin-bottom: 20px;
+}
+
+.DebateOpinion
+{
+	margin-top: -20px;
+}
+
 .DebateChild
 {
-	margin: 20px 0;
 	padding: 18px;
 	font-family: 'Open Sans', sans-serif;
 	font-size: 16px;
-	margin-bottom: 0;
 }
 
 /*Block Headline*/
@@ -186,4 +194,37 @@ a.navbar-brand
 .over-count {
 	color: red;
 	font-weight: bold;
+}
+
+/*Override counter font size*/
+.counters span {
+  font-size: 18px;
+}
+
+.counters span.counter-icon i {
+   padding: 16px;
+   min-width: 20px;
+   font-size: 22px;
+   position: relative;
+}
+
+.centering {
+  float:none;
+  margin:0 auto;
+}
+
+.DebateVoteCounter {
+	/*padding-left: 5px;*/
+	margin-top: 30px;
+}
+
+.counters span.counter-icon i:after {
+	left: 33%;
+   content: " "; 
+   display: block; 
+   position: absolute;
+   border-left: 9px solid transparent;
+   border-right: 9px solid transparent;
+   border-left-style: inset; /*FF fixes*/
+   border-right-style: inset; /*FF fixes*/
 }

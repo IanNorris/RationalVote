@@ -14,6 +14,10 @@
 	</div>
 </div>
 
+<div class="modal fade" id="fallacyDialog" tabindex="-1" role="dialog" aria-labelledby="fallacyLabel" aria-hidden="true">
+	<div class="modal-dialog"><div class="modal-content"></div></div>
+</div>
+
 @Html.RegisterScript( 
 	@<script>
 		$(function ()
@@ -25,4 +29,5 @@
 @section Scripts
 {
 	@Scripts.Render( "~/Scripts/ThirdParty/jqueryval" )
+	@Scripts.Render( "~/Scripts/debate" )
 }

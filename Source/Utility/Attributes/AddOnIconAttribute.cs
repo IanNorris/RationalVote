@@ -6,14 +6,15 @@ using System.Web.Mvc;
 
 public class AddOnIconAttribute : Attribute, IMetadataAware
 {
-	private readonly string _icon;
+	public string Icon { get; private set; }
+
 	public AddOnIconAttribute( string icon )
 	{
-		_icon = icon;
+		Icon = icon;
 	}
 
 	public void OnMetadataCreated( ModelMetadata metadata )
 	{
-		metadata.AdditionalValues[ "icon" ] = _icon;
+		metadata.AdditionalValues[ "icon" ] = Icon;
 	}
 }

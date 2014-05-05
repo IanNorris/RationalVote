@@ -6,6 +6,11 @@
 	string type = Model.Type.ToString().ToLower();
 	string targetID = "new-" + type + "-content";
 	string target = Url.Action( "CreateAjax", "Debate" );
+	
+	if( !Context.User.Identity.IsAuthenticated )
+	{
+		return;
+	}
 }
 
 @using( Ajax.BeginForm( null, null, FormMethod.Post, new AjaxOptions { OnSuccess = "OnAjaxResponseSuccess( data, '#" + targetID + "' )", Url = target }, new { @autocomplete = "off" } ) )

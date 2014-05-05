@@ -11,9 +11,19 @@
 }
 
 <div class="row">
-	<div class="col-md-@SideBarWidth"></div>
+	<div class="col-md-@SideBarWidth">
+		<div class="DebateVoteCounter">
+			<div class="counters">
+				<span class="counter-icon">
+
+					<i class="fa fa-thumbs-up rounded"></i>
+				</span>
+				<span class="counter">0</span>
+			</div>
+		</div>
+	</div>
 	<div class="col-md-@BoxWidth">
 		@Html.Partial( "_DebateBlockInline", Model.Child )
-		@*$opinion_box*@
+		@Html.Partial( "_DebateBlockOpinion", Model )
 	</div>
 </div>

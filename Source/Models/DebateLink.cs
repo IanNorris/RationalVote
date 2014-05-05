@@ -13,12 +13,12 @@ namespace RationalVote.Models
 
 		public DebateLink()
 		{
-			Weight = 1;
 		}
 	
 		public long Id { get; set; }
 		public LinkType Type { get; set; }
-		public long Weight { get; set; }
+
+		public System.DateTime LinkTime { get; set; }
 	
 		public long Parent { get; set; }
 
@@ -26,6 +26,6 @@ namespace RationalVote.Models
 
 		//These values are JOINed in
 		public string Tags { get; set; }
-		public byte Vote { get; set; }
+		public DebateLinkVote.VoteType Vote { get; set; }
 	}
 }

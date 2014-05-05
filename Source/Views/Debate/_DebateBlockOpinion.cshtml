@@ -1,0 +1,40 @@
+@model DebateLink
+
+@{
+	string choice = "Default";
+	var voteTypes = (DebateLinkVote.VoteType[])Enum.GetValues( typeof( DebateLinkVote.VoteType ) );
+
+	if( !Context.User.Identity.IsAuthenticated )
+	{
+		return;
+	}
+}
+
+<div class="DebateOpinion">
+	<form id="__AjaxAntiForgeryForm" action="#" method="post">@Html.AntiForgeryToken()</form>
+	<div class="btn-group">
+		<button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
+			<span id="selectedFallacyTrigger_@(Model.Id)" title="@EnumDescription.GetLongDescription( Model.Vote )">@EnumDescription.GetDescription(Model.Vote)</span>
+			<i class="fa fa-angle-down"></i>
+		</button>
+		<ul class="dropdown-menu" role="menu">
+			@foreach( var type in voteTypes )
+			{
+				if( type == DebateLinkVote.VoteType.StartOfFallacies )
+				{
+					break;
+				}
+
+				<li><a href="#" class="OpinionOption" data-target="@Model.Id" data-val="@type.ToString()" data-description="@EnumDescription.GetDescription(type)" data-title="@EnumDescription.GetLongDescription(type)" title="@EnumDescription.GetLongDescription(type)"><i class="fa fa-@EnumDescription.GetAddOnIcon(type)"></i> @EnumDescription.GetDescription( type )</a></li>
+			}
+
+			<li class="divider"></li>
+
+			<li>
+				<a id="FallacyTrigger_@Model.Id" data-toggle="modal" data-target="#fallacyDialog" href="@Url.Action( "Fallacy", "Debate", null )" title="Select a logical fallacy that this post commits from a list.">
+					<i class="fa fa-times"></i> Pick a logical fallacy...
+				</a>
+			</li>
+		</ul>
+	</div>
+</div>

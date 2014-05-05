@@ -61,6 +61,14 @@ namespace RationalVote
 			bundles.Add( new StyleBundle( "~/Content/csserrorinline" )
 				.Include( "~/Content/Theme/error-inline.css", urlRewrite )
 			);
+
+			bundles.Add( new StyleBundle( "~/Content/Fallacies/fallacies" )
+				.Include( "~/Content/Fallacies/Fallacies.css", urlRewrite )
+			);
+
+			bundles.Add( new ScriptBundle( "~/Scripts/debate" ).Include(
+				"~/Scripts/fallacy.js" )
+			);
 		}
 	}
 }
