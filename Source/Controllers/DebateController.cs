@@ -290,39 +290,62 @@ namespace RationalVote.Controllers
 		}
 
 		//
-		// GET: /Debate/{Id?}
-		[Route( "Debate/{Id?}" )]
-		public ActionResult Index( long? Id )
+		// GET: /Debate/{Id}
+		[Route( "Debate/{Id}" )]
+		public ActionResult Display( long Id )
 		{
-			if( Id != null )
+			using( DbConnection connection = RationalVoteContext.Connect() )
 			{
-				using( DbConnection connection = RationalVoteContext.Connect() )
-				{
-					Debate debate = connection.Get<Debate>( Id );
+				Debate debate = connection.Get<Debate>( Id );
 
-					if( debate != null )
-					{
-						return View( "Display", debate );
-					}
-					else
-					{
-						throw new HttpException( 404, "This debate does not exist." );
-					}
+				if( debate != null )
+				{
+					return View( "Display", debate );
+				}
+				else
+				{
+					throw new HttpException( 404, "This debate does not exist." );
 				}
 			}
-			else
-			{
-				using( DbConnection connection = RationalVoteContext.Connect() )
-				{
-					IEnumerable<Debate> list = connection.Query<Debate>(
-						@"SELECT Debate.* FROM Debate
-						LEFT OUTER JOIN DebateLink
-						ON Debate.Id = DebateLink.Child AND DebateLink.PathLength = 1
-						WHERE DebateLink.Child IS null
-						ORDER BY Debate.Updated DESC, Debate.Posted DESC" );
+		}
 
-					return View( "Index", list );
-				}
+		//
+		// GET: /Newest
+		[Route( "Newest" )]
+		public ActionResult Newest()
+		{
+			using( DbConnection connection = RationalVoteContext.Connect() )
+			{
+				IEnumerable<Debate> list = connection.Query<Debate>(
+					@"SELECT Debate.* FROM Debate
+					LEFT OUTER JOIN DebateLink
+					ON Debate.Id = DebateLink.Child AND DebateLink.PathLength = 1
+					WHERE DebateLink.Child IS null
+					ORDER BY Debate.Updated DESC, Debate.Posted DESC" );
+
+				ViewBag.Title = "Newest debates";
+
+				return View( "Index", list );
+			}
+		}
+
+		//
+		// GET: /Popular
+		[Route( "Popular" )]
+		public ActionResult Popular()
+		{
+			using( DbConnection connection = RationalVoteContext.Connect() )
+			{
+				IEnumerable<Debate> list = connection.Query<Debate>(
+					@"SELECT Debate.* FROM Debate
+					LEFT OUTER JOIN DebateLink
+					ON Debate.Id = DebateLink.Child AND DebateLink.PathLength = 1
+					WHERE DebateLink.Child IS null
+					ORDER BY (Debate.WeightFor - Debate.WeightAgainst) DESC, Debate.Updated DESC, Debate.Posted DESC" );
+
+				ViewBag.Title = "Most popular debates";
+
+				return View( "Index", list );
 			}
 		}
 

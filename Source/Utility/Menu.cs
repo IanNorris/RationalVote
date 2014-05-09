@@ -121,7 +121,7 @@ namespace RVUtility
 			return MvcHtmlString.Create( CreateMenuItem( htmlHelper, menuItem, out isActive ) );
 		}
 
-		public static MvcHtmlString CreateMenu( this HtmlHelper htmlHelper, string title, Item[] menuItems )
+		public static MvcHtmlString CreateMenu( this HtmlHelper htmlHelper, string title, string htmlBefore, string htmlAfter, Item[] menuItems )
 		{
 			string result = "";
 
@@ -141,8 +141,8 @@ namespace RVUtility
 				menuStyle = "active";
 			}
 
-			string initial = String.Format( "<li class=\"dropdown {0}\"><a href=\"#\" class=\"dropdown-toggle\" data-toggle=\"dropdown\" data-hover=\"dropdown\">{1}</a><ul class=\"dropdown-menu\">",
-				menuStyle, title );
+			string initial = String.Format( "<li class=\"dropdown {0}\"><a href=\"#\" class=\"dropdown-toggle\" data-toggle=\"dropdown\" data-hover=\"dropdown\">{1}{2}{3}</a><ul class=\"dropdown-menu\">",
+				menuStyle, htmlBefore, title, htmlAfter );
 
 			return MvcHtmlString.Create( initial + result + "</ul></li>" );
 		}

@@ -1,11 +1,15 @@
 ﻿@if( Context.User.Identity.IsAuthenticated )
 {
+	string emailHash = Utility.Crypto.CalculateMD5Hash( ((RationalVote.Models.UserPrincipal)Context.User).User.Email ).ToLower();
+	string gravatarLink = "//www.gravatar.com/avatar/" + emailHash;
+	string gravatarHtml = "<img class=\"rounded\" src=\"" + gravatarLink + "?r=g&d=mm&s=22\" />&nbsp;";
+	
 	using( Html.BeginForm( "LogOff", "User", FormMethod.Post, new { id = "logoutForm", @class = "logoutForm" } ) )
 	{
 		@Html.AntiForgeryToken()
 	}
 	
-	@Html.CreateMenu( ((RationalVote.Models.UserPrincipal)Context.User).User.Email,
+	@Html.CreateMenu( ((RationalVote.Models.UserPrincipal)Context.User).User.Email, gravatarHtml, "",
 		new Menu.Item[]
 		{
 			new Menu.Action(  "Profile", "user", "Edit", "Profile", null ),

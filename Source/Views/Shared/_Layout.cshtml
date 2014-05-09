@@ -25,9 +25,9 @@
 			</div>
 			<div class="collapse navbar-collapse navbar-responsive-collapse">
 				<ul class="nav navbar-nav navbar-left">
-					@Html.CreateMenuItem( new Menu.Action( "Debate", null, "", "Debate", null ) )
+					@Html.CreateMenuItem( new Menu.Action( "Debate", null, "Popular", "Debate", null ) )
 
-					@Html.CreateMenu( "About",
+					@Html.CreateMenu( "About", "", "",
 						new Menu.Item[]
 						{
 							new Menu.Action(  "About us", "question", "About", "Home", null ),

@@ -2,10 +2,11 @@
 using System.Security.Cryptography;
 using System.Linq;
 using System;
+using System.Text;
 
 namespace Utility
 {
-	class Crypto
+	public class Crypto
 	{
 		const int IterationCount = 5000;
 		public const int PasswordSaltSize = 64; //Numbers are actually half the number of bytes because this length is the string length (2 chars per byte)
@@ -79,6 +80,22 @@ namespace Utility
 			for( int i = 0; i < NumberChars; i += 2 )
 				bytes[ i / 2 ] = Convert.ToByte( hex.Substring( i, 2 ), 16 );
 			return bytes;
+		}
+
+		public static string CalculateMD5Hash( string input )
+		{
+			// step 1, calculate MD5 hash from input
+			MD5 md5 = System.Security.Cryptography.MD5.Create();
+			byte[] inputBytes = System.Text.Encoding.ASCII.GetBytes( input );
+			byte[] hash = md5.ComputeHash( inputBytes );
+
+			// step 2, convert byte array to hex string
+			StringBuilder sb = new StringBuilder();
+			for( int i = 0; i < hash.Length; i++ )
+			{
+				sb.Append( hash[ i ].ToString( "X2" ) );
+			}
+			return sb.ToString();
 		}
 	}
 }
