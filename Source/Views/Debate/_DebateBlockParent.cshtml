@@ -10,7 +10,7 @@
 	<div class="DebateHeading panel-heading"><h3 class="panel-title"><i class="fa fa-@Model.StatusIcon()"></i> [@Model.StatusName().ToUpper()] @Model.Title</h3></div>
 	@Html.Partial( "_VoteSplit", voteSplit )
 	<div class="panel-body">
-		<div class="headline"><h4><span class="label label-success" title="There are @voteSplit.For votes for this proposition">@voteSplit.For</span> Arguments for</h4></div>
+		<div class="headline"><h4><span class="label label-success" title="There are @Model.WeightFor votes for this proposition">@Model.WeightFor</span> votes for</h4></div>
 
 		@foreach( var forArg in arguments )
 		{
@@ -31,7 +31,7 @@
 
 		<p><br /></p>
 
-		<div class="headline"><h4><span class="label label-danger" title="There are @voteSplit.Against votes against this proposition">@voteSplit.Against</span> Arguments against</h4></div>
+		<div class="headline"><h4><span class="label label-danger" title="There are @Model.WeightAgainst votes against this proposition">@Model.WeightAgainst</span> votes against</h4></div>
 
 		@foreach( var againstArg in arguments )
 		{

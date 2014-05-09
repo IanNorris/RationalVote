@@ -46,6 +46,8 @@ namespace RationalVote.Models
 		public System.DateTime? Updated { get; set; }
 		public long? Owner { get; set; }
 		public bool Locked { get; set; }
+		public long WeightFor { get; set; }
+		public long WeightAgainst { get; set; }
 
 		public ValidityType Validity()
 		{
@@ -116,7 +118,9 @@ namespace RationalVote.Models
 				IEnumerable<DebateLink> arguments = connection.Query<DebateLink, Debate, DebateLink>( 
 					@"SELECT
 						DebateLink.Id, DebateLink.Type,
-						DebateLink.Parent, DebateLinkVote.Vote, Debate.*
+						DebateLink.Parent, DebateLinkVote.Vote,
+						DebateLink.LocalFor, DebateLink.LocalAgainst,
+						Debate.*
 					FROM
 						DebateLink
 							LEFT JOIN

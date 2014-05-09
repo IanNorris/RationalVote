@@ -24,6 +24,10 @@ namespace RationalVote.Models
 
 		public Debate Child { get; set; }
 
+		public long LocalFor { get; set; }
+		public long LocalAgainst { get; set; }
+		public long Weight { get; set; }
+
 		//These values are JOINed in
 		public string Tags { get; set; }
 		public DebateLinkVote.VoteType Vote { get; set; }

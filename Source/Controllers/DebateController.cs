@@ -37,6 +37,61 @@ namespace RationalVote.Controllers
 				transaction );
 		}
 
+		public void UpdateWeights( DbConnection connection, DbTransaction transaction, long parent )
+		{
+			connection.Execute( @"UPDATE DebateLink AS SummedOut
+								INNER JOIN
+									(
+										SELECT 
+											DL.Parent As Parent,
+											DL.Child As Child,
+											DL.Type as Type,
+											-- These are the votes to be displayed next to children
+											SUM( CASE WHEN DLV.Vote = 1 THEN 1 ELSE 0 END ) As LocalFor,
+											SUM( CASE WHEN DLV.Vote > 1 THEN 1 ELSE 0 END ) As LocalAgainst
+										FROM DebateLink DL
+										INNER JOIN Debate D
+											ON DL.Child = D.Id -- Join in the debate info
+										INNER JOIN DebateLinkVote DLV
+											ON 		DLV.Parent = DL.Parent -- Find matching rows
+												AND DLV.Child = DL.Child 
+												AND DLV.Type = DL.Type
+												AND DLV.Vote > 0 -- Skip votes of 0, they're 'No opinion'
+										WHERE
+											DL.Parent = @Parent AND DL.PathLength = 1 -- Only look at immediate children
+										GROUP BY DL.Child
+									) AS SummedTemp
+									ON SummedTemp.Parent = SummedOut.Parent AND SummedTemp.Child = SummedOut.Child AND SummedTemp.Type = SummedOut.Type
+								SET
+									SummedOut.LocalFor = SummedTemp.LocalFor, 
+									SummedOut.LocalAgainst = SummedTemp.LocalAgainst,
+									SummedOut.Weight = GREATEST( SummedTemp.LocalFor - SummedTemp.LocalAgainst, 0 )
+								WHERE
+									SummedOut.Parent = @Parent;
+
+								UPDATE Debate AS D
+								INNER JOIN
+								(
+									SELECT 
+										DebateLink.Parent AS Parent,
+										SUM( CASE WHEN DebateLink.Type = 0 THEN Weight ELSE 0 END ) As WeightFor,
+										SUM( CASE WHEN DebateLink.Type = 1 THEN Weight ELSE 0 END ) As WeightAgainst
+									FROM DebateLink
+									WHERE
+										DebateLink.Parent = @Parent AND DebateLink.PathLength = 1
+								) AS DTemp
+								ON DTemp.Parent = D.Id
+								SET
+									D.WeightFor = DTemp.WeightFor,
+									D.WeightAgainst = DTemp.WeightAgainst
+								WHERE D.Id = @Parent",
+				new
+				{
+					Parent = parent,
+				},
+				transaction );
+		}
+
 		public DebateLink CreateAndInsertLink( DbConnection connection, DbTransaction transaction, long parent, Debate child, DebateLink.LinkType type )
 		{
 			DebateLink link = new DebateLink();
@@ -65,6 +120,7 @@ namespace RationalVote.Controllers
 			vote.Owner = child.Owner.Value;
 			vote.Parent = parent;
 			vote.Child = child.Id;
+			vote.Type = type;
 			vote.Vote = DebateLinkVote.VoteType.Agree;
 
 			InsertVote( connection, transaction, vote );
@@ -76,11 +132,12 @@ namespace RationalVote.Controllers
 		{
 			//Check that the user is voting on the right link. If they're just spamming random junk at
 			//the server this might catch it. We don't want junk lying around on the server that isn't visible.
-			long found = connection.Query<long>( "SELECT 1 FROM DebateLink WHERE DebateLink.Parent = @Parent AND DebateLink.Child = @Child AND DebateLink.PathLength = 1",
+			long found = connection.Query<long>( "SELECT 1 FROM DebateLink WHERE DebateLink.Parent = @Parent AND DebateLink.Child = @Child AND DebateLink.Type = @Type AND DebateLink.PathLength = 1",
 									new
 									{
 										Parent = debateVote.Parent,
 										Child = debateVote.Child,
+										Type = debateVote.Type,
 									} ).FirstOrDefault();
 
 			if( found != 1 )
@@ -88,14 +145,17 @@ namespace RationalVote.Controllers
 				return false;
 			}
 
-			connection.Execute( "INSERT INTO DebateLinkVote (Parent,Child,Vote,Owner) VALUES (@Parent, @Child, @Vote, @Owner) ON DUPLICATE KEY UPDATE Vote=VALUES(Vote)",
+			connection.Execute( "INSERT INTO DebateLinkVote (Parent,Child,Type,Vote,Owner) VALUES (@Parent, @Child, @Type, @Vote, @Owner) ON DUPLICATE KEY UPDATE Vote=VALUES(Vote)",
 								new
 								{
 									Parent = debateVote.Parent,
 									Child = debateVote.Child,
+									Type = debateVote.Type,
 									Vote = debateVote.Vote,
 									Owner = debateVote.Owner
 								} );
+
+			UpdateWeights( connection, transaction, debateVote.Parent );
 
 			return true;
 		}

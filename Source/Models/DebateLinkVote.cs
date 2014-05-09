@@ -175,6 +175,7 @@ namespace RationalVote.Models
 		public VoteType Vote { get; set; }
 		public long Parent { get; set; }
 		public long Child { get; set; }
+		public DebateLink.LinkType Type { get; set; }
 		public long Owner { get; set; }
 	}
 }

@@ -13,12 +13,12 @@
 <div class="row">
 	<div class="col-md-@SideBarWidth">
 		<div class="DebateVoteCounter">
-			<div class="counters">
+			<div class="counters" title="@Model.LocalFor arguments for, @Model.LocalAgainst arguments against.">
 				<span class="counter-icon">
 
 					<i class="fa fa-thumbs-up rounded"></i>
 				</span>
-				<span class="counter">0</span>
+				<span class="counter">@(Model.LocalFor - Model.LocalAgainst)</span>
 			</div>
 		</div>
 	</div>
