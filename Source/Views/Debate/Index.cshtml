@@ -12,7 +12,28 @@
 	};
 }
 
+@{
+	int BoxWidth = 12;
+	int SideBarWidth = 1;
+	BoxWidth = BoxWidth - SideBarWidth;
+}
+
 @foreach( var debate in Model )
 {
-	@Html.Partial( "_DebateBlockInline", debate )
+	<div class="row">
+		<div class="col-md-@SideBarWidth">
+			<div class="DebateVoteCounter">
+				<div class="counters" title="@debate.WeightFor votes for, @debate.WeightAgainst votes against.">
+					<span class="counter-icon">
+
+						<i class="fa fa-thumbs-up rounded"></i>
+					</span>
+					<span class="counter">@(debate.WeightFor - debate.WeightAgainst)</span>
+				</div>
+			</div>
+		</div>
+		<div class="col-md-@BoxWidth">
+			@Html.Partial( "_DebateBlockInline", debate )
+		</div>
+	</div>
 }

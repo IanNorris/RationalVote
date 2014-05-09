@@ -129,7 +129,7 @@ namespace RationalVote.Models
 						DebateLinkVote ON (DebateLinkVote.Parent = DebateLink.Parent AND DebateLinkVote.Child = DebateLink.Child AND DebateLinkVote.Owner = @Owner)
 					WHERE
 						DebateLink.Parent = @Parent AND DebateLink.PathLength = 1
-					ORDER BY Debate.Status ASC, DebateLink.LinkTime DESC"
+					ORDER BY Debate.Status ASC, (Debate.WeightFor - Debate.WeightAgainst) DESC, DebateLink.LinkTime DESC"
 					,
 					(Parent, Child) =>
 					{
