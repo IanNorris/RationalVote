@@ -26,6 +26,7 @@ namespace RationalVote.Models
 		public long UserId { get; set; }
 
 		[AddOnButton( "check", null )]
+		[Placeholder("Display Name")]
 		[UserCanEdit(true)]
 		[Description("Display Name")]
 		[StringLength( 64, ErrorMessage="Maximum length is 64" )]
@@ -33,18 +34,21 @@ namespace RationalVote.Models
 
 		[AddOnButton( "check", null )]
 		[UserCanEdit(true)]
+		[Placeholder("Real Name")]
 		[Description("Real Name")]
 		[StringLength( 64, ErrorMessage="Maximum length is 64" )]
 		public string RealName { get; set; }
 
 		[AddOnButton( "check", null )]
 		[UserCanEdit(true)]
+		[Placeholder("Occupation")]
 		[Description("Occupation")]
 		[StringLength( 64, ErrorMessage="Maximum length is 64" )]
 		public string Occupation { get; set; }
 
 		[AddOnButton( "check", null )]
 		[UserCanEdit(true)]
+		[Placeholder("Location")]
 		[Description("Location")]
 		[StringLength( 128, ErrorMessage="Maximum length is 128" )]
 		public string Location { get; set; }

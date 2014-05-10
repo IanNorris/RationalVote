@@ -60,25 +60,10 @@ namespace RationalVote
 
 				if( profileOriginal != null )
 				{
-					if( profile.DisplayName != null )
-					{
-						profileOriginal.DisplayName = profile.DisplayName;
-					}
-					
-					if( profile.Location != null )
-					{
-						profileOriginal.Location = profile.Location;
-					}
-
-					if( profile.Occupation != null )
-					{
-						profileOriginal.Occupation = profile.Occupation;
-					}
-
-					if( profile.RealName != null )
-					{
-						profileOriginal.RealName = profile.RealName;
-					}
+					profileOriginal.DisplayName = profile.DisplayName;
+					profileOriginal.Location = profile.Location;
+					profileOriginal.Occupation = profile.Occupation;
+					profileOriginal.RealName = profile.RealName;
 
 					if( ModelState.IsValid )
 					{
