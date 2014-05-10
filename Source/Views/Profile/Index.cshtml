@@ -1,69 +1,226 @@
-﻿@model IEnumerable<RationalVote.Models.Profile>
+﻿@model RationalVote.Models.Profile
+
+@using System.Reflection;
+@using System.Linq.Expressions;
+
+@Styles.Render( "~/Content/CSS/profile" )
 
 @{
-    ViewBag.Title = "Index";
+	ViewBag.Title = "Profile";
+
+	long ProfileID = Model.UserId;
+	long UserID = 0;
+
+	if( Context.User.Identity.IsAuthenticated )
+	{
+		UserID = ( (RationalVote.Models.UserPrincipal)Context.User ).User.Id;
+	}
+
+	bool CanEdit = ProfileID == UserID;
 }
 
-<h2>Index</h2>
+@helper insertField( long userID, string fieldName, string fieldDescription, string fieldValue, bool canEdit )
+{
+	<tr>
+		<td width="30%">
+			<p class="profile-label">
+				@fieldDescription
+			</p>
+		</td>
+		<td width="70%">
+			@{
+				var param = Expression.Parameter( Model.GetType() );
+				var field = canEdit ? Expression.PropertyOrField( param, fieldName ) : null;
+				var lambda = canEdit ? Expression.Lambda<Func<Profile, string>>( field, param ) : null;
 
-<p>
-    @Html.ActionLink("Create New", "Create")
-</p>
-<table class="table">
-    <tr>
-        <th>
-            @Html.DisplayNameFor( model => model.UserId )
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.DisplayName)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.RealName)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Occupation)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Location)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Joined)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Experience)
-        </th>
-        <th></th>
-    </tr>
+				if( canEdit )
+				{
+					<a title="This value is public."><i class="fa fa-globe"></i></a>
+				}
 
-@foreach (var item in Model) {
-    <tr>
-        <td>
-            @Html.DisplayFor( modelItem => item.UserId )
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.DisplayName)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.RealName)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Occupation)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Location)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Joined)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Experience)
-        </td>
-        <td>
-            @Html.ActionLink( "Edit", "Edit", new { id = item.UserId } ) |
-            @Html.ActionLink( "Details", "Details", new { id = item.UserId } ) |
-            @Html.ActionLink( "Delete", "Delete", new { id = item.UserId } )
-        </td>
-    </tr>
+				<div class="profile-content" id="fieldName">@fieldValue</div>
+
+				if( canEdit )
+				{
+					<a rel="popover" id="@fieldName" data-title="@fieldDescription" class="hasProfilePopup"><i class="fa fa-pencil-square-o" title="Edit @fieldDescription"></i></a>
+
+					<div id="@fieldName-popup" class="profilePopupBox">
+
+						<input type="hidden" name="FieldName" value="@fieldName">
+						<input type="hidden" name="UserID" value="@userID">
+
+						@Html.EditorFor( lambda, null )
+						<br />
+
+						<p><a title="This value is public."><i class="fa fa-globe"></i></a> <b>This value is publicly visible, please be mindful of what information you are sharing.</b></p>
+					</div>
+
+					@*@Html.ValidationMessageFor( lambda, null )*@
+				}
+			}
+		</td>
+	</tr>
 }
 
-</table>
+<div class="row">
+	<div class="col-md-5">
+		@*using( Ajax.BeginForm( "Index", "Profile", FormMethod.Post, null ) )*@
+		@using( Html.BeginForm( "Index", "Profile", FormMethod.Post, null ) )
+		{
+			<table class="profile-table">
+				@Html.AntiForgeryToken()
+
+				@{
+			Type profileType = Model.GetType();
+			PropertyInfo[] profileFields = profileType.GetProperties();
+
+			foreach( var field in profileFields )
+			{
+				string description = null;
+
+				object[] attrs = field.GetCustomAttributes( typeof( System.ComponentModel.DescriptionAttribute ), false );
+				if( attrs != null && attrs.Length > 0 )
+				{
+					description = ( (System.ComponentModel.DescriptionAttribute)attrs[ 0 ] ).Description;
+				}
+
+				if( description != null )
+				{
+					bool canEdit = false;
+
+					if( ProfileID == UserID )
+					{
+						attrs = field.GetCustomAttributes( typeof( UserCanEditAttribute ), false );
+						if( attrs != null && attrs.Length > 0 )
+						{
+							canEdit = ( (UserCanEditAttribute)attrs[ 0 ] ).CanEdit;
+						}
+					}
+
+					object valueObj = field.GetValue( Model );
+
+					string value = valueObj != null ? valueObj.ToString() : "";
+
+
+					@insertField( ProfileID, field.Name, description, value, canEdit )
+
+				}
+			}
+
+			TimeSpan memberForTS = DateTime.Now - Model.Joined;
+
+			//Approximations from http://stackoverflow.com/questions/1916358/a-real-timespan-object-with-years-months
+			int totalDays = memberForTS.Days;
+			int years = (int)( (double)totalDays / 365.2425 ); totalDays -= (int)( (double)years * 365.2425 );
+			int months = (int)( (double)totalDays / 30.436875 ); totalDays -= (int)( (double)months * 30.436875 );
+			int days = totalDays;
+			int hours = memberForTS.Hours;
+
+			string memberFor = "";
+
+			int setFields = 0;
+
+			if( years > 0 )
+			{
+				memberFor += years + ( years > 1 ? " years" : " year" );
+				setFields++;
+			}
+
+			if( months > 0 )
+			{
+				if( memberFor.Length != 0 ) { memberFor += ", "; }
+				memberFor += months + ( months > 1 ? " months" : " month" );
+				setFields++;
+			}
+
+			if( days > 0 && setFields < 2 )
+			{
+				if( memberFor.Length != 0 ) { memberFor += ", "; }
+				memberFor += days + ( days > 1 ? " days" : " day" );
+				setFields++;
+			}
+
+			if( hours > 0 && setFields < 2 )
+			{
+				if( memberFor.Length != 0 ) { memberFor += ", "; }
+				memberFor += hours + ( hours > 1 ? " hours" : " hour" );
+				setFields++;
+			}
+
+			if( memberFor.Length == 0 )
+			{
+				memberFor = "Just joined";
+			}
+
+			@insertField( ProfileID, "memberFor", "Member for", memberFor, false );
+
+					@*@insertField( ProfileID, "expertTags", "Expert in", tags, false );*@
+				}
+			</table>
+		}
+	</div>
+
+	<div class="col-md-7">
+
+			@{
+				int percent = (int)(Model.LevelPercent() * 100.0);
+			}
+
+			<h4>You are level <span class="label label-success">@Model.Level()</span></h4>
+
+			<p>Progress towards level @(Model.Level()+1):</p>
+
+			<div class="progress progress-striped">
+				<div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="@percent" aria-valuemin="0" aria-valuemax="100" style="width: @percent%">
+					<span class="sr-only">@percent% towards level @(Model.Level()+1)</span>
+				</div>
+			</div>
+
+			<div class="margin-bottom-40"></div>
+
+			<b>This section is for example only and is not yet implemented.</b>
+
+			<div class="tab-v2">
+				<ul class="nav nav-tabs">
+					<li class="active"><a href="#merits" data-toggle="tab">Merits <span class="badge">2</span></a></li>
+					<li><a href="#perks" data-toggle="tab">Perks <span class="badge">1</span></a></li>
+					<li><a href="#followers" data-toggle="tab">Followers <span class="badge">2</span></a></li>
+				</ul>
+				<div class="tab-content">
+					<div class="tab-pane active" id="merits">
+						<ul>
+							<li><span class="badge">NEW!</span> <b>Respected</b> - You are now an expert in at least one topic. <small>unlocked today</small></li>
+							<li><span class="badge">NEW!</span> <b>Regular</b> - Contributed on 5 consecutive days. <small>unlocked yesterday</small></li>
+							<li><b>Remember my name</b> - You are no longer anonymous! <small>unlocked 3 days ago</small></li>
+							<li><b>Opinionated</b> - Cast an opinion on another post. <small>unlocked 2 weeks ago</small></li>
+							<li><b>Well read</b> - Viewed 20 debates with at least 5 opinions in each. <small>unlocked 3 weeks ago</small></li>
+							<li><b>Newbie</b> - Registered on the site. <small>unlocked 6 weeks ago</small></li>
+						</ul>
+					</div>
+					<div class="tab-pane" id="perks">
+						<ul>
+							<li><span class="badge">NEW!</span> <b>Congratulations!</b> - You have been awarded a new perk, click the button below to choose it.</li>
+							<li><b>Your fallacy</b> - Indicate a post contains a logical fallacy. <small>unlocked yesterday</small></li>
+							<li><b>Not just a number</b> - You no longer have to be anonymous. <small>unlocked 3 days ago</small></li>
+						</ul>
+
+						<div style="text-align:right">
+							<button type="submit" class="btn btn-primary editable-submit">Pick a new perk</button>
+						</div>
+					</div>
+					<div class="tab-pane" id="followers">
+						<ul>
+							<li><b>Bob77</b> <small>following for 1 day</small></li>
+							<li><b>Leeesa</b> <small>following for 2 days</small></li>
+						</ul>
+					</div>
+				</div>
+			</div>
+	</div>
+</div>
+
+@section Scripts
+{
+	@Scripts.Render( "~/Scripts/ThirdParty/jqueryval" )
+	@Scripts.Render( "~/Scripts/profile" )
+}

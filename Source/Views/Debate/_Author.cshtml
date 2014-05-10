@@ -10,7 +10,7 @@
 		{
 			long level = @Model.Level();
 
-			<a href="@Url.Action( "Details", "Profile", new { Id = Model.UserId } )" title="@Model.DisplayName" class="AuthorBlock">
+			<a href="@Url.Action( "Index", "Profile", new { Id = Model.UserId } )" title="@Model.DisplayName" class="AuthorBlock">
 			
 				<span class="AuthorBlockText">
 					@Model.DisplayName

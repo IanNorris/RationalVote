@@ -12,8 +12,8 @@
 	@Html.CreateMenu( ((RationalVote.Models.UserPrincipal)Context.User).User.Email, gravatarHtml, "",
 		new Menu.Item[]
 		{
-			new Menu.Action(  "Profile", "user", "Edit", "Profile", null ),
-			new Menu.Action(  "Settings", "cogs", "Settings", "User", null ),
+			new Menu.Action(  "Profile", "user", "Index", "Profile", new RouteValueDictionary( new { Id = UrlParameter.Optional } ) ),
+			new Menu.Action(  "Settings", "cogs", "Settings", "User", new RouteValueDictionary( new { Id = UrlParameter.Optional } ) ),
 			new Menu.Uri(  "Sign out", "sign-out", "javascript:document.getElementById('logoutForm').submit()" ),
 		} 
 	)

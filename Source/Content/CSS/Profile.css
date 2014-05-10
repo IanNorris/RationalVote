@@ -1,0 +1,38 @@
+.profile-table
+	{
+		border: none;
+		padding: 0;
+		width: 100%;
+	}
+
+	.profile-table td
+	{
+		padding: 1em;
+	}
+
+	.profilePopupBox
+	{
+		display: none;
+	}
+
+	.popover-content .input-group
+	{
+		width: 250px;
+	}
+
+	p.profile-label
+	{
+		font-weight: bold;
+		text-align: right;
+		vertical-align: middle;
+		padding-right: 1em;
+		margin: 0;
+	}
+
+	.profile-content
+	{
+		display: inline;
+		white-space:nowrap; 
+		overflow:hidden;
+		text-overflow: ellipsis; 
+	}

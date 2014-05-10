@@ -69,6 +69,14 @@ namespace RationalVote
 			bundles.Add( new ScriptBundle( "~/Scripts/debate" ).Include(
 				"~/Scripts/fallacy.js" )
 			);
+
+			bundles.Add( new StyleBundle( "~/Content/CSS/profile" )
+				.Include( "~/Content/CSS/Profile.css", urlRewrite )
+			);
+
+			bundles.Add( new ScriptBundle( "~/Scripts/profile" ).Include(
+				"~/Scripts/profile.js" )
+			);
 		}
 	}
 }

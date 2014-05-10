@@ -11,6 +11,7 @@ using System.Data.Common;
 using Dapper;
 using RationalVote.DAL;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel;
 
 namespace RationalVote.Models
 {
@@ -21,10 +22,31 @@ namespace RationalVote.Models
 			this.Experience = 0;
 		}
 
+		[Dapper.Key]
 		public long UserId { get; set; }
+
+		[AddOnButton( "check", null )]
+		[UserCanEdit(true)]
+		[Description("Display Name")]
+		[StringLength( 64, ErrorMessage="Maximum length is 64" )]
 		public string DisplayName { get; set; }
+
+		[AddOnButton( "check", null )]
+		[UserCanEdit(true)]
+		[Description("Real Name")]
+		[StringLength( 64, ErrorMessage="Maximum length is 64" )]
 		public string RealName { get; set; }
+
+		[AddOnButton( "check", null )]
+		[UserCanEdit(true)]
+		[Description("Occupation")]
+		[StringLength( 64, ErrorMessage="Maximum length is 64" )]
 		public string Occupation { get; set; }
+
+		[AddOnButton( "check", null )]
+		[UserCanEdit(true)]
+		[Description("Location")]
+		[StringLength( 128, ErrorMessage="Maximum length is 128" )]
 		public string Location { get; set; }
 
 		[DataType(DataType.DateTime)]
@@ -42,11 +64,22 @@ namespace RationalVote.Models
 			return profile;
 		}
 
-		public long Level()
+		public double LevelDouble()
 		{
 			const double LevelScale = 1.2;
 
-			return (long)Math.Log( Experience, LevelScale );
+			return Math.Log( Math.Max( Experience, 1 ), LevelScale );
+		}
+
+		public long Level()
+		{
+			return (long)LevelDouble();
+		}
+
+		public double LevelPercent()
+		{
+			double current = LevelDouble();
+			return current - Math.Floor(current);
 		}
 
 		public static Profile GetFromUser( long? Id )

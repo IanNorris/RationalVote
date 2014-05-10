@@ -1,14 +1,51 @@
-﻿@if( @ViewData.ModelMetadata.AdditionalValues[ "icon" ] != null )
-{
-	<div class="input-group">
-		<span class="input-group-addon"><i class="fa fa-@ViewData.ModelMetadata.AdditionalValues[ "icon" ]"></i></span>
-		@Html.TextBox( "", ViewData.TemplateInfo.FormattedModelValue, new { @class = "form-control", type = ViewData[ "type" ], placeholder = @ViewData.ModelMetadata.AdditionalValues[ "placeholder" ] ?? "" } )
-	</div>
+﻿@{
+	object icon = null;
+	ViewData.ModelMetadata.AdditionalValues.TryGetValue( "icon", out icon );
+
+	object buttonIcon = null;
+	ViewData.ModelMetadata.AdditionalValues.TryGetValue( "buttonIcon", out buttonIcon );
+
+	object buttonMessage = null;
+	ViewData.ModelMetadata.AdditionalValues.TryGetValue( "buttonMessage", out buttonMessage );
 	
-	@Html.ValidationMessageFor( m => m, null )
-}
-else
-{
-	@Html.TextBox( "", ViewData.TemplateInfo.FormattedModelValue, new { @class = "form-control", type = ViewData[ "type" ], placeholder = @ViewData.ModelMetadata.AdditionalValues[ "placeholder" ] ?? "" } )
-	@Html.ValidationMessageFor( m => m, null )
+	object placeholder = "";
+	ViewData.ModelMetadata.AdditionalValues.TryGetValue( "placeholder", out placeholder );
+	
+	if( buttonIcon != null || buttonMessage != null )
+	{
+		<div class="input-group">
+			@Html.TextBox( "", ViewData.TemplateInfo.FormattedModelValue, new { @class = "form-control", type = ViewData[ "type" ], placeholder = (string)placeholder } )
+			<span class="input-group-btn" style="width:auto">
+				<button type="submit" class="btn btn-primary editable-submit">
+					@if( buttonIcon != null )
+					{
+						<i class="fa fa-@buttonIcon"></i>
+					}
+					@if( buttonMessage != null )
+					{
+						@buttonMessage
+					}
+				</button>
+			</span>
+		</div>
+	
+		@Html.ValidationMessageFor( m => m, null )
+	}
+	else
+	{
+		if( icon != null )
+		{
+			<div class="input-group">
+				<span class="input-group-addon"><i class="fa fa-@((string)icon)"></i></span>
+				@Html.TextBox( "", ViewData.TemplateInfo.FormattedModelValue, new { @class = "form-control", type = ViewData[ "type" ], placeholder = (string)placeholder } )
+			</div>
+	
+			@Html.ValidationMessageFor( m => m, null )
+		}
+		else
+		{
+			@Html.TextBox( "", ViewData.TemplateInfo.FormattedModelValue, new { @class = "form-control", type = ViewData[ "type" ], placeholder = (string)placeholder } )
+			@Html.ValidationMessageFor( m => m, null )
+		}
+	}
 }
