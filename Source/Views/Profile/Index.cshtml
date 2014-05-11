@@ -71,88 +71,88 @@
 				@Html.AntiForgeryToken()
 
 				@{
-			Type profileType = Model.GetType();
-			PropertyInfo[] profileFields = profileType.GetProperties();
+					Type profileType = Model.GetType();
+					PropertyInfo[] profileFields = profileType.GetProperties();
 
-			foreach( var field in profileFields )
-			{
-				string description = null;
-
-				object[] attrs = field.GetCustomAttributes( typeof( System.ComponentModel.DescriptionAttribute ), false );
-				if( attrs != null && attrs.Length > 0 )
-				{
-					description = ( (System.ComponentModel.DescriptionAttribute)attrs[ 0 ] ).Description;
-				}
-
-				if( description != null )
-				{
-					bool canEdit = false;
-
-					if( ProfileID == UserID )
+					foreach( var field in profileFields )
 					{
-						attrs = field.GetCustomAttributes( typeof( UserCanEditAttribute ), false );
+						string description = null;
+
+						object[] attrs = field.GetCustomAttributes( typeof( System.ComponentModel.DescriptionAttribute ), false );
 						if( attrs != null && attrs.Length > 0 )
 						{
-							canEdit = ( (UserCanEditAttribute)attrs[ 0 ] ).CanEdit;
+							description = ( (System.ComponentModel.DescriptionAttribute)attrs[ 0 ] ).Description;
+						}
+
+						if( description != null )
+						{
+							bool canEdit = false;
+
+							if( ProfileID == UserID )
+							{
+								attrs = field.GetCustomAttributes( typeof( UserCanEditAttribute ), false );
+								if( attrs != null && attrs.Length > 0 )
+								{
+									canEdit = ( (UserCanEditAttribute)attrs[ 0 ] ).CanEdit;
+								}
+							}
+
+							object valueObj = field.GetValue( Model );
+
+							string value = valueObj != null ? valueObj.ToString() : "";
+
+
+							@insertField( ProfileID, field.Name, description, value, canEdit )
+
 						}
 					}
 
-					object valueObj = field.GetValue( Model );
+					TimeSpan memberForTS = DateTime.Now - Model.Joined;
 
-					string value = valueObj != null ? valueObj.ToString() : "";
+					//Approximations from http://stackoverflow.com/questions/1916358/a-real-timespan-object-with-years-months
+					int totalDays = memberForTS.Days;
+					int years = (int)( (double)totalDays / 365.2425 ); totalDays -= (int)( (double)years * 365.2425 );
+					int months = (int)( (double)totalDays / 30.436875 ); totalDays -= (int)( (double)months * 30.436875 );
+					int days = totalDays;
+					int hours = memberForTS.Hours;
 
+					string memberFor = "";
 
-					@insertField( ProfileID, field.Name, description, value, canEdit )
+					int setFields = 0;
 
-				}
-			}
+					if( years > 0 )
+					{
+						memberFor += years + ( years > 1 ? " years" : " year" );
+						setFields++;
+					}
 
-			TimeSpan memberForTS = DateTime.Now - Model.Joined;
+					if( months > 0 )
+					{
+						if( memberFor.Length != 0 ) { memberFor += ", "; }
+						memberFor += months + ( months > 1 ? " months" : " month" );
+						setFields++;
+					}
 
-			//Approximations from http://stackoverflow.com/questions/1916358/a-real-timespan-object-with-years-months
-			int totalDays = memberForTS.Days;
-			int years = (int)( (double)totalDays / 365.2425 ); totalDays -= (int)( (double)years * 365.2425 );
-			int months = (int)( (double)totalDays / 30.436875 ); totalDays -= (int)( (double)months * 30.436875 );
-			int days = totalDays;
-			int hours = memberForTS.Hours;
+					if( days > 0 && setFields < 2 )
+					{
+						if( memberFor.Length != 0 ) { memberFor += ", "; }
+						memberFor += days + ( days > 1 ? " days" : " day" );
+						setFields++;
+					}
 
-			string memberFor = "";
+					if( hours > 0 && setFields < 2 )
+					{
+						if( memberFor.Length != 0 ) { memberFor += ", "; }
+						memberFor += hours + ( hours > 1 ? " hours" : " hour" );
+						setFields++;
+					}
 
-			int setFields = 0;
+					if( memberFor.Length == 0 )
+					{
+						memberFor = "Just joined";
+					}
 
-			if( years > 0 )
-			{
-				memberFor += years + ( years > 1 ? " years" : " year" );
-				setFields++;
-			}
-
-			if( months > 0 )
-			{
-				if( memberFor.Length != 0 ) { memberFor += ", "; }
-				memberFor += months + ( months > 1 ? " months" : " month" );
-				setFields++;
-			}
-
-			if( days > 0 && setFields < 2 )
-			{
-				if( memberFor.Length != 0 ) { memberFor += ", "; }
-				memberFor += days + ( days > 1 ? " days" : " day" );
-				setFields++;
-			}
-
-			if( hours > 0 && setFields < 2 )
-			{
-				if( memberFor.Length != 0 ) { memberFor += ", "; }
-				memberFor += hours + ( hours > 1 ? " hours" : " hour" );
-				setFields++;
-			}
-
-			if( memberFor.Length == 0 )
-			{
-				memberFor = "Just joined";
-			}
-
-			@insertField( ProfileID, "memberFor", "Member for", memberFor, false );
+					@insertField( ProfileID, "memberFor", "Member for", memberFor, false );
 
 					@*@insertField( ProfileID, "expertTags", "Expert in", tags, false );*@
 				}
@@ -164,15 +164,35 @@
 
 			@{
 				int percent = (int)(Model.LevelPercent() * 100.0);
+
+				string emailHash = Model.EmailHash.ToLower();
 			}
 
-			<h4>You are level <span class="label label-success">@Model.Level()</span></h4>
+			<div class="thumbnails thumbnail-style" style="float: left; margin-right: 20px">
+				<div class="thumbnail-img">
+					<div class="overflow-hidden">
+						<img class=" img-responsive rounded" src="//www.gravatar.com/avatar/@emailHash?r=g&d=mm&s=100" />
+					</div>
+					@if( CanEdit )
+					{
+						<a class="btn-more hover-effect" data-toggle="modal" href="~/Content/Static/profilePic.html" data-target="#profilePicDialog"><i class="fa fa-pencil"></i></a>
+						
+						<div class="modal fade" id="profilePicDialog" tabindex="-1" role="dialog" aria-labelledby="profilePicLabel" aria-hidden="true">
+							<div class="modal-dialog"><div class="modal-content"></div></div>
+						</div>
+					}
+				</div>
+			</div>
 
-			<p>Progress towards level @(Model.Level()+1):</p>
+			<div>
+				<h4>You are level <span class="label label-success">@Model.Level()</span></h4>
 
-			<div class="progress progress-striped">
-				<div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="@percent" aria-valuemin="0" aria-valuemax="100" style="width: @percent%">
-					<span class="sr-only">@percent% towards level @(Model.Level()+1)</span>
+				<p>Progress towards level @(Model.Level()+1):</p>
+
+				<div class="progress progress-striped">
+					<div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="@percent" aria-valuemin="0" aria-valuemax="100" style="width: @percent%">
+						<span class="sr-only">@percent% towards level @(Model.Level()+1)</span>
+					</div>
 				</div>
 			</div>
 

@@ -229,3 +229,12 @@ a.navbar-brand
    border-left-style: inset; /*FF fixes*/
    border-right-style: inset; /*FF fixes*/
 }
+
+.thumbnail-style a.btn-more:hover {
+	text-decoration: none;
+	box-shadow: 0 0 0 0;
+}
+
+.thumbnail-style:hover a.btn-more {
+	right: -10px;
+}

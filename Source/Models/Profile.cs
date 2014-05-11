@@ -58,6 +58,8 @@ namespace RationalVote.Models
 
 		public long Experience { get; set; }
 
+		public string EmailHash { get; set; }
+
 		public static Profile CreateNew( User user )
 		{
 			Profile profile = new Profile();

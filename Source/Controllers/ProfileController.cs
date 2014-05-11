@@ -32,7 +32,12 @@ namespace RationalVote
 			{
 				using( DbConnection connection = RationalVoteContext.Connect() )
 				{
-					Profile profile = connection.Get<Profile>( Id );
+					Profile profile = connection.Query<Profile>( @"SELECT Profile.*, User.Email AS EmailHash FROM Profile
+																		INNER JOIN User
+																		ON User.Id = Profile.UserId
+																		WHERE Profile.UserId = @Id", new { Id = Id } ).First();
+
+					profile.EmailHash = Utility.Crypto.CalculateMD5Hash( profile.EmailHash );
 
 					if( profile != null )
 					{
