@@ -27,14 +27,14 @@
 				<ul class="nav navbar-nav navbar-left">
 					@Html.CreateMenuItem( new Menu.Action( "Debate", null, "Popular", "Debate", null ) )
 
-					@Html.CreateMenu( "About", "", "",
+					@*@Html.CreateMenu( "About", "", "",
 						new Menu.Item[]
 						{
 							new Menu.Action(  "About us", "question", "About", "Home", null ),
 							new Menu.Action(  "For legislators", "gavel", "ForLegislators", "Home", null ),
 							new Menu.Action(  "Contact us", "envelope-o", "Contact", "Home", null ),
 						}
-					)				
+					)*@				
 				</ul>
 				<ul class="nav navbar-nav navbar-right" style="left:-2em">
 					@Html.Partial( "_LoginPartial" )
