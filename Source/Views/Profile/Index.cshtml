@@ -175,7 +175,7 @@
 					</div>
 					@if( CanEdit )
 					{
-						<a class="btn-more hover-effect" data-toggle="modal" href="~/Content/Static/profilePic.html" data-target="#profilePicDialog"><i class="fa fa-pencil"></i></a>
+						<a class="btn-more hover-effect" data-toggle="modal" href="@Url.Action( "DialogProfilePic", "Home" )" data-target="#profilePicDialog"><i class="fa fa-pencil"></i></a>
 						
 						<div class="modal fade" id="profilePicDialog" tabindex="-1" role="dialog" aria-labelledby="profilePicLabel" aria-hidden="true">
 							<div class="modal-dialog"><div class="modal-content"></div></div>

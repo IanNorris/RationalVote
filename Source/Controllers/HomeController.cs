@@ -27,5 +27,30 @@ namespace RationalVote.Controllers
 		{
 			return View();
 		}
+
+		public ActionResult TermsOfService()
+		{
+			return View();
+		}
+
+		public ActionResult PrivacyPolicy()
+		{
+			return View();
+		}
+
+		public ActionResult DialogTermsOfService()
+		{
+			return View();
+		}
+
+		public ActionResult DialogPrivacyPolicy()
+		{
+			return View();
+		}
+
+		public ActionResult DialogProfilePic()
+		{
+			return View();
+		}
 	}
 }

@@ -25,12 +25,12 @@
 
 	<br />
 	<label class="checkbox">
-		@Html.EditorFor( model => model.RegisterAcceptedTermsOfService ) I agree to the <a data-toggle="modal" href="~/Content/Static/tos.html" data-target="#tosDialog">terms of service</a>
+		@Html.EditorFor( model => model.RegisterAcceptedTermsOfService ) I agree to the <a data-toggle="modal" href="@Url.Action( "DialogTermsOfService", "Home" )" data-target="#tosDialog">terms of service</a>
 	</label>
 	@Html.ValidationMessageFor( model => model.RegisterAcceptedTermsOfService )
 
 	<label class="checkbox">
-		@Html.EditorFor( model => model.RegisterAcceptedPrivacyPolicy ) I understand the <a data-toggle="modal" href="~/Content/Static/privacy.html" data-target="#privacyPolicyDialog">privacy policy</a>
+		@Html.EditorFor( model => model.RegisterAcceptedPrivacyPolicy ) I understand the <a data-toggle="modal" href="@Url.Action( "DialogPrivacyPolicy", "Home" )" data-target="#privacyPolicyDialog">privacy policy</a>
 	</label>
 	@Html.ValidationMessageFor( model => model.RegisterAcceptedPrivacyPolicy )
 
