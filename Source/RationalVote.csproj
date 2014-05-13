@@ -211,6 +211,7 @@
     <Compile Include="Models\DebateTag.cs" />
     <Compile Include="Models\EmailVerificationToken.cs" />
     <Compile Include="Models\ErrorMessage.cs" />
+    <Compile Include="Models\ForgotPassword.cs" />
     <Compile Include="Models\Permission.cs" />
     <Compile Include="Models\Profile.cs" />
     <Compile Include="Models\Session.cs" />
@@ -242,7 +243,7 @@
     <Content Include="Web.Release.config">
       <DependentUpon>Web.config</DependentUpon>
     </Content>
-	<Content Include="Views\**\*.cshtml" />
+    <Content Include="Views\**\*.cshtml" />
     <Content Include="Views\Web.config">
       <SubType>Designer</SubType>
     </Content>

@@ -220,6 +220,120 @@ namespace RationalVote
 			return RedirectToAction( "Index", "Home" );
 		}
 
+		// GET: /User/ForgotPassword
+		[Route("ForgotPassword")]
+		public ActionResult ForgotPassword()
+		{
+			return View();
+		}
+
+		// GET: /User/ForgotPasswordPost
+		[HttpPost]
+		[ValidateAntiForgeryToken]
+		[Route( "ForgotPasswordPost" )]
+		public ActionResult ForgotPassword( ForgotPassword forgot )
+		{
+			if( ModelState.IsValid )
+			{
+				using( DbConnection connection = RationalVoteContext.Connect() )
+				{
+					User user = connection.Query<User>( "SELECT * FROM User WHERE Email = @Email", new { Email = forgot.RegisterEmail } ).FirstOrDefault();
+
+					if( user != null )
+					{
+						string token = Utility.Crypto.GenerateSaltString( 32 );
+
+						PasswordResetToken tokenObj = new PasswordResetToken();
+						tokenObj.Token = token;
+						tokenObj.UserId = user.Id;
+
+						connection.Insert( tokenObj );
+
+						new Controllers.MailController().ResetPasswordEmail( user.Email, token ).Deliver();
+					}
+				}
+
+				TempData[ "SuccessMessage" ] = "If there was an account associated with this e-mail, it should receive a password reset link shortly.";
+				TempData[ "MessageTitle" ] = "Password reset e-mail sent";
+
+				return RedirectToAction( "Index", "Home" );
+			}
+			else
+			{
+				return View( "ForgotPassword", forgot );
+			}
+
+			
+		}
+
+		// GET: /User/ResetPassword/token
+		[Route( "ResetPassword/{token}" )]
+		public ActionResult ResetPassword( string token )
+		{
+			ResetPassword reset = new ResetPassword();
+			reset.Token = token;
+
+			return View( reset );
+		}
+
+		// GET: /User/ResetPasswordPost
+		[HttpPost]
+		[ValidateAntiForgeryToken]
+		[Route( "ResetPasswordPost" )]
+		public ActionResult ResetPassword( ResetPassword reset )
+		{
+			if( ModelState.IsValid )
+			{
+				using( DbConnection connection = RationalVoteContext.Connect() )
+				{
+					PasswordResetToken token = connection.Query<PasswordResetToken>( "SELECT * FROM PasswordResetToken WHERE Token = @Token", new { Token = reset.Token } ).FirstOrDefault();
+
+					if( token != null )
+					{
+						using( DbTransaction transaction = connection.BeginTransaction() )
+						{
+							User user = connection.Get<User>( token.UserId );
+
+							connection.Delete<PasswordResetToken>( token, transaction );
+
+							string salt;
+							string hash;
+							Utility.Crypto.CreatePasswordHash( user.Email, reset.RegisterPassword, out salt, out hash );
+
+							user.PasswordHash = hash;
+							user.PasswordSalt = salt;
+							user.Verified = 1;
+
+							connection.Update( user, transaction );
+
+							if( reset.ClearSessions )
+							{
+								RationalVote.Models.Session.ClearAllSessions( user.Id, connection, transaction );
+							}
+
+							transaction.Commit();
+
+							TempData[ "SuccessMessage" ] = "Thank you for resetting your password, you may now login to your account!";
+							TempData[ "MessageTitle" ] = "Password reset";
+
+							return RedirectToAction( "SignIn" );
+						}
+					}
+					else
+					{
+						TempData[ "ErrorMessage" ] = "This token has already been used or was never valid.";
+						TempData[ "MessageTitle" ] = "Invalid token";
+					}
+				}
+
+				return View( "ResetPassword", reset );
+			}
+			else
+			{
+				return View( "ResetPassword", reset );
+			}
+		}
+
 		// GET: /User/Edit/5
 		public ActionResult Edit(long? id)
 		{

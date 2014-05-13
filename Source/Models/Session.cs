@@ -111,6 +111,11 @@ namespace RationalVote.Models
 				connection.Execute( "DELETE FROM Session WHERE Id = @Id AND Token = @Token", new { Id = id_string, Token = token } );
 			}
 		}
+
+		public static void ClearAllSessions( long Id, DbConnection connection, DbTransaction transaction )
+		{
+			connection.Execute( "DELETE FROM Session WHERE User = @User", new { User = Id }, transaction );
+		}
 	
 		public long Id { get; set; }
 		public string Token { get; set; }

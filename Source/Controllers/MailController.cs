@@ -28,6 +28,16 @@ namespace RationalVote.Controllers
 			return Email( "VerificationEmail" );
 		}
 
+		public EmailResult ResetPasswordEmail( string email, string token )
+		{
+			To.Add( email );
+			From = GetFromEmail( "Verification" );
+			Subject = "Reset your password";
+			ViewBag.Token = token;
+
+			return Email( "ResetPasswordEmail" );
+		}
+
 		public EmailResult ExceptionEmail( HttpException e, string message )
 		{
 			To.Add( ConfigurationManager.AppSettings.Get( "ServerAdmin" ) );
