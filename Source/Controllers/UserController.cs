@@ -18,39 +18,10 @@ namespace RationalVote
 	[RoutePrefix("User")]
 	public class UserController : Controller
 	{
-		// GET: /User/
-		[RequireLogin]
-		public ActionResult Index()
-		{
-			using( DbConnection connection = RationalVoteContext.Connect() )
-			{
-				IEnumerable<User> users = connection.Query<User>( "SELECT * FROM User" );
-
-				return View( users.ToList() );
-			}
-			
-		}
-
 		public ActionResult SignIn( string returnUrl )
 		{
 			ViewBag.ReturnUrl = returnUrl;
 
-			return View();
-		}
-
-		// GET: /User/Details/5
-		public ActionResult Details(long? id)
-		{
-			/*if (id == null)
-			{
-				return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-			}
-			User user = db.Users.Find(id);
-			if (user == null)
-			{
-				return HttpNotFound();
-			}
-			return View(user);*/
 			return View();
 		}
 
@@ -332,79 +303,6 @@ namespace RationalVote
 			{
 				return View( "ResetPassword", reset );
 			}
-		}
-
-		// GET: /User/Edit/5
-		public ActionResult Edit(long? id)
-		{
-			/*if (id == null)
-			{
-				return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-			}
-			User user = db.Users.Find(id);
-			if (user == null)
-			{
-				return HttpNotFound();
-			}
-			ViewBag.Id = new SelectList(db.EmailVerificationTokens, "Id", "Id", user.Id);
-			ViewBag.Id = new SelectList(db.Profiles, "Id", "DisplayName", user.Id);
-			return View(user);*/
-			return View();
-		}
-
-		// POST: /User/Edit/5
-		// To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-		// more details see http://go.microsoft.com/fwlink/?LinkId=317598.
-		[HttpPost]
-		[ValidateAntiForgeryToken]
-		public ActionResult Edit([Bind(Include="Id,Email,PasswordSalt,PasswordHash,AuthenticationMethod,Verified")] User user)
-		{
-			/*if (ModelState.IsValid)
-			{
-				db.Entry(user).State = EntityState.Modified;
-				db.SaveChanges();
-				return RedirectToAction("Index");
-			}
-			ViewBag.Id = new SelectList(db.EmailVerificationTokens, "Id", "Id", user.Id);
-			ViewBag.Id = new SelectList(db.Profiles, "Id", "DisplayName", user.Id);
-			return View(user);*/
-			return View();
-		}
-
-		// GET: /User/Delete/5
-		public ActionResult Delete(long? id)
-		{
-			/*if (id == null)
-			{
-				return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-			}
-			User user = db.Users.Find(id);
-			if (user == null)
-			{
-				return HttpNotFound();
-			}
-			return View(user);*/
-			return View();
-		}
-
-		// POST: /User/Delete/5
-		[HttpPost, ActionName("Delete")]
-		[ValidateAntiForgeryToken]
-		public ActionResult DeleteConfirmed(long id)
-		{
-			/*User user = db.Users.Find(id);
-			db.Users.Remove(user);
-			db.SaveChanges();*/
-			return RedirectToAction("Index");
-		}
-
-		protected override void Dispose(bool disposing)
-		{
-			/*if (disposing)
-			{
-				db.Dispose();
-			}*/
-			base.Dispose(disposing);
 		}
 	}
 }
