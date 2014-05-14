@@ -238,3 +238,11 @@ a.navbar-brand
 .thumbnail-style:hover a.btn-more {
 	right: -10px;
 }
+
+.reg-page {
+	height: 39em;
+}
+
+.hcentered {
+	text-align:center;
+}

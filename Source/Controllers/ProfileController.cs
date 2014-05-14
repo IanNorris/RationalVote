@@ -32,7 +32,7 @@ namespace RationalVote
 			{
 				using( DbConnection connection = RationalVoteContext.Connect() )
 				{
-					Profile profile = connection.Query<Profile>( @"SELECT Profile.*, User.Email AS EmailHash FROM Profile
+					ProfileWithEmailHash profile = connection.Query<ProfileWithEmailHash>( @"SELECT Profile.*, User.Email AS EmailHash FROM Profile
 																		INNER JOIN User
 																		ON User.Id = Profile.UserId
 																		WHERE Profile.UserId = @Id", new { Id = Id } ).First();

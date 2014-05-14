@@ -53,12 +53,12 @@ namespace RationalVote.Models
 		[StringLength( 128, ErrorMessage="Maximum length is 128" )]
 		public string Location { get; set; }
 
+		public string ProfileLink { get; set; }
+
 		[DataType(DataType.DateTime)]
 		public System.DateTime Joined { get; set; }
 
 		public long Experience { get; set; }
-
-		public string EmailHash { get; set; }
 
 		public static Profile CreateNew( User user )
 		{
@@ -102,5 +102,10 @@ namespace RationalVote.Models
 				return profile;
 			}
 		}
+	}
+
+	public class ProfileWithEmailHash : Profile
+	{
+		public string EmailHash { get; set; }
 	}
 }

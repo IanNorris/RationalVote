@@ -14,15 +14,21 @@ namespace RationalVote.Models
 {
 	public partial class User
 	{
+		public enum AuthenticationMethodType : int
+		{
+			Local,
+			Facebook,
+		}
+
 		public User()
 		{
-			this.AuthenticationMethod = 0;
+			this.AuthenticationMethod = User.AuthenticationMethodType.Local;
 			this.Verified = 0;
 		}
 
 		public User( UserRegister user )
 		{
-			this.AuthenticationMethod = 0;
+			this.AuthenticationMethod = User.AuthenticationMethodType.Local;
 			this.Verified = 0;
 
 			this.Email = user.RegisterEmail.ToLower();
@@ -39,7 +45,7 @@ namespace RationalVote.Models
 
 		public string PasswordSalt { get; set; }
 		public string PasswordHash { get; set; }
-		public byte AuthenticationMethod { get; set; }
-		public byte Verified { get; set; }
+		public AuthenticationMethodType AuthenticationMethod { get; set; }
+		public int Verified { get; set; }
 	}
 }

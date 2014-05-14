@@ -97,5 +97,34 @@ namespace Utility
 			}
 			return sb.ToString();
 		}
+
+		public static string CalculateSHA256Hash( string input )
+		{
+			SHA256Managed sha = new SHA256Managed();
+			string hash = String.Empty;
+			byte[] crypto = sha.ComputeHash( Encoding.UTF8.GetBytes( input ), 0, Encoding.UTF8.GetByteCount( input ) );
+
+			foreach( byte bit in crypto )
+			{
+				hash += bit.ToString( "x2" );
+			}
+
+			return hash;
+		}
+
+		private static byte[] StringEncode( string text )
+		{
+			var encoding = new ASCIIEncoding();
+			return encoding.GetBytes( text );
+		}
+
+		public static byte[] CalculateHMAC256( string key, string message )
+		{
+			byte[] keyBytes = StringEncode( key );
+			byte[] messageBytes = StringEncode( message );
+
+			var hash = new HMACSHA256( keyBytes );
+			return hash.ComputeHash( messageBytes );
+		}
 	}
 }

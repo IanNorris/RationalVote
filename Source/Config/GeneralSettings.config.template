@@ -15,4 +15,7 @@
 	<add key="maxArgumentLength" value="160" />
 
 	<add key="passwordSalt" value="Generate a SHA-256 Hash and stick it here" />
+	
+	<add key="facebookAppId" value="AppId" />
+	<add key="facebookAppSecret" value="Secret" />
 </appSettings>

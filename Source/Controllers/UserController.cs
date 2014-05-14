@@ -12,6 +12,7 @@ using Dapper;
 using RationalVote.DAL;
 using Utility;
 using MySql.Data.MySqlClient;
+using System.Configuration;
 
 namespace RationalVote
 {
@@ -19,6 +20,13 @@ namespace RationalVote
 	public class UserController : Controller
 	{
 		public ActionResult SignIn( string returnUrl )
+		{
+			ViewBag.ReturnUrl = returnUrl;
+
+			return View();
+		}
+
+		public ActionResult FacebookLogin( string returnUrl )
 		{
 			ViewBag.ReturnUrl = returnUrl;
 
@@ -50,6 +58,8 @@ namespace RationalVote
 
 							user.PasswordSalt = salt;
 							user.PasswordHash = hash;
+
+							user.AuthenticationMethod = Models.User.AuthenticationMethodType.Local;
 
 #if DEBUG
 							user.Verified = 1;
@@ -110,7 +120,7 @@ namespace RationalVote
 			{
 				using( DbConnection connection = RationalVoteContext.Connect() )
 				{
-					User storedUser = connection.Query<User>( "SELECT * FROM User WHERE Email = @Email", new { Email = userPublic.LoginEmail.ToLower() } ).FirstOrDefault();
+					User storedUser = connection.Query<User>( "SELECT * FROM User WHERE Email = @Email AND AuthenticationMethod = 0", new { Email = userPublic.LoginEmail.ToLower() } ).FirstOrDefault();
 
 					if( storedUser != null && storedUser.Verified != 0 && Utility.Crypto.ConfirmPasswordHash( storedUser.Email, userPublic.LoginPassword, storedUser.PasswordSalt, storedUser.PasswordHash ) )
 					{
@@ -139,6 +149,118 @@ namespace RationalVote
 			return View( "SignIn", userPublic );
 		}
 
+		// POST: /User/LoginPostFB
+		// To protect from overposting attacks, please enable the specific properties you want to bind to, for 
+		// more details see http://go.microsoft.com/fwlink/?LinkId=317598.
+		[HttpPost]
+		[ValidateAntiForgeryToken]
+		public ActionResult LoginPostFB( LoginFacebook login, string returnUrl )
+		{
+			try
+			{
+				var fb = new Facebook.FacebookClient();
+				dynamic fb_access_token = fb.Get( "oauth/access_token", new
+				{
+					client_id = ConfigurationManager.AppSettings.Get("facebookAppId"),
+					client_secret = ConfigurationManager.AppSettings.Get("facebookAppSecret"),
+					grant_type = "client_credentials"
+				} );
+
+				long facebookId = 0;
+				if( !long.TryParse( login.UserID, out facebookId ) )
+				{
+					throw new Facebook.FacebookOAuthException();
+				}
+
+				var client = new Facebook.FacebookClient( fb_access_token.access_token );
+				string userID = login.UserID;
+				/*string email = client.Get( login.UserID + "/email" ) as string;
+				string name = client.Get( login.UserID + "/name" ) as string;
+				string location = client.Get( login.UserID + "/location" ) as string;
+				string profile_link = client.Get( login.UserID + "/link" ) as string;*/
+
+				dynamic userDetails = client.Get( login.UserID );
+				string email = userDetails.email;
+				string name = userDetails.name;
+				string location = userDetails.location;
+				string profile_link = userDetails.link;
+
+				using( DbConnection connection = RationalVoteContext.Connect() )
+				{
+					User storedUser = connection.Query<User>( "SELECT * FROM User WHERE PasswordSalt = @UserID AND AuthenticationMethod = 1", new { UserID = userID } ).FirstOrDefault();
+
+					if( storedUser != null )
+					{
+						//Create new session for the user
+						RationalVote.Models.Session.CreateSession( storedUser, Request, false );
+
+						if( Url.IsLocalUrl( returnUrl ) )
+						{
+							return Redirect( returnUrl );
+						}
+						else
+						{
+							return RedirectToAction( "Index", "Home" );
+						}
+					}
+					else
+					{
+						using( DbTransaction transaction = connection.BeginTransaction() )
+						{
+							//Create user
+							User user = new User();
+
+							user.Email = email;
+							user.PasswordSalt = userID;
+							user.PasswordHash = "UNUSED";
+							user.Verified = 1;
+							user.AuthenticationMethod = Models.User.AuthenticationMethodType.Facebook;
+
+							//Add the user
+							user.Id = connection.Insert( user, transaction );
+
+							//Create profile
+							Profile profile = RationalVote.Models.Profile.CreateNew( user );
+							profile.DisplayName = name;
+							profile.Location = location;
+							profile.RealName = name;
+							profile.ProfileLink = profile_link;
+
+							connection.Execute( @"INSERT INTO Profile 
+												(UserId, DisplayName, RealName, Occupation, Location, ProfileLink, Joined, Experience) 
+												VALUES 
+												(@UserId, @DisplayName, @RealName, @Occupation, @Location, @ProfileLink, @Joined, @Experience)", 
+												profile, transaction );
+
+							transaction.Commit();
+
+							TempData[ "SuccessMessage" ] = "Thank you for registering!";
+							TempData[ "MessageTitle" ] = "Registration complete";
+
+							//Create new session for the user
+							RationalVote.Models.Session.CreateSession( user, Request, false );
+
+							if( Url.IsLocalUrl( returnUrl ) )
+							{
+								return Redirect( returnUrl );
+							}
+							else
+							{
+								return RedirectToAction( "Index", "Home" );
+							}
+						}
+					}
+				}
+			}
+			catch( Facebook.FacebookOAuthException )
+			{
+				TempData[ "ErrorMessage" ] = "Unable to sign in via facebook, did you de-authorize the app?";
+				TempData[ "MessageTitle" ] = "Facebook login failed";
+
+				return RedirectToAction( "SignIn", "User" );
+			}
+		}
+
 		// POST: /User/LogOff
 		// To protect from overposting attacks, please enable the specific properties you want to bind to, for 
 		// more details see http://go.microsoft.com/fwlink/?LinkId=317598.
@@ -163,7 +285,7 @@ namespace RationalVote
 		{
 			using( DbConnection connection = RationalVoteContext.Connect() )
 			{
-				EmailVerificationToken resultToken = connection.Query<EmailVerificationToken>( "SELECT * FROM EmailVerificationToken WHERE Token = @Token", new { Token = token } ).FirstOrDefault();
+				EmailVerificationToken resultToken = connection.Query<EmailVerificationToken>( "SELECT * FROM EmailVerificationToken WHERE Token = @Token  AND AuthenticationMethod = 0", new { Token = token } ).FirstOrDefault();
 
 				if( resultToken == null )
 				{
@@ -208,7 +330,7 @@ namespace RationalVote
 			{
 				using( DbConnection connection = RationalVoteContext.Connect() )
 				{
-					User user = connection.Query<User>( "SELECT * FROM User WHERE Email = @Email", new { Email = forgot.RegisterEmail } ).FirstOrDefault();
+					User user = connection.Query<User>( "SELECT * FROM User WHERE Email = @Email  AND AuthenticationMethod = 0", new { Email = forgot.RegisterEmail } ).FirstOrDefault();
 
 					if( user != null )
 					{
@@ -257,7 +379,7 @@ namespace RationalVote
 			{
 				using( DbConnection connection = RationalVoteContext.Connect() )
 				{
-					PasswordResetToken token = connection.Query<PasswordResetToken>( "SELECT * FROM PasswordResetToken WHERE Token = @Token", new { Token = reset.Token } ).FirstOrDefault();
+					PasswordResetToken token = connection.Query<PasswordResetToken>( "SELECT * FROM PasswordResetToken WHERE Token = @Token AND AuthenticationMethod = 0", new { Token = reset.Token } ).FirstOrDefault();
 
 					if( token != null )
 					{

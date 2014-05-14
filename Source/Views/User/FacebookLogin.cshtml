@@ -1,0 +1,190 @@
+<div id="fb-root"></div>
+
+<form id="__AjaxAntiForgeryForm" action="#" method="post">@Html.AntiForgeryToken()</form>
+<form id="ReturnUrl" action="#" method="post"><input id="returnUrl" type="hidden" value="@ViewBag.returnUrl" /></form>
+
+<style>
+.loader,
+.loader:before,
+.loader:after {
+  background: #4863ae;
+  -webkit-transform: translate3d(0,0,0);
+  -webkit-animation: load1 1s infinite ease-in-out;
+  animation: load1 1s infinite ease-in-out;
+  width: 1em;
+  height: 4em;
+}
+.loader:before,
+.loader:after {
+  position: absolute;
+  top: 0;
+  content: '';
+}
+.loader:before {
+  left: -1.5em;
+}
+.loader {
+  text-indent: -9999em;
+  margin: auto;
+  position: relative;
+  font-size: 11px;
+  -webkit-transform: translate3d(0,0,0);
+  -webkit-animation-delay: 0.16s;
+  animation-delay: 0.16s;
+}
+.loader:after {
+  left: 1.5em;
+  -webkit-transform: translate3d(0,0,0);
+  -webkit-animation-delay: 0.32s;
+  animation-delay: 0.32s;
+}
+@@-webkit-keyframes load1 {
+  0%,
+  80%,
+  100% {
+	box-shadow: 0 0 #4863ae;
+	height: 4em;
+  }
+  40% {
+	box-shadow: 0 -2em #4863ae;
+	height: 5em;
+  }
+}
+@@keyframes load1 {
+  0%,
+  80%,
+  100% {
+	box-shadow: 0 0 #4863ae;
+	height: 4em;
+  }
+  40% {
+	box-shadow: 0 -2em #4863ae;
+	height: 5em;
+  }
+}
+
+.loader-box{
+	margin-top: 40px;
+	height: 75px;
+}
+
+.FacebookLoginBox{
+	display: none;
+}
+
+/*Panel Blue*/
+.panel-fb {
+   border-color: #4863ae;
+}
+
+.panel-fb > .panel-heading {
+   background: #4863ae;
+}
+
+</style>
+
+<script>
+@if( TempData["ErrorMessage"] != null )
+{
+	<text>var failed_login = true;</text>
+}
+else
+{
+	<text>var failed_login = false;</text>
+}
+</script>
+
+<script>
+	var logged_in = false;
+
+		function ajaxLogin( response )
+		{
+			if( response != null && response.status == 'connected' && logged_in == false )
+			{
+				$( ".FacebookLoginBox" ).hide();
+
+				// jquery extend function
+				$.extend(
+				{
+					redirectPost: function(location, args)
+					{
+						var form = '';
+						$.each( args, function( key, value ) {
+							form += '<input type="hidden" name="'+key+'" value="'+value+'">';
+						});
+						$('<form action="'+location+'" method="POST">'+form+'</form>').submit();
+					}
+				});
+
+				logged_in = true;
+				$.redirectPost( "@Url.Action( "LoginPostFB", "User" )",
+				{
+					AccessToken: response.authResponse.accessToken,
+					ExpiresIn: response.authResponse.expiresIn,
+					SignedRequest: response.authResponse.signedRequest,
+					UserID: response.authResponse.userID,
+					__RequestVerificationToken: $('#__AjaxAntiForgeryForm input[name=__RequestVerificationToken]').val(),
+					returnUrl: $('#ReturnUrl input[name=returnUrl]').val()
+				} );
+			}
+			else if( response != null && (response.status == 'unknown' || response.status == 'not_authorized' ) )
+			{
+				$( ".FacebookLoginBox" ).css( 'display', 'inline' );
+				$( ".loader-box" ).hide();
+			}
+		}
+
+		window.fbAsyncInit = function()
+		{
+			FB.init(
+				{
+					appId      : '@System.Configuration.ConfigurationManager.AppSettings.Get("facebookAppId")',
+					xfbml      : true,
+					version    : 'v2.0'
+				}
+			);
+
+			// Listen to events
+			FB.Event.subscribe('auth.statusChange', ajaxLogin );
+
+			if( !failed_login )
+			{
+				FB.Event.subscribe('auth.login', ajaxLogin );
+
+				FB.getLoginStatus( ajaxLogin );
+			}
+		};
+
+		(function(d, s, id){
+			var js, fjs = d.getElementsByTagName(s)[0];
+			if (d.getElementById(id)) {return;}
+			js = d.createElement(s); js.id = id;
+			js.src = "//connect.facebook.net/en_US/sdk.js";
+			fjs.parentNode.insertBefore(js, fjs);
+		}(document, 'script', 'facebook-jssdk'));
+	</script>
+	
+<div class="container-fluid">
+	<div class="row-fluid col-wrap">
+		<div class="col-md-4 col-md-offset-4">
+			<!-- Blue Panel -->            
+			<div class="panel panel-fb">
+				<div class="panel-heading">
+					<h3 class="panel-title"><i class="fa fa-facebook"></i> Facebook Login</h3>
+				</div>
+				<div class="panel-body">
+					<div class="FacebookLoginBox">
+						<h3>To log in, please click the button below.</h3>
+						<div class="hcentered">
+							<div class="fb-login-button" data-max-rows="1" data-size="xlarge" data-show-faces="true" data-auto-logout-link="false" data-scope="email,public_profile"></div>
+						</div>
+					</div>
+
+					<div class="loader-box">
+						<div class="loader">Loading...</div>
+					</div>
+				</div>
+			</div>      
+		</div>
+	</div>
+</div>

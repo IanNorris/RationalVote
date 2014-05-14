@@ -1,4 +1,4 @@
-﻿@model RationalVote.Models.Profile
+﻿@model RationalVote.Models.ProfileWithEmailHash
 
 @using System.Reflection;
 @using System.Linq.Expressions;
@@ -31,7 +31,7 @@
 			@{
 				var param = Expression.Parameter( Model.GetType() );
 				var field = canEdit ? Expression.PropertyOrField( param, fieldName ) : null;
-				var lambda = canEdit ? Expression.Lambda<Func<Profile, string>>( field, param ) : null;
+				var lambda = canEdit ? Expression.Lambda<Func<ProfileWithEmailHash, string>>( field, param ) : null;
 
 				if( canEdit )
 				{

@@ -59,6 +59,9 @@
     <Reference Include="Dapper">
       <HintPath>packages\Dapper.1.13\lib\net45\Dapper.dll</HintPath>
     </Reference>
+    <Reference Include="Facebook">
+      <HintPath>packages\Facebook.6.4.2\lib\net45\Facebook.dll</HintPath>
+    </Reference>
     <Reference Include="Glimpse.Ado, Version=1.7.1.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>packages\Glimpse.Ado.1.7.1\lib\net45\Glimpse.Ado.dll</HintPath>
@@ -212,6 +215,7 @@
     <Compile Include="Models\EmailVerificationToken.cs" />
     <Compile Include="Models\ErrorMessage.cs" />
     <Compile Include="Models\ForgotPassword.cs" />
+    <Compile Include="Models\LoginFacebook.cs" />
     <Compile Include="Models\Permission.cs" />
     <Compile Include="Models\Profile.cs" />
     <Compile Include="Models\Session.cs" />
@@ -291,7 +295,7 @@
           <AutoAssignPort>True</AutoAssignPort>
           <DevelopmentServerPort>63319</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
-          <IISUrl>http://localhost:63320/</IISUrl>
+          <IISUrl>http://local.rationalvote.com:63320/</IISUrl>
           <NTLMAuthentication>False</NTLMAuthentication>
           <UseCustomServer>False</UseCustomServer>
           <CustomServerUrl>
