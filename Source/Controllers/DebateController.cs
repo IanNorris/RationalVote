@@ -186,7 +186,7 @@ namespace RationalVote.Controllers
 				debateInput.Argument = replaceMultipleSpaces.Replace( debateInput.Argument, @" " );
 
 				Debate debate = new Debate();
-				debate.Owner = ((RationalVote.Models.UserPrincipal)HttpContext.User).User.Id;
+				debate.Owner = ((RationalVote.Models.UserPrincipal)HttpContext.User).User.User.Id;
 				debate.Title = debateInput.Argument;
 				debate.Locked = false;
 				debate.Posted = DateTime.Now;
@@ -229,7 +229,7 @@ namespace RationalVote.Controllers
 				debateInput.Argument = replaceMultipleSpaces.Replace( debateInput.Argument, @" " );
 
 				Debate debate = new Debate();
-				debate.Owner = ( (RationalVote.Models.UserPrincipal)HttpContext.User ).User.Id;
+				debate.Owner = ( (RationalVote.Models.UserPrincipal)HttpContext.User ).User.User.Id;
 				debate.Title = debateInput.Argument;
 				debate.Locked = false;
 				debate.Posted = DateTime.Now;
@@ -269,7 +269,7 @@ namespace RationalVote.Controllers
 		{
 			if( ModelState.IsValid )
 			{
-				debateVote.Owner = ( (RationalVote.Models.UserPrincipal)HttpContext.User ).User.Id;
+				debateVote.Owner = ( (RationalVote.Models.UserPrincipal)HttpContext.User ).User.User.Id;
 
 				using( DbConnection connection = RationalVoteContext.Connect() )
 				{

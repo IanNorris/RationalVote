@@ -1,15 +1,25 @@
 ﻿@if( Context.User.Identity.IsAuthenticated )
 {
-	string emailHash = Utility.Crypto.CalculateMD5Hash( ((RationalVote.Models.UserPrincipal)Context.User).User.Email ).ToLower();
-	string gravatarLink = "//www.gravatar.com/avatar/" + emailHash;
-	string gravatarHtml = "<img class=\"rounded\" src=\"" + gravatarLink + "?r=g&d=mm&s=22\" />&nbsp;";
+	UserProfile user = ( (RationalVote.Models.UserPrincipal)Context.User ).User;
+
+	string avatarLink = user.GetAvatarLink( 22 );
+
+	string avatar = "<img class=\"rounded\" src=\"" + avatarLink + "\" />&nbsp;";
 	
 	using( Html.BeginForm( "LogOff", "User", FormMethod.Post, new { id = "logoutForm", @class = "logoutForm" } ) )
 	{
 		@Html.AntiForgeryToken()
 	}
 	
-	@Html.CreateMenu( ((RationalVote.Models.UserPrincipal)Context.User).User.Email, gravatarHtml, "",
+	
+	string DisplayName = user.Profile.DisplayName != null ? user.Profile.DisplayName : "";
+	DisplayName = DisplayName.Trim();
+	if( DisplayName.Length == 0 )
+	{
+		DisplayName = user.User.Email + " (Anonymous)";
+	}
+	
+	@Html.CreateMenu( DisplayName, avatar, "",
 		new Menu.Item[]
 		{
 			new Menu.Action(  "Profile", "user", "Index", "Profile", new RouteValueDictionary( new { Id = UrlParameter.Optional } ) ),

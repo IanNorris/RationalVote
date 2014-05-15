@@ -55,7 +55,7 @@ namespace RationalVote
 
 		void Application_AuthenticateRequest( Object sender, EventArgs e )
 		{
-			User user = RationalVote.Models.Session.ValidateAndUpdateSession();
+			UserProfile user = RationalVote.Models.Session.ValidateAndUpdateSession();
 			
 			if( user != null )
 			{

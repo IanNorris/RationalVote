@@ -1,4 +1,4 @@
-﻿@model RationalVote.Models.ProfileWithEmailHash
+﻿@model RationalVote.Models.UserProfile
 
 @using System.Reflection;
 @using System.Linq.Expressions;
@@ -8,12 +8,12 @@
 @{
 	ViewBag.Title = "Profile";
 
-	long ProfileID = Model.UserId;
+	long ProfileID = Model.Profile.UserId;
 	long UserID = 0;
 
 	if( Context.User.Identity.IsAuthenticated )
 	{
-		UserID = ( (RationalVote.Models.UserPrincipal)Context.User ).User.Id;
+		UserID = ( (RationalVote.Models.UserPrincipal)Context.User ).User.User.Id;
 	}
 
 	bool CanEdit = ProfileID == UserID;
@@ -30,8 +30,7 @@
 		<td width="70%">
 			@{
 				var param = Expression.Parameter( Model.GetType() );
-				var field = canEdit ? Expression.PropertyOrField( param, fieldName ) : null;
-				var lambda = canEdit ? Expression.Lambda<Func<ProfileWithEmailHash, string>>( field, param ) : null;
+				var field = canEdit ? Expression.PropertyOrField( Expression.PropertyOrField( param, "Profile" ), fieldName ) : null;
 
 				if( canEdit )
 				{
@@ -49,7 +48,7 @@
 						<input type="hidden" name="FieldName" value="@fieldName">
 						<input type="hidden" name="UserID" value="@userID">
 
-						@Html.EditorFor( lambda, null )
+						@{ Html.EditorFor( Expression.Lambda<Func<RationalVote.Models.UserProfile, string>>( field, param ), null ); }
 						<br />
 
 						<p><a title="This value is public."><i class="fa fa-globe"></i></a> <b>This value is publicly visible, please be mindful of what information you are sharing.</b></p>
@@ -71,7 +70,7 @@
 				@Html.AntiForgeryToken()
 
 				@{
-					Type profileType = Model.GetType();
+					Type profileType = Model.Profile.GetType();
 					PropertyInfo[] profileFields = profileType.GetProperties();
 
 					foreach( var field in profileFields )
@@ -97,7 +96,7 @@
 								}
 							}
 
-							object valueObj = field.GetValue( Model );
+							object valueObj = field.GetValue( Model.Profile );
 
 							string value = valueObj != null ? valueObj.ToString() : "";
 
@@ -107,7 +106,7 @@
 						}
 					}
 
-					TimeSpan memberForTS = DateTime.Now - Model.Joined;
+					TimeSpan memberForTS = DateTime.Now - Model.Profile.Joined;
 
 					//Approximations from http://stackoverflow.com/questions/1916358/a-real-timespan-object-with-years-months
 					int totalDays = memberForTS.Days;
@@ -163,15 +162,15 @@
 	<div class="col-md-7">
 
 			@{
-				int percent = (int)(Model.LevelPercent() * 100.0);
+				int percent = (int)(Model.Profile.LevelPercent() * 100.0);
 
-				string emailHash = Model.EmailHash.ToLower();
+				string avatarLink = Model.GetAvatarLink( 100 );
 			}
 
 			<div class="thumbnails thumbnail-style" style="float: left; margin-right: 20px">
 				<div class="thumbnail-img">
 					<div class="overflow-hidden">
-						<img class=" img-responsive rounded" src="//www.gravatar.com/avatar/@emailHash?r=g&d=mm&s=100" />
+						<img class=" img-responsive rounded" src="@avatarLink" />
 					</div>
 					@if( CanEdit )
 					{
@@ -185,13 +184,13 @@
 			</div>
 
 			<div>
-				<h4>Level <span class="label label-success">@Model.Level()</span></h4>
+				<h4>Level <span class="label label-success">@Model.Profile.Level()</span></h4>
 
-				<p>Progress towards level @(Model.Level()+1):</p>
+				<p>Progress towards level @(Model.Profile.Level() + 1):</p>
 
 				<div class="progress progress-striped">
 					<div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="@percent" aria-valuemin="0" aria-valuemax="100" style="width: @percent%">
-						<span class="sr-only">@percent% towards level @(Model.Level()+1)</span>
+						<span class="sr-only">@percent% towards level @(Model.Profile.Level() + 1)</span>
 					</div>
 				</div>
 			</div>

@@ -9,15 +9,15 @@ namespace RationalVote.Models
 {
 	public class UserPrincipal : IPrincipal
 	{
-		public UserPrincipal( User user )
+		public UserPrincipal( UserProfile user )
 		{
 			this.User = user;
-			this.Identity = new GenericIdentity( user.Email );
+			this.Identity = new GenericIdentity( user.User.Email );
 		}
 
 		public IIdentity Identity { get; private set; }
 		public bool IsInRole( string role ) { return false; }
 
-		public User User { get; private set; }
+		public UserProfile User { get; private set; }
 	}
 }

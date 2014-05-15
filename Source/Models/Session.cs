@@ -6,12 +6,13 @@ using System.Web;
 using RationalVote.DAL;
 using RationalVote.Models;
 using Dapper;
+using System.Data;
 
 namespace RationalVote.Models
 {    
 	public partial class Session
 	{
-		static int LIFE_SHORT	= 360;			//1 day in seconds
+		static int LIFE_SHORT	= 7200;			//2 hours in seconds
 		static int LIFE_LONG	= 31536000;		//1 year in seconds
 
 		public Session()
@@ -41,7 +42,7 @@ namespace RationalVote.Models
 			return session;
 		}
 
-		public static User ValidateAndUpdateSession()
+		public static UserProfile ValidateAndUpdateSession()
 		{
 			string id_string = Utility.Cookie.GetCookie( "s_id" );
 			string token = Utility.Cookie.GetCookie( "s_tok" );
@@ -72,7 +73,7 @@ namespace RationalVote.Models
 				//SQL Server
 				//"UPDATE Session SET LastSeen = @CurrentDate OUTPUT INSERTED.* WHERE Token = @Token AND Id = @Id AND DATEADD(SECOND, Life, LastSeen) >= GETDATE()"
 								
-				User user = connection.Query<User>(
+				UserProfile userObj = connection.Query<UserProfile,User,Profile,UserProfile>(
 					@"SET @SelectedUser := NULL; 
 					
 					UPDATE
@@ -94,10 +95,22 @@ namespace RationalVote.Models
 						AND
 						(DATE_ADD(LastSeen, INTERVAL Life SECOND) < NOW());
 
-					SELECT * FROM User WHERE Id = @SelectedUser"
-					, new { Token = token, Id = id } ).FirstOrDefault();
+					SELECT User.Id as Id, User.*, '' as Split1, Profile.*, '' as Split2 FROM User 
+					INNER JOIN Profile
+						ON Profile.UserId = User.Id
+					WHERE Id = @SelectedUser",
+					(userProfile, user, profile) =>
+					{
+						userProfile.User = user;
+						userProfile.Profile = profile;
+						return userProfile;
+					},
+					new { Token = token, Id = id },
+					commandTimeout: null,
+					commandType: CommandType.Text, 
+					splitOn: "Id,UserId" ).FirstOrDefault();
 
-				return user;
+				return userObj;
 			}
 		}
 

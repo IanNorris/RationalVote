@@ -24,7 +24,7 @@ namespace RationalVote
 			{
 				if( HttpContext.User.Identity.IsAuthenticated )
 				{
-					Id = ((RationalVote.Models.UserPrincipal)HttpContext.User).User.Id;
+					Id = ((RationalVote.Models.UserPrincipal)HttpContext.User).User.User.Id;
 				}
 			}
 
@@ -32,16 +32,22 @@ namespace RationalVote
 			{
 				using( DbConnection connection = RationalVoteContext.Connect() )
 				{
-					ProfileWithEmailHash profile = connection.Query<ProfileWithEmailHash>( @"SELECT Profile.*, User.Email AS EmailHash FROM Profile
+					UserProfile profileObj = connection.Query<UserProfile,User,Profile,UserProfile>( @"SELECT User.Id As Id, User.*, Profile.* FROM Profile
 																		INNER JOIN User
 																		ON User.Id = Profile.UserId
-																		WHERE Profile.UserId = @Id", new { Id = Id } ).First();
+																		WHERE Profile.UserId = @Id", 
+																		( userProfile, user, profile ) =>
+																		{
+																			userProfile.User = user;
+																			userProfile.Profile = profile;
+																			return userProfile;
+																		},
+																		new { Id = Id },
+																		splitOn: "Id,UserId" ).First();
 
-					profile.EmailHash = Utility.Crypto.CalculateMD5Hash( profile.EmailHash );
-
-					if( profile != null )
+					if( profileObj != null )
 					{
-						return View( "Index", profile );
+						return View( "Index", profileObj );
 					}
 				}
 			}
@@ -57,7 +63,7 @@ namespace RationalVote
 		[ValidateAntiForgeryToken]
 		public ActionResult Index( [Bind(Include="DisplayName,RealName,Occupation,Location")] Profile profile )
 		{
-			long Id = ((RationalVote.Models.UserPrincipal)HttpContext.User).User.Id;
+			long Id = ((RationalVote.Models.UserPrincipal)HttpContext.User).User.User.Id;
 
 			using( DbConnection connection = RationalVoteContext.Connect() )
 			{

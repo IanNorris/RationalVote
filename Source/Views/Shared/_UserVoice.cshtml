@@ -5,8 +5,8 @@
 
 	if( isAuthenticated )
 	{
-		userIdentity = ( (RationalVote.Models.UserPrincipal)Context.User ).User.Email;
-		userID = ( (RationalVote.Models.UserPrincipal)Context.User ).User.Id;
+		userIdentity = ( (RationalVote.Models.UserPrincipal)Context.User ).User.User.Email;
+		userID = ( (RationalVote.Models.UserPrincipal)Context.User ).User.User.Id;
 	}
 }
 <script>
