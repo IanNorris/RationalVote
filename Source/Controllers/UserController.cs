@@ -156,13 +156,58 @@ namespace RationalVote
 		[ValidateAntiForgeryToken]
 		public ActionResult LoginPostFB( LoginFacebook login, string returnUrl )
 		{
+			string appSecret = ConfigurationManager.AppSettings.Get("facebookAppSecret");
+
+			string[] signed_components = login.SignedRequest.Split( '.' );
+
+			if( signed_components.Length != 2 )
+			{
+				throw new HttpException( 500, "Invalid signed request" );
+			}
+
+			string encoded_sig = signed_components[ 0 ];
+			string payload = signed_components[ 1 ];
+
+			string expected = Convert.ToBase64String( Utility.Crypto.CalculateHMAC256( appSecret, payload ) );
+
+			//Ensure length is multiple of 4, pad with = as spec requires
+			int mod4 = encoded_sig.Length % 4;
+			if( mod4 > 0 )
+			{
+				encoded_sig += new string( '=', 4 - mod4 );
+			}
+
+			encoded_sig = encoded_sig.Replace('-', '+').Replace('_', '/');
+
+			if( !expected.Equals( encoded_sig, StringComparison.Ordinal ) )
+			{
+				throw new HttpException( 500, "Invalid signed request" );
+			}
+
+			//Ensure length is multiple of 4, pad with = as spec requires
+			mod4 = payload.Length % 4;
+			if( mod4 > 0 )
+			{
+				payload += new string( '=', 4 - mod4 );
+			}
+
+			byte[] data = Convert.FromBase64String( payload );
+			string decodedPayload = System.Text.Encoding.UTF8.GetString( data );
+
+			var decoded_payload = System.Web.Helpers.Json.Decode(decodedPayload);
+
+			if( decoded_payload.user_id != login.UserID )
+			{
+				throw new HttpException( 500, "Signed user ID does not match unsigned user ID - Possible forgery attempt, IP address logged." );
+			}
+
 			try
 			{
 				var fb = new Facebook.FacebookClient();
 				dynamic fb_access_token = fb.Get( "oauth/access_token", new
 				{
 					client_id = ConfigurationManager.AppSettings.Get("facebookAppId"),
-					client_secret = ConfigurationManager.AppSettings.Get("facebookAppSecret"),
+					client_secret = appSecret,
 					grant_type = "client_credentials"
 				} );
 

@@ -114,7 +114,7 @@ namespace Utility
 
 		private static byte[] StringEncode( string text )
 		{
-			var encoding = new ASCIIEncoding();
+			var encoding = new UTF8Encoding();
 			return encoding.GetBytes( text );
 		}
 
