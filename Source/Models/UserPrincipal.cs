@@ -12,7 +12,7 @@ namespace RationalVote.Models
 		public UserPrincipal( UserProfile user )
 		{
 			this.User = user;
-			this.Identity = new GenericIdentity( user.User.Email );
+			this.Identity = new GenericIdentity( user.User.Identity() );
 		}
 
 		public IIdentity Identity { get; private set; }

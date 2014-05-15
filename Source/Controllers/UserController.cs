@@ -36,7 +36,7 @@ namespace RationalVote
 		// POST: /User/Register
 		// To protect from overposting attacks, please enable the specific properties you want to bind to, for 
 		// more details see http://go.microsoft.com/fwlink/?LinkId=317598.
-		[HttpPost]
+		[HttpPost, ValidateInput(false)]
 		[ValidateAntiForgeryToken]
 		public ActionResult Register( UserRegister userPublic, string returnUrl )
 		{
@@ -74,7 +74,12 @@ namespace RationalVote
 
 							//Create profile
 							Profile profile = RationalVote.Models.Profile.CreateNew( user );
-							connection.Insert( profile, transaction );
+
+							connection.Execute( @"INSERT INTO Profile 
+												(UserId, DisplayName, RealName, Occupation, Location, ProfileLink, Joined, Experience) 
+												VALUES 
+												(@UserId, @DisplayName, @RealName, @Occupation, @Location, @ProfileLink, @Joined, @Experience)",
+												profile, transaction );
 
 #if !DEBUG
 							new Controllers.MailController().VerificationEmail( user, verificationToken ).Deliver();
@@ -110,7 +115,7 @@ namespace RationalVote
 		// POST: /User/Login
 		// To protect from overposting attacks, please enable the specific properties you want to bind to, for 
 		// more details see http://go.microsoft.com/fwlink/?LinkId=317598.
-		[HttpPost]
+		[HttpPost, ValidateInput(false)]
 		[ValidateAntiForgeryToken]
 		public ActionResult Login( UserLogin userPublic, string returnUrl )
 		{
@@ -152,7 +157,7 @@ namespace RationalVote
 		// POST: /User/LoginPostFB
 		// To protect from overposting attacks, please enable the specific properties you want to bind to, for 
 		// more details see http://go.microsoft.com/fwlink/?LinkId=317598.
-		[HttpPost]
+		[HttpPost, ValidateInput(false)]
 		[ValidateAntiForgeryToken]
 		public ActionResult LoginPostFB( LoginFacebook login, string returnUrl )
 		{
@@ -330,7 +335,7 @@ namespace RationalVote
 		{
 			using( DbConnection connection = RationalVoteContext.Connect() )
 			{
-				EmailVerificationToken resultToken = connection.Query<EmailVerificationToken>( "SELECT * FROM EmailVerificationToken WHERE Token = @Token  AND AuthenticationMethod = 0", new { Token = token } ).FirstOrDefault();
+				EmailVerificationToken resultToken = connection.Query<EmailVerificationToken>( "SELECT * FROM EmailVerificationToken WHERE Token = @Token", new { Token = token } ).FirstOrDefault();
 
 				if( resultToken == null )
 				{
@@ -366,7 +371,7 @@ namespace RationalVote
 		}
 
 		// GET: /User/ForgotPasswordPost
-		[HttpPost]
+		[HttpPost, ValidateInput(false)]
 		[ValidateAntiForgeryToken]
 		[Route( "ForgotPasswordPost" )]
 		public ActionResult ForgotPassword( ForgotPassword forgot )
@@ -415,7 +420,7 @@ namespace RationalVote
 		}
 
 		// GET: /User/ResetPasswordPost
-		[HttpPost]
+		[HttpPost, ValidateInput(false)]
 		[ValidateAntiForgeryToken]
 		[Route( "ResetPasswordPost" )]
 		public ActionResult ResetPassword( ResetPassword reset )

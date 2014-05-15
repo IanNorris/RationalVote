@@ -33,6 +33,19 @@ namespace RationalVote.Models
 
 			this.Email = user.RegisterEmail.ToLower();
 		}
+
+		public string Identity()
+		{
+			switch( AuthenticationMethod )
+			{
+				case AuthenticationMethodType.Local:
+					return Email;
+				case AuthenticationMethodType.Facebook:
+					return PasswordSalt;
+			}
+
+			return null;
+		}
 	
 		public long Id { get; set; }
 

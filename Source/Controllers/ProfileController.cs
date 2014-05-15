@@ -67,18 +67,31 @@ namespace RationalVote
 
 			using( DbConnection connection = RationalVoteContext.Connect() )
 			{
-				Profile profileOriginal = connection.Get<Profile>( Id );
-
+				UserProfile profileOriginal = connection.Query<UserProfile, User, Profile, UserProfile>( @"SELECT User.Id As Id, User.*, Profile.* FROM Profile
+																		INNER JOIN User
+																		ON User.Id = Profile.UserId
+																		WHERE Profile.UserId = @Id",
+																		( userProfile, user, nestedProfile ) =>
+																		{
+																			userProfile.User = user;
+																			userProfile.Profile = nestedProfile;
+																			return userProfile;
+																		},
+																		new { Id = Id },
+																		splitOn: "Id,UserId" ).First();
+				
 				if( profileOriginal != null )
 				{
-					profileOriginal.DisplayName = profile.DisplayName;
-					profileOriginal.Location = profile.Location;
-					profileOriginal.Occupation = profile.Occupation;
-					profileOriginal.RealName = profile.RealName;
+					profileOriginal.Profile.DisplayName = profile.DisplayName;
+					profileOriginal.Profile.Location = profile.Location;
+					profileOriginal.Profile.Occupation = profile.Occupation;
+					profileOriginal.Profile.RealName = profile.RealName;
 
 					if( ModelState.IsValid )
 					{
-						connection.Update( profileOriginal );
+						connection.Update( profileOriginal.Profile );
+
+						return RedirectToAction( "Index" );
 					}
 
 					return View( "Index", profileOriginal );

@@ -48,7 +48,7 @@
 						<input type="hidden" name="FieldName" value="@fieldName">
 						<input type="hidden" name="UserID" value="@userID">
 
-						@{ Html.EditorFor( Expression.Lambda<Func<RationalVote.Models.UserProfile, string>>( field, param ), null ); }
+						@Html.EditorFor( Expression.Lambda<Func<RationalVote.Models.UserProfile, string>>( field, param ), null )
 						<br />
 
 						<p><a title="This value is public."><i class="fa fa-globe"></i></a> <b>This value is publicly visible, please be mindful of what information you are sharing.</b></p>

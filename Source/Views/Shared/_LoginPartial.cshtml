@@ -16,7 +16,7 @@
 	DisplayName = DisplayName.Trim();
 	if( DisplayName.Length == 0 )
 	{
-		DisplayName = user.User.Email + " (Anonymous)";
+		DisplayName = "Anonymous (" + user.User.Email + ")";
 	}
 	
 	@Html.CreateMenu( DisplayName, avatar, "",
