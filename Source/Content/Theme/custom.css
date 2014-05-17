@@ -247,6 +247,7 @@ a.navbar-brand
 	text-align:center;
 }
 
-ul.navbar-left {
-	top: 6px !important;
+/* Fix for menu hover underline not being on the line*/
+.navbar-nav>li>a {
+	line-height: 22px;
 }
