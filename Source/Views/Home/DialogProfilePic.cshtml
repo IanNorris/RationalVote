@@ -1,13 +1,29 @@
 @{
 	Layout = "~/Views/Shared/_Dialog.cshtml";
 	ViewBag.DialogTitle = "Changing your profile picture";
-	ViewBag.RenderDialog = true;	
+	ViewBag.RenderDialog = true;
+
+	RationalVote.Models.User.AuthenticationMethodType authMethod = RationalVote.Models.User.AuthenticationMethodType.Local;
+	
+	if( Context.User.Identity.IsAuthenticated )
+	{
+		authMethod = ( (RationalVote.Models.UserPrincipal)Context.User ).User.User.AuthenticationMethod;
+	}
 }
 
-<p>
-	RationalVote uses Gravatar for profile pictures. To change your profile picture you will need to create a Gravatar account.
-</p>
+@if( authMethod == RationalVote.Models.User.AuthenticationMethodType.Local )
+{
+	<p>
+		RationalVote uses Gravatar for profile pictures. To change your profile picture you will need to create a Gravatar account.
+	</p>
 
-<br />
+	<br />
 
-<a href="http://www.gravatar.com" target="_blank" class="btn btn-primary">Get started</a>
+	<a href="http://www.gravatar.com" target="_blank" class="btn btn-primary">Get started</a>
+}
+else
+{
+	<p>
+		Because you created your account through Facebook, RationalVote will use your Facebook Profile picture.
+	</p>
+}
