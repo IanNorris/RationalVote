@@ -20,7 +20,7 @@ namespace Utility
 			cookie.Expires = expiry;
 
 			string domain = AppSettings.Get<string>( "cookieDomain" );
-			if( domain.Length != 0 )
+			if( domain != null && domain.Length != 0 )
 			{
 				cookie.Domain = domain;
 			}

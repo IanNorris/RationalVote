@@ -15,6 +15,11 @@ namespace Utility
 		{
 			var appSetting = ConfigurationManager.AppSettings[ key ];
 
+			if( appSetting == null )
+			{
+				return default(T);
+			}
+
 			if (typeof(T) == typeof(string))
 			{ 
 				return (T)(object)ConfigurationManager.AppSettings[ key ];
