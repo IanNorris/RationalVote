@@ -43,7 +43,7 @@ namespace RationalVote
 																			return userProfile;
 																		},
 																		new { Id = Id },
-																		splitOn: "Id,UserId" ).First();
+																		splitOn: "Id,UserId" ).FirstOrDefault();
 
 					if( profileObj != null )
 					{
