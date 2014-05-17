@@ -203,7 +203,7 @@ namespace RationalVote.Controllers
 
 						transaction.Commit();
 
-						return RedirectToAction( "Index", new { Id = Id } );
+						return RedirectToAction( "Display", new { Id = Id } );
 					}
 				}
 			}

@@ -3,8 +3,8 @@
 @{
 	if( Model != null )
 	{
-		bool Expert = true;
-		string ExpertTags = "Cheese,Ponies";
+		bool Expert = false;
+		string ExpertTags = "";//Cheese,Ponies";
 	
 		if( Model.DisplayName != null )
 		{
@@ -27,9 +27,9 @@
 					}
 				</span>
 
-				<span class="label label-default" title="@Model.DisplayName has reached level @level">
+				@*<span class="label label-default" title="@Model.DisplayName has reached level @level">
 					@level
-				</span>
+				</span>*@
 			</a>
 		}
 		else
