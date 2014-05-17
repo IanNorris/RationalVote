@@ -19,6 +19,14 @@ namespace RationalVote
 	[RoutePrefix("User")]
 	public class UserController : Controller
 	{
+		public static DateTime UnixTimeStampToDateTime( double unixTimeStamp )
+		{
+			// Unix timestamp is seconds past epoch
+			System.DateTime dtDateTime = new DateTime( 1970, 1, 1, 0, 0, 0, 0, System.DateTimeKind.Utc );
+			dtDateTime = dtDateTime.AddSeconds( unixTimeStamp ).ToLocalTime();
+			return dtDateTime;
+		}
+
 		public ActionResult SignIn( string returnUrl )
 		{
 			ViewBag.ReturnUrl = returnUrl;
@@ -200,6 +208,18 @@ namespace RationalVote
 			string decodedPayload = System.Text.Encoding.UTF8.GetString( data );
 
 			var decoded_payload = System.Web.Helpers.Json.Decode(decodedPayload);
+
+			DateTime issuedAt = UnixTimeStampToDateTime( decoded_payload.issued_at );
+
+			TimeSpan timeSinceIssued = DateTime.Now - issuedAt;
+
+			if( timeSinceIssued.TotalMinutes > 10 )
+			{
+				TempData[ "ErrorMessage" ] = "Unable to sign in via Facebook, the issue time is too old. Please try again.";
+				TempData[ "MessageTitle" ] = "Facebook login failed";
+
+				return RedirectToAction( "SignIn", "User" );
+			}
 
 			if( decoded_payload.user_id != login.UserID )
 			{
