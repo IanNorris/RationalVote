@@ -19,6 +19,12 @@ namespace Utility
 			// Could use TryParse instead, but I wanted to catch all exceptions
 			IPAddress.Parse(userHostAddress);
 
+			var cloudFlareIP = request.ServerVariables[ "HTTP_CF_CONNECTING_IP" ];
+			if( !string.IsNullOrEmpty( cloudFlareIP ) )
+			{
+				return cloudFlareIP;
+			}
+
 			var forwardedFor = request.ServerVariables[ "X_FORWARDED_FOR" ];
 
 			if (string.IsNullOrEmpty(forwardedFor))
