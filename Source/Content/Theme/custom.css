@@ -246,3 +246,7 @@ a.navbar-brand
 .hcentered {
 	text-align:center;
 }
+
+ul.navbar-left {
+	top: 6px !important;
+}
