@@ -4,7 +4,7 @@
 	
 	ViewBag.Breadcrumbs = new List<KeyValuePair<string, string>>()
 	{
-		new KeyValuePair<string, string>( "Debates", "/Debate" )
+		new KeyValuePair<string, string>( "Debates", Url.Action( "Popular", "Debate" ) )
 		
 		//TODO: set this to the parent, could also be a tag or search term
 		//new KeyValuePair<string, string>( Model.Title, Url.Action( "Index", "Debate", new { Id = Model.Id } ) )
