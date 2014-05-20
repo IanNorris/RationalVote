@@ -24,7 +24,7 @@ namespace Utility
 			{
 				cookie.Domain = domain;
 			}
-			cookie.Secure = AppSettings.Get<bool>( "cookieSecureOnly" );
+			cookie.Secure = System.Web.HttpContext.Current.Request.IsSecureConnection;
 			cookie.Shareable = false;
 			cookie.Value = value;
 

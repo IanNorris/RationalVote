@@ -7,8 +7,7 @@
 
 	<add key="emailFrom" value="noreply@yoursite.com" />
 	
-	<add key="cookieDomain" value="" />
-	<add key="cookieSecureOnly" value="false" /> <!--Set this to true if you are running the site off https only-->
+	<add key="cookieDomain" value=".yoursite.com" />
 	
 	<!-- Also need to update DebateNew.cs StringLength for Argument
 			otherwise server side validation won't work correctly -->
