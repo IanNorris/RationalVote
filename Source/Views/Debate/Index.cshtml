@@ -17,22 +17,45 @@
 	BoxWidth = BoxWidth - SideBarWidth;
 }
 
-@foreach( var debate in Model )
+@if( Model.Count() > 0 )
 {
-	<div class="row">
-		<div class="col-md-@SideBarWidth">
-			<div class="DebateVoteCounter">
-				<div class="counters" title="@debate.WeightFor votes for, @debate.WeightAgainst votes against.">
-					<span class="counter-icon">
+	foreach( var debate in Model )
+	{
+		<div class="row">
+			<div class="col-md-@SideBarWidth">
+				<div class="DebateVoteCounter">
+					<div class="counters" title="@debate.WeightFor votes for, @debate.WeightAgainst votes against.">
+						<span class="counter-icon">
 
-						<i class="fa fa-thumbs-up rounded"></i>
-					</span>
-					<span class="counter">@(debate.WeightFor - debate.WeightAgainst)</span>
+							<i class="fa fa-thumbs-up rounded"></i>
+						</span>
+						<span class="counter">@(debate.WeightFor - debate.WeightAgainst)</span>
+					</div>
 				</div>
 			</div>
+			<div class="col-md-@BoxWidth">
+				@Html.Partial( "_DebateBlockInline", debate )
+			</div>
 		</div>
-		<div class="col-md-@BoxWidth">
-			@Html.Partial( "_DebateBlockInline", debate )
-		</div>
+	}
+}
+else
+{
+	<div class="alert alert-success">
+		<h4>That's all there is!</h4>
+		<text>Unfortunately we have no more content left to show you!</text>
 	</div>
 }
+
+<ul class="pager">
+	<ul class="pager">
+		@if( ViewBag.PreviousIndex != null )
+		{
+			<li>@Html.ActionLink( "Previous", ViewContext.RouteData.Values["action"] as String, ViewContext.RouteData.Values["controller"] as String, new { start = ViewBag.PreviousIndex }, null )</li>
+		}
+		@if( ViewBag.NextIndex - ViewBag.Offset >= Debate.MaxPerPage )
+		{
+			<li>@Html.ActionLink( "Next", ViewContext.RouteData.Values[ "action" ] as String, ViewContext.RouteData.Values[ "controller" ] as String, new { start = ViewBag.NextIndex }, null )</li>
+		}
+	</ul>
+</ul>

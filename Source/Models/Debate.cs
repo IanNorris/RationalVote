@@ -15,6 +15,9 @@ namespace RationalVote.Models
 {
 	public partial class Debate
 	{
+		public const int MaxPerPage = 10;
+		public const int MaxPages = 20;
+
 		//The order of the elements in this enum
 		//control the sort order
 		public enum StatusType : sbyte

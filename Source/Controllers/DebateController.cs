@@ -311,9 +311,20 @@ namespace RationalVote.Controllers
 
 		//
 		// GET: /Newest
-		[Route( "Newest" )]
-		public ActionResult Newest()
+		[Route( "Newest/{start?}" )]
+		public ActionResult Newest( long? start )
 		{
+			long startValid = start.GetValueOrDefault();
+
+			ViewBag.Title = "Newest debates";
+
+			if( startValid != 0 )
+			{
+				ViewBag.PreviousIndex = Math.Max( startValid - Debate.MaxPerPage, 0 );
+			}
+
+			ViewBag.Offset = startValid;
+
 			using( DbConnection connection = RationalVoteContext.Connect() )
 			{
 				IEnumerable<Debate> list = connection.Query<Debate>(
@@ -321,9 +332,11 @@ namespace RationalVote.Controllers
 					LEFT OUTER JOIN DebateLink
 					ON Debate.Id = DebateLink.Child AND DebateLink.PathLength = 1
 					WHERE DebateLink.Child IS null
-					ORDER BY Debate.Updated DESC, Debate.Posted DESC" );
+					ORDER BY Debate.Updated DESC, Debate.Posted DESC
+					LIMIT @Offset, @MaxRows",
+					new { MaxRows = Debate.MaxPerPage, Offset = startValid } );
 
-				ViewBag.Title = "Newest debates";
+				ViewBag.NextIndex = startValid + list.Count();
 
 				return View( "Index", list );
 			}
@@ -331,9 +344,27 @@ namespace RationalVote.Controllers
 
 		//
 		// GET: /Popular
-		[Route( "Popular" )]
-		public ActionResult Popular()
+		[Route( "Popular/{start?}" )]
+		public ActionResult Popular( long? start )
 		{
+			long startValid = start.GetValueOrDefault();
+
+			ViewBag.Title = "Most popular debates";
+
+			if( startValid != 0 )
+			{
+				ViewBag.PreviousIndex = Math.Max( startValid - Debate.MaxPerPage, 0 );
+			}
+
+			ViewBag.Offset = startValid;
+
+			if( startValid > Debate.MaxPerPage * Debate.MaxPages )
+			{
+				IEnumerable<Debate> list = new List<Debate>();
+
+				return View( "Index", list );
+			}
+
 			using( DbConnection connection = RationalVoteContext.Connect() )
 			{
 				IEnumerable<Debate> list = connection.Query<Debate>(
@@ -341,9 +372,11 @@ namespace RationalVote.Controllers
 					LEFT OUTER JOIN DebateLink
 					ON Debate.Id = DebateLink.Child AND DebateLink.PathLength = 1
 					WHERE DebateLink.Child IS null
-					ORDER BY (Debate.WeightFor - Debate.WeightAgainst) DESC, Debate.Updated DESC, Debate.Posted DESC" );
+					ORDER BY (Debate.WeightFor - Debate.WeightAgainst) DESC, Debate.Updated DESC, Debate.Posted DESC
+					LIMIT @Offset, @MaxRows",
+					new { MaxRows = Debate.MaxPerPage, Offset = startValid } );
 
-				ViewBag.Title = "Most popular debates";
+				ViewBag.NextIndex = startValid + list.Count();
 
 				return View( "Index", list );
 			}
