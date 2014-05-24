@@ -1,6 +1,6 @@
-﻿@model RationalVote.Models.Debate
+﻿@model RationalVote.Models.DebateContainer
 @{
-	ViewBag.Title = Model.Title;
+	ViewBag.Title = Model.Debate.Title;
 	Layout = "~/Views/Debate/_DebateLayout.cshtml";
 	
 	ViewBag.Breadcrumbs = new List<KeyValuePair<string, string>>()

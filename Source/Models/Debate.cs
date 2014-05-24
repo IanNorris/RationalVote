@@ -17,6 +17,7 @@ namespace RationalVote.Models
 	{
 		public const int MaxPerPage = 10;
 		public const int MaxPages = 20;
+		public const int MaxChildrenPerFetch = 8;
 
 		//The order of the elements in this enum
 		//control the sort order
@@ -110,40 +111,6 @@ namespace RationalVote.Models
 		public string StatusName()
 		{
 			return Status.ToString();
-		}
-
-		public IEnumerable<DebateLink> Children( long userID )
-		{
-			using( DbConnection connection = RationalVoteContext.Connect() )
-			{
-				//To limit selection, do SELECT TOP 10 etc
-
-				IEnumerable<DebateLink> arguments = connection.Query<DebateLink, Debate, DebateLink>( 
-					@"SELECT
-						DebateLink.Id, DebateLink.Type,
-						DebateLink.Parent, DebateLinkVote.Vote,
-						DebateLink.LocalFor, DebateLink.LocalAgainst,
-						Debate.*
-					FROM
-						DebateLink
-							LEFT JOIN
-						Debate ON DebateLink.Child = Debate.Id
-							LEFT OUTER JOIN
-						DebateLinkVote ON (DebateLinkVote.Parent = DebateLink.Parent AND DebateLinkVote.Child = DebateLink.Child AND DebateLinkVote.Owner = @Owner)
-					WHERE
-						DebateLink.Parent = @Parent AND DebateLink.PathLength = 1
-					ORDER BY Debate.Status ASC, (Debate.WeightFor - Debate.WeightAgainst) DESC, DebateLink.Weight DESC, DebateLink.LinkTime DESC"
-					,
-					(Parent, Child) =>
-					{
-						Parent.Child = Child;
-						return Parent;
-					},
-					new { Parent = this.Id, Owner = userID }
-					);
-
-				return arguments;
-			}
 		}
 	}
 }

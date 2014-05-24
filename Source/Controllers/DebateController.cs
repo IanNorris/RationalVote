@@ -23,7 +23,49 @@ namespace RationalVote.Controllers
 			replaceMultipleSpaces = new Regex( @"[ ]{2,}", RegexOptions.None );
 		}
 
-		public void CreateAndInsertLinkSelf( DbConnection connection, DbTransaction transaction, long parent )
+		public static IEnumerable<DebateLink> GetDebateChildren( long debateId, long userID, long offset, DebateLink.LinkType? type )
+		{
+			string typeFilter = "";
+
+			if( type != null )
+			{
+				typeFilter = " ON DebateLink.Type = " + (int)type.Value;
+			}
+
+			using( DbConnection connection = RationalVoteContext.Connect() )
+			{
+				//To limit selection, do SELECT TOP 10 etc
+
+				IEnumerable<DebateLink> arguments = connection.Query<DebateLink, Debate, DebateLink>(
+					@"SELECT
+						DebateLink.Id, DebateLink.Type,
+						DebateLink.Parent, DebateLinkVote.Vote,
+						DebateLink.LocalFor, DebateLink.LocalAgainst,
+						Debate.*
+					FROM
+						DebateLink
+							LEFT JOIN
+						Debate ON DebateLink.Child = Debate.Id
+							LEFT OUTER JOIN
+						DebateLinkVote ON (DebateLinkVote.Parent = DebateLink.Parent AND DebateLinkVote.Child = DebateLink.Child AND DebateLinkVote.Owner = @Owner" + typeFilter + @")
+					WHERE
+						DebateLink.Parent = @Parent AND DebateLink.PathLength = 1
+					ORDER BY Debate.Status ASC, (Debate.WeightFor - Debate.WeightAgainst) DESC, DebateLink.Weight DESC, DebateLink.LinkTime DESC
+					LIMIT @Offset, @MaxRows"
+					,
+					( Parent, Child ) =>
+					{
+						Parent.Child = Child;
+						return Parent;
+					},
+					new { Parent = debateId, Owner = userID, Offset = offset, MaxRows = Debate.MaxChildrenPerFetch }
+					);
+
+				return arguments;
+			}
+		}
+
+		public static void CreateAndInsertLinkSelf( DbConnection connection, DbTransaction transaction, long parent )
 		{
 			connection.Execute( "INSERT INTO DebateLink (Parent, Child, Type, LinkTime, PathLength) VALUES (@Parent, @Child, @Type, @LinkTime, @PathLength)",
 				new
@@ -37,7 +79,7 @@ namespace RationalVote.Controllers
 				transaction );
 		}
 
-		public void UpdateWeights( DbConnection connection, DbTransaction transaction, long parent )
+		public static void UpdateWeights( DbConnection connection, DbTransaction transaction, long parent )
 		{
 			connection.Execute( @"UPDATE DebateLink AS SummedOut
 								INNER JOIN
@@ -298,9 +340,14 @@ namespace RationalVote.Controllers
 			{
 				Debate debate = connection.Get<Debate>( Id );
 
+				DebateContainer viewObj = new DebateContainer();
+				viewObj.Debate = debate;
+				viewObj.Children = GetDebateChildren( debate.Id, HttpContext.User.Identity.IsAuthenticated ? ( (RationalVote.Models.UserPrincipal)HttpContext.User ).User.User.Id : 0, 0, null );
+				viewObj.VoteSplit = RationalVote.Models.VoteSplit.Get( debate.Id );
+
 				if( debate != null )
 				{
-					return View( "Display", debate );
+					return View( "Display", viewObj );
 				}
 				else
 				{

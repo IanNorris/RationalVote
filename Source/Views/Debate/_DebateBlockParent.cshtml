@@ -1,18 +1,12 @@
-﻿@model Debate
+﻿@model DebateContainer
 
-@{
-	var arguments = Model.Children( Context.User.Identity.IsAuthenticated ? ( (RationalVote.Models.UserPrincipal)Context.User ).User.User.Id : 0 );
-	
-	var voteSplit = RationalVote.Models.VoteSplit.Get( Model.Id );
-}
-
-<div class="panel Debate@(Model.Validity().ToString())" title="@Model.ValidityExplanation()">
-	<div class="DebateHeading panel-heading"><h3 class="panel-title"><i class="fa fa-@Model.StatusIcon()"></i> [@Model.StatusName().ToUpper()] @Model.Title</h3></div>
-	@Html.Partial( "_VoteSplit", voteSplit )
+<div class="panel Debate@(Model.Debate.Validity().ToString())" title="@Model.Debate.ValidityExplanation()">
+	<div class="DebateHeading panel-heading"><h3 class="panel-title"><i class="fa fa-@Model.Debate.StatusIcon()"></i> [@Model.Debate.StatusName().ToUpper()] @Model.Debate.Title</h3></div>
+	@Html.Partial( "_VoteSplit", Model.VoteSplit )
 	<div class="panel-body">
-		<div class="headline"><h4><span class="label label-success" title="There are @Model.WeightFor votes for this proposition">@Model.WeightFor</span> votes for</h4></div>
+		<div class="headline"><h4><span class="label label-success" title="There are @Model.Debate.WeightFor votes for this proposition">@Model.Debate.WeightFor</span> votes for</h4></div>
 
-		@foreach( var forArg in arguments )
+		@foreach( var forArg in Model.Children )
 		{
 			if( forArg.Type == DebateLink.LinkType.For )
 			{
@@ -25,15 +19,15 @@
 		<div class="row">
 			<div class="col-md-11 col-md-offset-1">
 				<br />
-				@Html.Partial( "_DebateBlockResponse", new DebateResponse( DebateLink.LinkType.For, Model.Id ) )
+				@Html.Partial( "_DebateBlockResponse", new DebateResponse( DebateLink.LinkType.For, Model.Debate.Id ) )
 			</div>
 		</div>
 
 		<p><br /></p>
 
-		<div class="headline"><h4><span class="label label-danger" title="There are @Model.WeightAgainst votes against this proposition">@Model.WeightAgainst</span> votes against</h4></div>
+		<div class="headline"><h4><span class="label label-danger" title="There are @Model.Debate.WeightAgainst votes against this proposition">@Model.Debate.WeightAgainst</span> votes against</h4></div>
 
-		@foreach( var againstArg in arguments )
+		@foreach( var againstArg in Model.Children )
 		{
 			if( againstArg.Type == DebateLink.LinkType.Against )
 			{
@@ -46,7 +40,7 @@
 		<div class="row">
 			<div class="col-md-11 col-md-offset-1">
 				<br />
-				@Html.Partial( "_DebateBlockResponse", new DebateResponse( DebateLink.LinkType.Against, Model.Id ) )
+				@Html.Partial( "_DebateBlockResponse", new DebateResponse( DebateLink.LinkType.Against, Model.Debate.Id ) )
 			</div>
 		</div>
 
@@ -57,7 +51,7 @@
 				@*$tags_block*@
 			</div>
 			<div class="col-md-5" style="text-align: right">
-				@Html.Partial( "_Author", RationalVote.Models.Profile.GetFromUser( Model.Owner ), new ViewDataDictionary() )
+				@Html.Partial( "_Author", RationalVote.Models.Profile.GetFromUser( Model.Debate.Owner ), new ViewDataDictionary() )
 			</div>
 		</div>
 	</div>

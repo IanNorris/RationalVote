@@ -206,6 +206,7 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\Debate.cs" />
+    <Compile Include="Models\DebateContainer.cs" />
     <Compile Include="Models\DebateLink.cs" />
     <Compile Include="Models\DebateLinkVote.cs" />
     <Compile Include="Models\DebateNew.cs" />
