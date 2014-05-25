@@ -6,13 +6,22 @@
 	<div class="panel-body">
 		<div class="headline"><h4><span class="label label-success" title="There are @Model.Debate.WeightFor votes for this proposition">@Model.Debate.WeightFor</span> votes for</h4></div>
 
+		@{
+			int forCount = 0;
+		}
+
 		@foreach( var forArg in Model.Children )
 		{
 			if( forArg.Type == DebateLink.LinkType.For )
 			{
 				@Html.Partial( "_DebateBlockLink", forArg )
+				forCount++;
 			}
 		}
+
+		<div class="invisible LatestOfsetFor">
+			@forCount
+		</div>
 
 		<div id="new-for-content"></div>
 
@@ -20,7 +29,7 @@
 			<div class="col-md-11 col-md-offset-1">
 				<br />
 				<div class="hcentered">
-					<button type="button" class="btn-u btn-u-sm btn-brd btn-brd-hover btn-u-light-grey" title="View more reasons" onclick="loadMoreChildren( '#new-for-content', '@DebateLink.LinkType.For.ToString()' )">View More</button>
+					<button type="button" class="btn-u btn-u-sm btn-brd btn-brd-hover btn-u-light-grey" title="View more reasons" onclick="loadMoreChildren( this, @Model.Debate.Id, '#new-for-content', '@DebateLink.LinkType.For.ToString()' )">View More</button>
 				</div>
 			</div>
 		</div>
@@ -36,13 +45,22 @@
 
 		<div class="headline"><h4><span class="label label-danger" title="There are @Model.Debate.WeightAgainst votes against this proposition">@Model.Debate.WeightAgainst</span> votes against</h4></div>
 
+		@{
+			int againstCount = 0;
+		}
+
 		@foreach( var againstArg in Model.Children )
 		{
 			if( againstArg.Type == DebateLink.LinkType.Against )
 			{
 				@Html.Partial( "_DebateBlockLink", againstArg )
+				againstCount++;
 			}
 		}
+
+		<div class="invisible LatestOfsetAgainst">
+			@againstCount
+		</div>
 
 		<div id="new-against-content"></div>
 
@@ -50,7 +68,7 @@
 			<div class="col-md-11 col-md-offset-1">
 				<br />
 				<div class="hcentered">
-					<button type="button" class="btn-u btn-u-sm btn-brd btn-brd-hover btn-u-light-grey" title="View more reasons" onclick="loadMoreChildren( '#new-against-content', '@DebateLink.LinkType.Against.ToString()' )">View More</button>
+					<button type="button" class="btn-u btn-u-sm btn-brd btn-brd-hover btn-u-light-grey" title="View more reasons" onclick="loadMoreChildren( this, @Model.Debate.Id, '#new-against-content', '@DebateLink.LinkType.Against.ToString()' )">View More</button>
 				</div>
 			</div>
 		</div>

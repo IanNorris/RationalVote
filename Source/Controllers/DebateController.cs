@@ -354,6 +354,14 @@ namespace RationalVote.Controllers
 			return new HttpStatusCodeResult(HttpStatusCode.Forbidden);
 		}
 
+		// GET: /GetChildrenAjax/{Parent}/{Type}/{Offset}
+		[Route( "GetChildrenAjax/{Parent}/{Type}/{Offset}" )]
+		public ActionResult GetChildrenAjax( long Parent, DebateLink.LinkType Type, int Offset )
+		{
+			ViewBag.Offset = Offset;
+			return View( "DebateChildrenAjax", GetDebateChildren( Parent, HttpContext.User.Identity.IsAuthenticated ? ( (RationalVote.Models.UserPrincipal)HttpContext.User ).User.User.Id : 0, Offset, Type ) );
+		}
+
 		//
 		// GET: /Debate/{Id}
 		[Route( "Debate/{Id}" )]
