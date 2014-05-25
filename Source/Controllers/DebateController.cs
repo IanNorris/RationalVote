@@ -23,13 +23,51 @@ namespace RationalVote.Controllers
 			replaceMultipleSpaces = new Regex( @"[ ]{2,}", RegexOptions.None );
 		}
 
+		public static string GetDebateChildrenQuery( DebateLink.LinkType type )
+		{
+			return @"(SELECT
+						DebateLink.Id, DebateLink.Type,
+						DebateLink.Parent, DebateLinkVote.Vote,
+						DebateLink.LocalFor, DebateLink.LocalAgainst,
+						Debate.*
+					FROM
+						DebateLink
+							JOIN
+						Debate ON (DebateLink.Child = Debate.Id AND DebateLink.Type = " + (int)type + @")
+							LEFT OUTER JOIN
+						DebateLinkVote ON (DebateLinkVote.Parent = DebateLink.Parent AND DebateLinkVote.Child = DebateLink.Child AND DebateLinkVote.Owner = @Owner)
+					WHERE
+						DebateLink.Parent = @Parent AND DebateLink.PathLength = 1
+					ORDER BY Debate.Status ASC, (Debate.WeightFor - Debate.WeightAgainst) DESC, DebateLink.Weight DESC, DebateLink.LinkTime DESC
+					LIMIT @Offset, @MaxRows)";
+		}
+
 		public static IEnumerable<DebateLink> GetDebateChildren( long debateId, long userID, long offset, DebateLink.LinkType? type )
 		{
-			string typeFilter = "";
+			string query = "";
 
-			if( type != null )
+			if( type == null )
 			{
-				typeFilter = " ON DebateLink.Type = " + (int)type.Value;
+				bool first = true;
+
+				DebateLink.LinkType[] types = (DebateLink.LinkType[])Enum.GetValues( typeof(DebateLink.LinkType) );
+				foreach( var typeVal in types )
+				{
+					if( !first )
+					{
+						query += " UNION ";
+					}
+					else
+					{
+						first = false;
+					}
+
+					query += GetDebateChildrenQuery( typeVal );
+				}
+			}
+			else
+			{
+				query = GetDebateChildrenQuery( type.Value );
 			}
 
 			using( DbConnection connection = RationalVoteContext.Connect() )
@@ -37,22 +75,7 @@ namespace RationalVote.Controllers
 				//To limit selection, do SELECT TOP 10 etc
 
 				IEnumerable<DebateLink> arguments = connection.Query<DebateLink, Debate, DebateLink>(
-					@"SELECT
-						DebateLink.Id, DebateLink.Type,
-						DebateLink.Parent, DebateLinkVote.Vote,
-						DebateLink.LocalFor, DebateLink.LocalAgainst,
-						Debate.*
-					FROM
-						DebateLink
-							LEFT JOIN
-						Debate ON DebateLink.Child = Debate.Id
-							LEFT OUTER JOIN
-						DebateLinkVote ON (DebateLinkVote.Parent = DebateLink.Parent AND DebateLinkVote.Child = DebateLink.Child AND DebateLinkVote.Owner = @Owner" + typeFilter + @")
-					WHERE
-						DebateLink.Parent = @Parent AND DebateLink.PathLength = 1
-					ORDER BY Debate.Status ASC, (Debate.WeightFor - Debate.WeightAgainst) DESC, DebateLink.Weight DESC, DebateLink.LinkTime DESC
-					LIMIT @Offset, @MaxRows"
-					,
+					query,
 					( Parent, Child ) =>
 					{
 						Parent.Child = Child;

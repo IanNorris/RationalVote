@@ -17,7 +17,7 @@ namespace RationalVote.Models
 	{
 		public const int MaxPerPage = 10;
 		public const int MaxPages = 20;
-		public const int MaxChildrenPerFetch = 8;
+		public const int MaxChildrenPerFetch = 4;
 
 		//The order of the elements in this enum
 		//control the sort order
