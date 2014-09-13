@@ -5,9 +5,11 @@
   src: url(https://themes.googleusercontent.com/static/fonts/monda/v2/jTmvG8tSl8y7Cw0ieRkwGA.eot);
   src: local('Monda Regular'), local('Monda-Regular'), url(https://themes.googleusercontent.com/static/fonts/monda/v2/jTmvG8tSl8y7Cw0ieRkwGA.eot) format('embedded-opentype'), url(https://themes.googleusercontent.com/static/fonts/monda/v2/sk05J8GA1NvUxDnk43EgAQ.woff) format('woff');
 }
+/*
 @font-face {
   font-family: 'Open Sans';
   font-style: normal;
   font-weight: 400;
   src: local('Open Sans'), local('OpenSans'), url(https://themes.googleusercontent.com/static/fonts/opensans/v8/cJZKeOuBrn4kERxqtaUH3T8E0i7KZn-EPnyo3HZu7kw.woff) format('woff');
 }
+*/
