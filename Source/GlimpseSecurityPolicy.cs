@@ -20,7 +20,9 @@ namespace RationalVote
 			{
 				foreach( string user in glimpseUsers )
 				{
-					if( ((RationalVote.Models.UserPrincipal)httpContext.User).User.User.Email.ToLower().CompareTo( user ) == 0 )
+					string username = ((RationalVote.Models.UserPrincipal)httpContext.User).User.User.Email;
+
+					if( username != null && username.ToLower().CompareTo( user ) == 0 )
 					{
 						return RuntimePolicy.On;
 					}
