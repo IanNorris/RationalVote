@@ -449,7 +449,7 @@ namespace RationalVote
 			{
 				using( DbConnection connection = RationalVoteContext.Connect() )
 				{
-					PasswordResetToken token = connection.Query<PasswordResetToken>( "SELECT * FROM PasswordResetToken WHERE Token = @Token AND AuthenticationMethod = 0", new { Token = reset.Token } ).FirstOrDefault();
+					PasswordResetToken token = connection.Query<PasswordResetToken>( "SELECT * FROM PasswordResetToken WHERE Token = @Token", new { Token = reset.Token } ).FirstOrDefault();
 
 					if( token != null )
 					{
