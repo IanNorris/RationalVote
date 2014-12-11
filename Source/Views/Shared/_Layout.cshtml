@@ -32,6 +32,8 @@
 						{
 							new Menu.Action(  "About us", "question", "About", "Home", null ),
 							new Menu.Action(  "For legislators", "gavel", "ForLegislators", "Home", null ),
+							new Menu.Action(  "For business", "building", "ForBusiness", "Home", null ),
+							new Menu.Action(  "Example uses", "plus", "ExampleUses", "Home", null ),
 							new Menu.Action(  "Contact us", "envelope-o", "Contact", "Home", null ),
 						}
 					)*@				
@@ -76,6 +78,8 @@
 	}
 
 	@Scripts.Render( "~/Scripts/ThirdParty/jqbs" )
+	<script src="/signalr/hubs"></script>
+	@Scripts.Render( "~/Scripts/notifications" )
 	@RenderSection( "Scripts", required: false )
 	@Html.RegisteredScripts()
 

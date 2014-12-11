@@ -9,6 +9,9 @@ using System.Data.Common;
 using Dapper;
 using RationalVote.Models;
 using RationalVote.DAL;
+using System.ComponentModel;
+using Microsoft.AspNet.SignalR;
+using System.Threading;
 
 namespace RationalVote
 {

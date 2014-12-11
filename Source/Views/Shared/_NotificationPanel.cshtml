@@ -1,0 +1,40 @@
+﻿<li class="dropdown">
+	<a href="#" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown">
+		<i class="fa fa-bell-o messages-seen"></i>&nbsp;<span class="badge" id="NotificationCount"></span>
+	</a>
+	<ul class="dropdown-menu">
+		<div class="panel-body" style="text-align:center">No new messages.</div>
+		@*<div class="panel-body notification-body">
+			<ul class="notifications">
+				@{
+					for( int i = 0; i < 10; i++ )
+					{
+						Notification n = new Notification();
+						@Html.Partial( "_Notification", n )
+					}
+				}
+			</ul>
+		</div>*@
+	</ul>
+
+	@*<!-- <input type="button" id="broadcast" value="broadcast" /> -->*@
+
+	<audio id="notification_sound">
+		<source src="~/Content/Sounds/jingles_PIZZA00.ogg" type="audio/ogg">
+	</audio>
+</li>
+
+@* <li class="right clearfix"><span class="notifications-img pull-right">
+		<img src="http://placehold.it/50/FA6F57/fff&text=ME" alt="User Avatar" class="img-circle" />
+	</span>
+		<div class="notifications-body clearfix">
+			<div class="header">
+				<small class=" text-muted"><span class="glyphicon glyphicon-time"></span>13 mins ago</small>
+				<strong class="pull-right primary-font">Bhaumik Patel</strong>
+			</div>
+			<p>
+				Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur bibendum ornare
+				dolor, quis ullamcorper ligula sodales.
+			</p>
+		</div>
+	</li> *@

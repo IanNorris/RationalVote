@@ -5,13 +5,13 @@
 	string avatarLink = user.GetAvatarLink( 22 );
 
 	string avatar = "<img class=\"rounded\" src=\"" + avatarLink + "\" />&nbsp;";
-	
+
 	using( Html.BeginForm( "LogOff", "User", FormMethod.Post, new { id = "logoutForm", @class = "logoutForm" } ) )
 	{
 		@Html.AntiForgeryToken()
 	}
-	
-	
+
+
 	string DisplayName = user.Profile.DisplayName != null ? user.Profile.DisplayName : "";
 	DisplayName = DisplayName.Trim();
 	if( DisplayName.Length == 0 )
@@ -19,13 +19,15 @@
 		DisplayName = "Anonymous (" + user.User.Email + ")";
 	}
 	
+	@Html.Partial( "_NotificationPanel" )
+
 	@Html.CreateMenu( DisplayName, avatar, "",
 		new Menu.Item[]
 		{
 			new Menu.Action(  "Profile", "user", "Index", "Profile", new RouteValueDictionary( new { Id = UrlParameter.Optional } ) ),
 			//new Menu.Action(  "Settings", "cogs", "Settings", "User", new RouteValueDictionary( new { Id = UrlParameter.Optional } ) ),
 			new Menu.Uri(  "Sign out", "sign-out", "javascript:document.getElementById('logoutForm').submit()" ),
-		} 
+		}
 	)
 }
 else

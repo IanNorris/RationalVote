@@ -1,4 +1,5 @@
 ﻿using System.Web.Mvc;
+using Microsoft.AspNet.SignalR;
 using Microsoft.Owin;
 using Owin;
 
@@ -13,6 +14,16 @@ namespace RationalVote
 
 			ViewEngines.Engines.Clear();
 			ViewEngines.Engines.Add( new RazorViewEngine() );
+
+			HubConfiguration hubConfiguration = new HubConfiguration();
+#if DEBUG
+			hubConfiguration.EnableDetailedErrors = true;
+#else
+			hubConfiguration.EnableDetailedErrors = false;
+#endif
+			hubConfiguration.EnableJavaScriptProxies = true;
+			//app.MapSignalR<NotificationConnection>( "/Notifications", hubConfiguration );
+			app.MapSignalR( hubConfiguration );
 		}
 	}
 }

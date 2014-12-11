@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using Microsoft.AspNet.SignalR;
+using RationalVote.SignalR;
 
 namespace RationalVote.Controllers
 {
@@ -10,6 +12,7 @@ namespace RationalVote.Controllers
 	{
 		public ActionResult Index()
 		{
+			//GlobalHost.ConnectionManager.GetHubContext<NotificationHub,INotificationClient>().Clients.All.OnCountUpdated( 333 );
 			return View();
 		}
 
@@ -24,6 +27,16 @@ namespace RationalVote.Controllers
 		}
 
 		public ActionResult ForLegislators()
+		{
+			return View();
+		}
+
+		public ActionResult ForBusiness()
+		{
+			return View();
+		}
+
+		public ActionResult ExampleUses()
 		{
 			return View();
 		}

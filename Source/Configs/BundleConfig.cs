@@ -18,6 +18,7 @@ namespace RationalVote
 				//"~/Scripts/ThirdParty/modernizr-*",
 				"~/Scripts/ThirdParty/jquery-{version}.js",
 				"~/Scripts/ThirdParty/jquery.unobtrusive-ajax.js",
+				"~/Scripts/ThirdParty/jquery.signalR-2.1.1.js",
 				"~/Scripts/ThirdParty/bootstrap.js",
 				"~/Scripts/ThirdParty/respond.js" )
 			);
@@ -68,6 +69,10 @@ namespace RationalVote
 
 			bundles.Add( new ScriptBundle( "~/Scripts/debate" ).Include(
 				"~/Scripts/fallacy.js" )
+			);
+
+			bundles.Add( new ScriptBundle( "~/Scripts/notifications" ).Include(
+				"~/Scripts/notifications.js" )
 			);
 
 			bundles.Add( new StyleBundle( "~/Content/CSS/profile" )
