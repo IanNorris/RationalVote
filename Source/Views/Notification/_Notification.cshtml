@@ -1,0 +1,41 @@
+﻿@model RationalVote.Models.Notification
+
+@{
+	if( Model.Reason == Notification.Type.System )
+	{
+		Model.Joined_ProfileImage = "/Content/Theme/images/profile/admin_sm.png";
+		Model.Joined_ProfileName = "System Message";
+	}
+
+}
+
+<li class="left clearfix notification-@Model.State.ToString().ToLower()">
+	<span class="notifications-img pull-left">
+		<img src="@Model.Joined_ProfileImage" alt="User Avatar" class="img-circle" width="50" height="50" />
+	</span>
+	<div class="notifications-body clearfix">
+		<div class="header">
+			<strong class="primary-font">@Model.Joined_ProfileName</strong>
+
+			@if( Model.Reason == Notification.Type.System )
+			{
+				<p>
+					@Model.Message
+				</p>
+			}
+			else
+			{
+				<p>
+					@Model.Message
+				</p>
+			}
+
+			<small class="pull-right text-muted">
+				<i class="fa fa-clock-o"></i> @Model.Sent
+			</small>
+		</div>
+
+		
+
+	</div>
+</li>

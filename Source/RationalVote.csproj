@@ -258,7 +258,7 @@
       <SubType>Designer</SubType>
     </Content>
     <Content Include="Views\Shared\_NotificationPanel.cshtml" />
-    <Content Include="Views\Shared\_Notification.cshtml" />
+    <Content Include="Views\Notification\_Notification.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -277,6 +277,9 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Home\ExampleUses.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Notification\Index.cshtml" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

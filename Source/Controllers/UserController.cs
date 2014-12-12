@@ -262,7 +262,7 @@ namespace RationalVote
 					if( storedUser != null )
 					{
 						//Create new session for the user
-						RationalVote.Models.Session.CreateSession( storedUser, Request, false );
+						RationalVote.Models.Session.CreateSession( storedUser, Request, true );
 
 						if( Url.IsLocalUrl( returnUrl ) )
 						{

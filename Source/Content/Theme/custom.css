@@ -390,3 +390,41 @@ Usage:
 {
 	color: grey;
 }
+
+.notification-unread
+{
+	background-color:aliceblue;
+}
+
+.notification-read
+{
+	background-color:white;
+}
+
+.notification-seen
+{
+	background-color:aliceblue;
+}
+
+.notification-dropdown
+{
+	top: 2px;
+}
+
+/* Center a div, nest the three to center.*/
+
+.center-outer {
+	display: table;
+	height: 100%;
+	width: 100%;
+}
+
+.center-middle {
+	display: table-cell;
+	vertical-align: middle;
+}
+
+.center-inner {
+	margin-left: auto;
+	margin-right: auto; 
+}
