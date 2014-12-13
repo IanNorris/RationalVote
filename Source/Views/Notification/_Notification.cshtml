@@ -15,7 +15,7 @@
 	</span>
 	<div class="notifications-body clearfix">
 		<div class="header">
-			<strong class="primary-font">@Model.Joined_ProfileName</strong>
+			<strong>@Model.Joined_ProfileName</strong>
 
 			@if( Model.Reason == Notification.Type.System )
 			{
@@ -30,6 +30,7 @@
 				</p>
 			}
 
+			<br/>
 			<small class="pull-right text-muted">
 				<i class="fa fa-clock-o"></i> @Model.Sent
 			</small>

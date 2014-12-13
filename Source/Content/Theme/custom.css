@@ -321,6 +321,7 @@ Usage:
 {
 	right: 0;
 }
+
 .notification-body
 {
 	width: 300px;
@@ -362,24 +363,24 @@ Usage:
 {
 	margin-right: 5px;
 }
-/*
-::-webkit-scrollbar-track
+
+.notification-dropdown ::-webkit-scrollbar-track
 {
 	-webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
 	background-color: #F5F5F5;
 }
 
-::-webkit-scrollbar
+.notification-dropdown ::-webkit-scrollbar
 {
 	width: 12px;
 	background-color: #F5F5F5;
 }
 
-::-webkit-scrollbar-thumb
+.notification-dropdown ::-webkit-scrollbar-thumb
 {
 	-webkit-box-shadow: inset 0 0 6px rgba(0,0,0,.3);
 	background-color: #555;
-}*/
+}
 
 .messages-new
 {
