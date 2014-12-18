@@ -29,11 +29,6 @@ namespace RationalVote.SignalR
 			return base.OnConnected();
 		}
 
-		/*public void OnConnect( string message )
-		{
-
-		}*/
-
 		//Functions that the client can call go here
 	}
 

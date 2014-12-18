@@ -21,7 +21,7 @@ $(function () {
 				$('#NotificationCount').text( '' );
 			}
 
-			if( !initial && newCount > 0 )
+			if( initial != false && newCount > 0 )
 			{
 				notification_sound.play();
 			}
