@@ -20,8 +20,8 @@ namespace RationalVote.SignalR
 				int count = connection.Query<int>(
 					@"SELECT COUNT(*) AS Count FROM rationalvote.notification WHERE Receiver = @User GROUP BY Receiver;",
 					new { User = ((RationalVote.Models.UserPrincipal)this.Context.User).User.Id } ).FirstOrDefault();
-
-				Clients.User( this.Context.User.Identity.Name ).OnCountUpdated( (uint)count, false );
+				
+				Clients.Caller.OnCountUpdated( (uint)count, false );
 			}
 
 			
