@@ -10,14 +10,34 @@ $(function () {
 			//notifications.server.onConnect( 'Hello World' );
 		}
 
-		notifications.client.onCountUpdated = function( newCount )
+		notifications.client.onCountUpdated = function( newCount, initial )
 		{
-			$('#NotificationCount').text( newCount );
-			notification_sound.play();
+			if( newCount > 0 )
+			{
+				$('#NotificationCount').text( newCount );
+			}
+			else
+			{
+				$('#NotificationCount').text( '' );
+			}
+
+			if( !initial && newCount > 0 )
+			{
+				notification_sound.play();
+			}
+
 			notificationCountUpdated = true;
 
-			$('#NotificationBell').addClass( 'messages-new' );
-			$('#NotificationBell').removeClass( 'messages-seen' );
+			if( newCount == 0 )
+			{
+				$('#NotificationBell').removeClass( 'messages-new' );
+				$('#NotificationBell').addClass( 'messages-seen' );
+			}
+			else
+			{
+				$('#NotificationBell').addClass( 'messages-new' );
+				$('#NotificationBell').removeClass( 'messages-seen' );
+			}
 		};
 
 		var notificationProxy = $.connection.notificationHub;

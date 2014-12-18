@@ -327,6 +327,12 @@ Usage:
 	width: 300px;
 	overflow-y: scroll;
 	height: 250px;
+	padding: 0px;
+}
+
+.notification-content
+{
+	padding: 5px;
 }
 .notifications
 {
@@ -337,7 +343,6 @@ Usage:
 
 .notifications li
 {
-	margin-bottom: 10px;
 	padding-bottom: 5px;
 	border-bottom: 1px dotted #B3A9A9;
 }

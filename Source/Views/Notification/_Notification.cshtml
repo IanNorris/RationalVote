@@ -9,34 +9,27 @@
 
 }
 
-<li class="left clearfix notification-@Model.State.ToString().ToLower()">
+<li class="left clearfix notification-@Model.State.ToString().ToLower() notification-content">
 	<span class="notifications-img pull-left">
 		<img src="@Model.Joined_ProfileImage" alt="User Avatar" class="img-circle" width="50" height="50" />
 	</span>
-	<div class="notifications-body clearfix">
-		<div class="header">
-			<strong>@Model.Joined_ProfileName</strong>
+	<div class="clearfix">
+		<strong>@Model.Joined_ProfileName</strong>
 
-			@if( Model.Reason == Notification.Type.System )
-			{
-				<p>
-					@Model.Message
-				</p>
-			}
-			else
-			{
-				<p>
-					@Model.Message
-				</p>
-			}
-
-			<br/>
-			<small class="pull-right text-muted">
-				<i class="fa fa-clock-o"></i> @Model.Sent
-			</small>
-		</div>
-
-		
-
+		@if( Model.Reason == Notification.Type.System )
+		{
+			<p>
+				@Model.Message
+			</p>
+		}
+		else
+		{
+			<p>
+				@Model.Message
+			</p>
+		}
+		<small class="pull-right text-muted">
+			<i class="fa fa-clock-o"></i> @Model.Sent
+		</small>
 	</div>
 </li>
